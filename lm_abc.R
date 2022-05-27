@@ -5,17 +5,17 @@
 rm(list = ls())
 
 # Source functions:
-source("~/Dropbox/Projects/PRIME/Categorical variables/source_lmabc.R")
+source("source_lmabc.R")
 # --------------------------------------------
-# Simulate some data: 
-n = 200 
+# Simulate some data:
+n = 200
 
 # Categorical variable: race
 groups_1 = c("Asian", "Hisp", "NHB", "NHW") # groups
 pi_1 = c(0.10, 0.15, 0.20, 0.55) # population proprtions
 K_1 = length(groups_1) # number of levels
-k_1 = factor(sample(groups_1, 
-                    size  = n, replace = TRUE, 
+k_1 = factor(sample(groups_1,
+                    size  = n, replace = TRUE,
                     prob  = pi_1),
              levels = c("NHW", "Asian", "Hisp", "NHB")) # force NHW as baseline
 
@@ -29,8 +29,8 @@ cor(x1, x2) # x1, x2 correlated
 
 # Expected value of the response:
 Ey = 1 + 2*x1 + -2*x2 +
-  3*I(k_1==groups_1[1]) -.5*I(k_1==groups_1[2]) + 
-  .5*I(k_1==groups_1[2])*x1 
+  3*I(k_1==groups_1[1]) -.5*I(k_1==groups_1[2]) +
+  .5*I(k_1==groups_1[2])*x1
 
 # Observed y-value:
 y  = Ey + rnorm(n=n)
@@ -44,7 +44,7 @@ plot(Ey, y)
 f0 = formula(y ~ x1 + x2 + x1*k_1)
 
 # Data frame w/ variables needed:
-dat = data.frame(y, x1, x2, k_1) 
+dat = data.frame(y, x1, x2, k_1)
 
 # Fit the linear model using NHW as the reference group:
 fit_base = lm(f0)
@@ -82,7 +82,7 @@ vcov(fit_abc)
 # plot(fit_base)
 # plot(fit_abc)
 
-# Summaries: 
+# Summaries:
 summary(fit_base)
 summary(fit_abc) # not done!
 
@@ -120,7 +120,7 @@ beta_hat_slope%*%pi_hat_1 # numerical zero
 # Full design matrix (overparametrized):
 XX = getFullDesign(f0, data = dat)
 head(XX) # inspect...
-ncol(XX); 
+ncol(XX);
 mrank(XX) # rank < num columns -> rank deficient!
 
 # Constraint matrix for ABCs:
