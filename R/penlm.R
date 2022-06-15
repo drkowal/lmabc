@@ -1,3 +1,4 @@
+#' @export
 cv.penlm = function(formula,
 										data,
 										lambda_path = NULL,

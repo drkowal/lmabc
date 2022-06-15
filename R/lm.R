@@ -1,3 +1,4 @@
+#' @export
 lm.abc = function(formula, data, ..., cprobs = NULL){
 
 	# Usual fit: this is a nice baseline
@@ -85,6 +86,7 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 
 }
 
+#' @export
 getConstraints = function(formula, data, cprobs = NULL){
 
 	# Model frame has some useful information
@@ -230,7 +232,7 @@ getConstraints = function(formula, data, cprobs = NULL){
 	return(Con)
 }
 
-# Compute the full (overparametrized) design matrix X
+#' @export
 getFullDesign = function(formula, data, center = TRUE){
 
 	# Model frame has some useful information

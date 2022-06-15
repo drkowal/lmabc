@@ -1,3 +1,4 @@
+#' @export
 glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
 
 	# Usual glm fit: this is a nice baseline
