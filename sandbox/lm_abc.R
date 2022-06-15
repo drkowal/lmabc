@@ -5,7 +5,7 @@
 rm(list = ls())
 
 # Source functions:
-source("source_lmabc.R")
+# source("source_lmabc.R")
 # --------------------------------------------
 # Simulate some data:
 n = 200
