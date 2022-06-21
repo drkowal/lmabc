@@ -1,6 +1,6 @@
 #' @export
-AIC.lm.abc = function(fit,...){
-	stats::AIC(fit$lm,...)
+AIC.lm.abc = function(fit,...,k=2){
+	stats::AIC(fit$lm,...,k=k)
 }
 
 #' #' @export
