@@ -26,7 +26,7 @@ cv.penlm = function(formula,
 	Xuse = X%*%Qm
 
 	# Response variable:
-	y = model.frame(formula, data)[,1]
+	y = stats::model.frame(formula, data)[,1]
 
 	# Compute the matrix to reweight by ABCs
 	# (so that we apply shrinkage equally to all groups)
@@ -163,14 +163,14 @@ cv.penlm = function(formula,
 
 	# Add a plot?
 	if(plot){
-		plot(log(lambda_path), mse, ylim = range(mse + se, mse - se),
-				 type = 'n', main = paste(K, '-fold CV: ', type, ' regression with ABCs', sep=''))
-		arrows(log(lambda_path), mse - se,
-					 log(lambda_path), mse + se,
-					 length=0.05, angle=90, code=3, lwd=1, col='gray')
-		lines(log(lambda_path), mse, type='p', pch = 16, col='red')
-		abline(v = log(lambda.1se), lty =2)
-		abline(v = log(lambda.min), lty =2)
+		graphics::plot(log(lambda_path), mse, ylim = range(mse + se, mse - se),
+									 type = 'n', main = paste(K, '-fold CV: ', type, ' regression with ABCs', sep=''))
+		graphics::arrows(log(lambda_path), mse - se,
+										 log(lambda_path), mse + se,
+										 length=0.05, angle=90, code=3, lwd=1, col='gray')
+		graphics::lines(log(lambda_path), mse, type='p', pch = 16, col='red')
+		graphics::abline(v = log(lambda.1se), lty =2)
+		graphics::abline(v = log(lambda.min), lty =2)
 	}
 
 	# Return:
