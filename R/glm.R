@@ -1,5 +1,5 @@
 #' @export
-glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
+glm.abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 
 	# Usual glm fit: this is a nice baseline
 	fit0 = stats::glm(formula = formula,
@@ -65,7 +65,7 @@ glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
 
 		# Check fitted values to make sure the fits are identical:
 		tol = 10^-8 # tolerance
-		if(mean((fitted(fit_con) - fitted(fit0))^2) > tol){
+		if(mean((stats::fitted(fit_con) - stats::fitted(fit0))^2) > tol){
 			stop('Fitted values are not the same;
          may be an issue with the constraint matrix')
 		}

@@ -2,8 +2,8 @@
 lm.abc = function(formula, data, ..., cprobs = NULL){
 
 	# Usual fit: this is a nice baseline
-	fit0 = stats::lm(formula = formula,
-									 data  = data, ...)
+	fit0 = lm(formula = formula,
+						data  = data, ...)
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
@@ -41,7 +41,7 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 		# Xuse = t(qr.qty(cQR, t(X))[-(1:m),])
 
 		# Fitted model in the *unconstrained* (lower-dim) space
-		fit_con = lm(update(formula, ~ Xuse - 1),
+		fit_con = lm(stats::update(formula, ~ Xuse - 1),
 								 data = data, ...)
 
 		#y = model.frame(fit0)[,1]
@@ -64,8 +64,8 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 
 		# Check fitted values to make sure the fits are identical:
 		tol = 10^-8 # tolerance
-		if(mean((fitted(fit_con) - fitted(fit0))^2)
-			 + mean((X%*%beta_con - fitted(fit0))^2) > tol){
+		if(mean((stats::fitted(fit_con) - stats::fitted(fit0))^2)
+			 + mean((X%*%beta_con - stats::fitted(fit0))^2) > tol){
 			stop('Fitted values are not the same;
          may be an issue with the constraint matrix')
 		}
