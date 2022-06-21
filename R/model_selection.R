@@ -1,9 +1,9 @@
 #' @export
-AIC.lm.abc = function(fit,...,k=2){
-	stats::AIC(fit$lm,...,k=k)
+AIC.lm.abc = function(object,...,k=2){
+	stats::AIC(object$lm,...,k=k)
 }
 
 #' #' @export
-#' BIC.lm.abc = function(fit,...){
-#' 	stats::BIC(fit$lm,...)
+#' BIC.lm.abc = function(object,...){
+#' 	stats::BIC(object$lm,...)
 #' }
