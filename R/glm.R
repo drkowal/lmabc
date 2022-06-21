@@ -2,9 +2,9 @@
 glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
 
 	# Usual glm fit: this is a nice baseline
-	fit0 = glm(formula = formula,
-						 family = family,
-						 data = data, ...)
+	fit0 = stats::glm(formula = formula,
+										family = family,
+										data = data, ...)
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
@@ -41,9 +41,9 @@ glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
 		# Xuse = t(qr.qty(cQR, t(X))[-(1:m),])
 
 		# Fitted model in the *unconstrained* (lower-dim) space
-		fit_con = glm(update(formula, ~ Xuse - 1),
-									family = family,
-									data = data, ...)
+		fit_con = stats::glm(stats::update(formula, ~ Xuse - 1),
+												 family = family,
+												 data = data, ...)
 
 		#y = model.frame(fit0)[,1]
 		#fit_con = lm(y ~ Xuse - 1)
