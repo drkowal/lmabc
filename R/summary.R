@@ -1,7 +1,7 @@
 #' @export
 summary.lm.abc = function(fit){
 	# fixme!
-	ses = sqrt(diag(vcov(fit)))
+	ses = sqrt(diag(stats::vcov(fit)))
 }
 
 #' @export
