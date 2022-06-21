@@ -42,10 +42,10 @@ cv.penlm = function(formula,
 
 		# Get the lambda path, if unspecified
 		if(is.null(lambda_path)){
-			lambda_path = glmnet(x = X[,-1],
-													 y = y,
-													 family ="gaussian",
-													 alpha = 0)$lambda
+			lambda_path = glmnet::glmnet(x = X[,-1],
+																	 y = y,
+																	 family ="gaussian",
+																	 alpha = 0)$lambda
 		}
 		# Recurring term:
 		DtDridge = crossprod(sqrt(penwt)*Qm)
@@ -67,9 +67,9 @@ cv.penlm = function(formula,
 		Dlasso = penwt*Qm
 
 		# Fit the model to the full dataset:
-		fit_lasso = genlasso(y = y,
-												 X = Xuse,
-												 D = Dlasso)
+		fit_lasso = genlasso::genlasso(y = y,
+																	 X = Xuse,
+																	 D = Dlasso)
 
 		# Get the lambda path, if unspecified
 		if(is.null(lambda_path)) lambda_path = fit_lasso$lambda
@@ -126,9 +126,9 @@ cv.penlm = function(formula,
 		# Lasso estimator:
 		if(type=='lasso'){
 			# Fit the model:
-			fit_lasso = genlasso(y = y_in,
-													 X = Xuse_in,
-													 D = Dlasso)
+			fit_lasso = genlasso::genlasso(y = y_in,
+																		 X = Xuse_in,
+																		 D = Dlasso)
 			# Estimates along the path:
 			beta_path_in = sapply(lambda_path, function(lambda){
 				crossprod(t(Qm), coef(fit_lasso, lambda = lambda)$beta)
