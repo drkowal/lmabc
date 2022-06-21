@@ -2,8 +2,8 @@
 lm.abc = function(formula, data, ..., cprobs = NULL){
 
 	# Usual fit: this is a nice baseline
-	fit0 = lm(formula = formula,
-						data  = data, ...)
+	fit0 = stats::lm(formula = formula,
+									 data  = data, ...)
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
@@ -90,8 +90,8 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 getConstraints = function(formula, data, cprobs = NULL){
 
 	# Model frame has some useful information
-	mf = model.frame(formula = formula,
-									 data  = data)
+	mf = stats::model.frame(formula = formula,
+													data  = data)
 
 	# Names of the variables involved:
 	vnames = attr(mf, 'names')
@@ -236,8 +236,8 @@ getConstraints = function(formula, data, cprobs = NULL){
 getFullDesign = function(formula, data, center = TRUE){
 
 	# Model frame has some useful information
-	mf = model.frame(formula = formula,
-									 data  = data)
+	mf = stats::model.frame(formula = formula,
+													data  = data)
 
 	# Names of the variables involved:
 	vnames = attr(mf, 'names')
@@ -271,14 +271,14 @@ getFullDesign = function(formula, data, center = TRUE){
 
 		# Form the FULL (overparametrized) design  matrix:
 		# Note: same order as covar!
-		X = model.matrix(object = formula,
-										 data = data,
-										 contrasts.arg =
-										 	lapply(cdat, contrasts, contrasts=FALSE))
+		X = stats::model.matrix(object = formula,
+														data = data,
+														contrasts.arg =
+															lapply(cdat, stats::contrasts, contrasts=FALSE))
 	} else {
 		# No categorical variables, so just return the usual value:
-		X = model.matrix(object = formula,
-										 data = data)
+		X = stats::model.matrix(object = formula,
+														data = data)
 	}
 
 	return(X)
