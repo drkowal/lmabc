@@ -1,11 +1,6 @@
-random_sum_to_1 = function(leng) {
-  # runif(4, 0, 100); store, then divide by sum
-	outpt = c()
-	for (i in 1:leng) {
-		outpt = c(outpt,runif(1,0,100))
-	}
-	outpt = outpt/sum(outpt)
-	return(outpt)
+random_sum_to_1 = function(leng, m = 100) {
+  outpt <- runif(leng, 0, m)
+  outpt/sum(outpt)
 }
 
 generate_y = function(Xmat, Kmat, a0, a1, b0, b1, interactions, sgma) {
