@@ -1,4 +1,4 @@
 #' @export
-plot.lm.abc = function(x,...){
+plot.lmabc = function(x,...){
 	graphics::plot(x$lm,...)
 }
