@@ -1,4 +1,5 @@
 random_sum_to_1 = function(leng) {
+  # runif(4, 0, 100); store, then divide by sum
 	outpt = c()
 	for (i in 1:leng) {
 		outpt = c(outpt,runif(1,0,100))
