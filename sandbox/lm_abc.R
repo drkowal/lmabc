@@ -50,7 +50,7 @@ dat = data.frame(y, x1, x2, k_1)
 fit_base = lm(f0)
 
 # Fit the linear model w/ ABCs:
-fit_abc = lm.abc(f0, data = dat)
+fit_abc = lm_abc(f0, data = dat)
 # --------------------------------------------
 # Compare the outputs:
 # note: the parameters have different interpretations!
