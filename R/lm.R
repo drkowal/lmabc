@@ -41,7 +41,7 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 		# Xuse = t(qr.qty(cQR, t(X))[-(1:m),])
 
 		# Fitted model in the *unconstrained* (lower-dim) space
-		fit_con = lm(update(formula, ~ Xuse - 1),
+		fit_con = lm(stats::update(formula, ~ Xuse - 1),
 								 data = data, ...)
 
 		#y = model.frame(fit0)[,1]
@@ -64,8 +64,8 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 
 		# Check fitted values to make sure the fits are identical:
 		tol = 10^-8 # tolerance
-		if(mean((fitted(fit_con) - fitted(fit0))^2)
-			 + mean((X%*%beta_con - fitted(fit0))^2) > tol){
+		if(mean((stats::fitted(fit_con) - stats::fitted(fit0))^2)
+			 + mean((X%*%beta_con - stats::fitted(fit0))^2) > tol){
 			stop('Fitted values are not the same;
          may be an issue with the constraint matrix')
 		}
@@ -90,8 +90,8 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 getConstraints = function(formula, data, cprobs = NULL){
 
 	# Model frame has some useful information
-	mf = model.frame(formula = formula,
-									 data  = data)
+	mf = stats::model.frame(formula = formula,
+													data  = data)
 
 	# Names of the variables involved:
 	vnames = attr(mf, 'names')
@@ -236,8 +236,8 @@ getConstraints = function(formula, data, cprobs = NULL){
 getFullDesign = function(formula, data, center = TRUE){
 
 	# Model frame has some useful information
-	mf = model.frame(formula = formula,
-									 data  = data)
+	mf = stats::model.frame(formula = formula,
+													data  = data)
 
 	# Names of the variables involved:
 	vnames = attr(mf, 'names')
@@ -271,14 +271,14 @@ getFullDesign = function(formula, data, center = TRUE){
 
 		# Form the FULL (overparametrized) design  matrix:
 		# Note: same order as covar!
-		X = model.matrix(object = formula,
-										 data = data,
-										 contrasts.arg =
-										 	lapply(cdat, contrasts, contrasts=FALSE))
+		X = stats::model.matrix(object = formula,
+														data = data,
+														contrasts.arg =
+															lapply(cdat, stats::contrasts, contrasts=FALSE))
 	} else {
 		# No categorical variables, so just return the usual value:
-		X = model.matrix(object = formula,
-										 data = data)
+		X = stats::model.matrix(object = formula,
+														data = data)
 	}
 
 	return(X)
