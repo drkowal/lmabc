@@ -2,7 +2,7 @@
 summary.lm.abc = function(fit){
 	# fixme!
 	ses = sqrt(diag(vcov(fit)))
-
+	summary(fit) # new line here
 }
 
 #' @export
