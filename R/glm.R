@@ -1,5 +1,5 @@
 #' @export
-glm.abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
+glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 
 	# Usual glm fit: this is a nice baseline
 	fit0 = stats::glm(formula = formula,
@@ -72,7 +72,7 @@ glm.abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 		sigma_hat = summary(fit_con)$sigma # error SD
 
 		# New class:
-		fit = fit0;  attr(fit, 'class') = 'glm.abc'
+		fit = fit0;  attr(fit, 'class') = 'glmabc'
 		fit$glm = fit0 #  store the original object
 		fit$X = X # store the full design matrix
 		fit$Con = Con # store the constraint matrix
@@ -81,6 +81,6 @@ glm.abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 		fit$sigma = sigma_hat # estimated standard deviation
 		# fit$residuals # already there
 
-		return(fit) # return the glm.abc object
+		return(fit) # return the glmabc object
 	}
 }
