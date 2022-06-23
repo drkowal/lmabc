@@ -1,17 +1,14 @@
-source("source_Imabc.R")
-install.packages("qpcR")
-
 generate_data = function(n,n_cont, n_cat, cont_range, cat_lengths) {
   if (length(cat_lengths) != n_cat) {
     stop("cat_lengths should be a vector of length n_cat")
   }
-  
+
   Xmat = matrix(data=rep(0,n*n_cont), nrow=n, ncol=n_cont)
   for (i in 1:n_cont) {
     xi = runif(n=n, min = cont_range[1], max = cont_range[2])
     Xmat[,i] = xi
   }
-  
+
   Kmat = matrix(data=rep(0,n*n_cat), nrow=n, ncol=n_cat)
   longest = max(cat_lengths)
   probs_list = c()
@@ -28,7 +25,7 @@ generate_data = function(n,n_cont, n_cat, cont_range, cat_lengths) {
         prob_remain = prob_remain - probs[j]
       }
     }
-    
+
     ki = sample(cat_list,n, replace = TRUE, prob = probs)
     Kmat[,i] = as.vector(ki)
     probs_list = qpcR:::cbind.na(probs_list, probs)
@@ -80,10 +77,10 @@ k3 = testt[[2]][,3]
 k4 = testt[[2]][,4]
 
 form = y_testt ~ testt[[1]][,1] + testt[[1]][,2] + testt[[2]][,1] + testt[[2]][,2]+
-  testt[[2]][,3] + testt[[2]][,4] + testt[[2]][,1] * testt[[1]][,1] + 
-  testt[[2]][,2] * testt[[1]][,1] + testt[[2]][,3] * testt[[1]][,1] + 
-  testt[[2]][,4] * testt[[1]][,1] + testt[[2]][,1] * testt[[1]][,2] + 
-  testt[[2]][,2] * testt[[1]][,2] + testt[[2]][,3] * testt[[1]][,2] + 
+  testt[[2]][,3] + testt[[2]][,4] + testt[[2]][,1] * testt[[1]][,1] +
+  testt[[2]][,2] * testt[[1]][,1] + testt[[2]][,3] * testt[[1]][,1] +
+  testt[[2]][,4] * testt[[1]][,1] + testt[[2]][,1] * testt[[1]][,2] +
+  testt[[2]][,2] * testt[[1]][,2] + testt[[2]][,3] * testt[[1]][,2] +
   testt[[2]][,4] * testt[[1]][,2]
 form2 = y_testt ~ x + y + k1 + k2 + k3 + k4 +
   x * k1 + x * k2 + x * k3 + x * k4 +
