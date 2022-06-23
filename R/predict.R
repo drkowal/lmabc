@@ -1,4 +1,4 @@
 #' @export
-predict.lm.abc = function(fit,...){
-	predict.lm(fit$lm,...)
+predict.lmabc = function(object,...){
+	stats::predict.lm(object$lm,...)
 }

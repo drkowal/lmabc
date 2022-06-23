@@ -1,10 +1,10 @@
 #' @export
-glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
+glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 
 	# Usual glm fit: this is a nice baseline
-	fit0 = glm(formula = formula,
-						 family = family,
-						 data = data, ...)
+	fit0 = stats::glm(formula = formula,
+										family = family,
+										data = data, ...)
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
@@ -41,9 +41,9 @@ glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
 		# Xuse = t(qr.qty(cQR, t(X))[-(1:m),])
 
 		# Fitted model in the *unconstrained* (lower-dim) space
-		fit_con = glm(update(formula, ~ Xuse - 1),
-									family = family,
-									data = data, ...)
+		fit_con = stats::glm(stats::update(formula, ~ Xuse - 1),
+												 family = family,
+												 data = data, ...)
 
 		#y = model.frame(fit0)[,1]
 		#fit_con = lm(y ~ Xuse - 1)
@@ -65,14 +65,14 @@ glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
 
 		# Check fitted values to make sure the fits are identical:
 		tol = 10^-8 # tolerance
-		if(mean((fitted(fit_con) - fitted(fit0))^2) > tol){
+		if(mean((stats::fitted(fit_con) - stats::fitted(fit0))^2) > tol){
 			stop('Fitted values are not the same;
          may be an issue with the constraint matrix')
 		}
 		sigma_hat = summary(fit_con)$sigma # error SD
 
 		# New class:
-		fit = fit0;  attr(fit, 'class') = 'glm.abc'
+		fit = fit0;  attr(fit, 'class') = 'glmabc'
 		fit$glm = fit0 #  store the original object
 		fit$X = X # store the full design matrix
 		fit$Con = Con # store the constraint matrix
@@ -81,6 +81,6 @@ glm.abc = function(formula, family = gaussian, data, ..., cprobs = NULL){
 		fit$sigma = sigma_hat # estimated standard deviation
 		# fit$residuals # already there
 
-		return(fit) # return the glm.abc object
+		return(fit) # return the glmabc object
 	}
 }
