@@ -1,5 +1,5 @@
 #' @export
-lm.abc = function(formula, data, ..., cprobs = NULL){
+lm_abc = function(formula, data, ..., cprobs = NULL){
 
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,
@@ -72,7 +72,7 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 		sigma_hat = summary(fit_con)$sigma # error SD
 
 		# New class:
-		fit = fit0;  attr(fit, 'class') = 'lm.abc'
+		fit = fit0;  attr(fit, 'class') = 'lmabc'
 		fit$lm = fit0 #  store the original object
 		fit$X = X # store the full design matrix
 		fit$Con = Con # store the constraint matrix
@@ -81,7 +81,7 @@ lm.abc = function(formula, data, ..., cprobs = NULL){
 		fit$sigma = sigma_hat # estimated standard deviation
 		# fit$residuals # already there
 
-		return(fit) # return the lm.abc object
+		return(fit) # return the lmabc object
 	}
 
 }
