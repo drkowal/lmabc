@@ -8,45 +8,6 @@ random_sum_to_1 = function(leng) {
 	return(outpt)
 }
 
-'''
-generate_data = function(n,n_cont, n_cat, cont_range, cat_lengths) {
-  if (length(cat_lengths) != n_cat) {
-    stop("cat_lengths should be a vector of length n_cat")
-  }
-
-  Xmat = matrix(data=rep(0,n*n_cont), nrow=n, ncol=n_cont)
-  for (i in 1:n_cont) {
-    xi = runif(n=n, min = cont_range[1], max = cont_range[2])
-    Xmat[,i] = xi
-  }
-
-  Kmat = matrix(data=rep(0,n*n_cat), nrow=n, ncol=n_cat)
-  longest = max(cat_lengths)
-  probs_list = c()
-  for (i in 1:n_cat) {
-    cat_list = letters[1:cat_lengths[i]]
-    probs = c()
-    prob_remain = 1
-    for (j in 1:cat_lengths[i]) {
-      if (j == cat_lengths[i]) {
-        probs = c(probs,prob_remain)
-      }
-      else {
-        minn = 10/n
-        #probs = c(probs,runif(1,0,prob_remain))
-        probs = c(probs,runif(1,minn,prob_remain))
-        prob_remain = prob_remain - probs[j]
-      }
-    }
-
-    ki = sample(cat_list,n, replace = TRUE, prob = probs)
-    Kmat[,i] = as.vector(ki)
-    probs_list = qpcR:::cbind.na(probs_list, probs)
-  }
-  return(list(Xmat,Kmat,probs_list[,-1]))
-}
-'''
-
 generate_y = function(Xmat, Kmat, a0, a1, b0, b1, interactions, sgma) {
 	#current implementation gives random interaction weights
 
