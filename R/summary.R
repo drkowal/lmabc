@@ -1,11 +1,12 @@
 #' @export
-summary.lm.abc = function(fit){
+summary.lmabc = function(object, ...){
 	# fixme!
-	ses = sqrt(diag(vcov(fit)))
-	summary(fit) # new line here
+	print("heloo")
+	ses = sqrt(diag(vcov(object)))
+	summary(object$lm) # new line here
 }
 
 #' @export
-vcov.lm.abc = function(fit){
-	fit$sigma^2*fit$cov.unscaled
+vcov.lmabc = function(object){
+	object$sigma^2*object$cov.unscaled
 }
