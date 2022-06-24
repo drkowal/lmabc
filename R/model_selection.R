@@ -5,5 +5,5 @@ AIC.lmabc = function(object,...,k=2){
 
 #' @export
 BIC.lmabc = function(object,...){
-	stats::BIC(object$lm,...)
+	BIC(object$lm,...)
 }
