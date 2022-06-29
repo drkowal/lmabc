@@ -1,6 +1,6 @@
 #' Summarizing Linear ABC Model Fits
 #'
-#' \code{summary.lmbc} summary method for class "lmabc".
+#' \code{summary} method for class "lmabc".
 #'
 #' This function uses the summary.lm functionality. To learn more about the original
 #' functionality go to \code{\link[stats]{summary.lm}}.
@@ -10,7 +10,6 @@
 #'
 #' @return A list of summary statistics of the fitted linear ABC
 #' model given in object.
-
 #' @export
 summary.lmabc = function(object, ...){
 	ses = sqrt(diag(vcov(object)))  # this is the second column of the coefficient table in the output. i figured this out by running sqrt(diag(vcov(fit_base))), then seeing if there was any overlap with the output of summary(fit_base), which there was!
