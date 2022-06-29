@@ -7,18 +7,16 @@
 \method{summary}{lmabc}(object, ...)
 }
 \arguments{
-\item{object}{An object of class "lmabc", usually, a direct result of a call to lmabc}
+\item{object}{An object of class "lmabc", usually, a direct result of a call to \link{lm_abc}}
 
 \item{...}{further arguments passed to or from other methods.}
 }
 \value{
-A list of summary statistics of the fitted linear ABC
-model given in object.
+A list of summary statistics of the fitted linear ABC model given in object.
 }
 \description{
-\code{summary.lmbc} summary method for class "lmabc".
+\code{summary} method for class "lmabc".
 }
-\details{
-This function uses the summary.lm functionality. To learn more about the original
-functionality go to \code{\link[stats]{summary.lm}}.
+\seealso{
+\link[stats:summary]{stats::summary}
 }

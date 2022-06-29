@@ -2,14 +2,11 @@
 #'
 #' \code{summary} method for class "lmabc".
 #'
-#' This function uses the summary.lm functionality. To learn more about the original
-#' functionality go to \code{\link[stats]{summary.lm}}.
-
-#' @param object An object of class "lmabc", usually, a direct result of a call to lmabc
+#' @param object An object of class "lmabc", usually, a direct result of a call to [lmabc::lm_abc]
 #' @inheritParams stats::summary.lm
 #'
-#' @return A list of summary statistics of the fitted linear ABC
-#' model given in object.
+#' @returns A list of summary statistics of the fitted linear ABC model given in object.
+#' @seealso [stats::summary.lm]
 #' @export
 summary.lmabc = function(object, ...){
 	ses = sqrt(diag(vcov(object)))  # this is the second column of the coefficient table in the output. i figured this out by running sqrt(diag(vcov(fit_base))), then seeing if there was any overlap with the output of summary(fit_base), which there was!
