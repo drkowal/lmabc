@@ -16,7 +16,8 @@
 summary.lmabc = function(object, ...){
 	# fixme!
 	ses = sqrt(diag(vcov(object)))
-	summary.lm(object$lm, ...) # new line here
+	class(object) = "lm"
+	summary(object, ...) # new line here
 }
 
 #' @export
