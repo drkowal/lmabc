@@ -12,12 +12,10 @@
 #' model given in object.
 
 #' @export
-
 summary.lmabc = function(object, ...){
-	# fixme!
 	ses = sqrt(diag(vcov(object)))
 	class(object) = "lm"
-	summary(object, ...) # new line here
+	summary(object, ...)
 }
 
 #' @export
