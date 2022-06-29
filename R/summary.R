@@ -21,6 +21,6 @@ summary.lmabc = function(object, ...){
 }
 
 #' @export
-vcov.lmabc = function(object){
+vcov.lmabc = function(object, ...){
 	object$sigma^2*object$cov.unscaled
 }
