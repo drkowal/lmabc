@@ -17,11 +17,15 @@ summary.lmabc = function(object, correlation = FALSE, symbolic.cor = FALSE, ...)
 	t_val = term_coeff/ses # New t-values
 	p_val = 2*pt(abs(t_val), object$df.residual, lower.tail = FALSE) # new probabilities calculated here
 
-	summary_base$coefficients <- cbind(term_coeff, ses, t_val, p_val) # entering the new values of the coeff matrix
+	coefficients_abc <- cbind(term_coeff, ses, t_val, p_val) # entering the new values of the coeff matrix
 	# renaming the dimensions of the new coeff matrix
-	dimnames(summary_base$coefficients)<-
+	dimnames(coefficients_abc)<-
 		list(names(term_coeff),
 				 c("Estimate", "Std. Error", "t value", "Pr(>|t|)"))
+
+	summary_abc <- summary_base; attr(summary_abc, 'class') <- "summary.lmabc"
+	summary_abc$summary.lm <- summary_base
+	summary_abc$coefficients <- coefficients_abc
 
 	# New correlation matrix
 	if (correlation) {
@@ -32,14 +36,14 @@ summary.lmabc = function(object, correlation = FALSE, symbolic.cor = FALSE, ...)
 		rss <- sum(object$residuals^2)
 		resvar <- rss/rdf
 
-		summary_base$correlation <- (R * resvar)/outer(ses, ses)
-		dimnames(summary_base$correlation) <- dimnames(summary_base$cov.unscaled)
-		summary_base$symbolic.cor <- symbolic.cor
+		correlation <- (R * resvar)/outer(ses, ses)
+		dimnames(correlation) <- dimnames(summary_base$cov.unscaled)
+
+		summary_abc$correlation <- correlation
+		summary_abc$symbolic.cor <- symbolic.cor
 	}
-	# class of the returned object is still summary.lm, is this something we want
-	# to change?
-	class(summary_base) <- "summary.lmabc"
-	summary_base
+
+	summary_abc
 }
 
 #' @export
