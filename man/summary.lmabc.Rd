@@ -4,10 +4,16 @@
 \alias{summary.lmabc}
 \title{Summarizing Linear ABC Model Fits}
 \usage{
-\method{summary}{lmabc}(object, ...)
+\method{summary}{lmabc}(object, correlation = FALSE, symbolic.cor = FALSE, ...)
 }
 \arguments{
 \item{object}{An object of class "lmabc", usually, a direct result of a call to \link{lm_abc}}
+
+\item{correlation}{logical; if \code{TRUE}, the correlation matrix of
+    the estimated parameters is returned and printed.}
+
+\item{symbolic.cor}{logical. If \code{TRUE}, print the correlations in
+    a symbolic form (see \code{\link[stats]{symnum}}) rather than as numbers.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
@@ -18,5 +24,5 @@ A list of summary statistics of the fitted linear ABC model given in object.
 \code{summary} method for class "lmabc".
 }
 \seealso{
-\link[stats:summary]{stats::summary}
+\link[stats:summary.lm]{stats::summary.lm}
 }
