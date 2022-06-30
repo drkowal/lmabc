@@ -14,6 +14,11 @@ summary.lmabc = function(object, ...){
 
 	# if you examine the str() of a summary object—with the code that Kowal gave us, you could try str(summary(fit_base))—you'll see that it is a named list. The names are call, terms, residuals, etc. Look through this output and figure out what we can use and what we need to change. For instance, we can use r.squared, so there's no need to change that. BUT we can't use coefficients, so you'll need to assign a new coefficients matrix to that spot in the list. Here's an example to get you started: summary_base$coefficients <- (generate new coefficient matrix)
 	# eventually, we'll have to figure out if we can leave the class of summary_base as "summary.lm". We may have to create a new class, "summary.lmabc", if this doesn't work, along with print.summary.lmabc. But that's an issue for later! First let's get summary.lmabc working
+
+	#fit_abc$coefficients
+	#sqrt(diag(stats::vcov(fit_abc)))
+	#fit_abc$coefficients/sqrt(diag(stats::vcov(fit_abc)))
+	#2*pt(abs(fit_abc$coefficients/sqrt(diag(stats::vcov(fit_abc)))), fit_abc$df.residual, lower.tail = FALSE)
 }
 
 #' @export
