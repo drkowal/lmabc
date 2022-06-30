@@ -3,13 +3,13 @@
 #' \code{summary} method for class "lmabc".
 #'
 #' @param object An object of class "lmabc", usually, a direct result of a call to [lmabc::lm_abc]
-#' @inheritParams stats::summary.lm
+#' @inheritParams stats::summary
 #'
 #' @returns A list of summary statistics of the fitted linear ABC model given in object.
-#' @seealso [stats::summary.lm]
+#' @seealso [stats::summary], [stats::summary.lm]
 #' @export
-summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...) {
-	summary_base <- summary(object$lm, correlation = correlation, symbolic.cor = symbolic.cor, ...) # a lot of the information is the same between the base summary and the abc summary
+summary.lmabc <- function(object, ...) {
+	summary_base <- summary(object$lm, ...) # a lot of the information is the same between the base summary and the abc summary
 
 	ses <- sqrt(diag(vcov(object))) # Calculating the new standard error
 	term_coeff <- object$coefficients # extracting all the coefficents from the lmabc model
@@ -23,6 +23,7 @@ summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...
 	summary_abc <- summary_base; attr(summary_abc, 'class') <- "summary.lmabc"
 	summary_abc$summary.lm <- summary_base
 	summary_abc$coefficients <- coefficients_abc
+	summary_abc$correlation <- NULL  # remove the bad correlation matrix if it's there
 
 	# New correlation matrix
 	if (correlation) {
