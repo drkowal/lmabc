@@ -9,7 +9,7 @@
 #' @seealso [stats::summary.lm]
 #' @export
 summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...) {
-	summary_base <- summary(object$lm) # a lot of the information is the same between the base summary and the abc summary
+	summary_base <- summary(object$lm, correlation = correlation, symbolic.cor = symbolic.cor, ...) # a lot of the information is the same between the base summary and the abc summary
 
 	ses <- sqrt(diag(vcov(object))) # Calculating the new standard error
 	term_coeff <- object$coefficients # extracting all the coefficents from the lmabc model
