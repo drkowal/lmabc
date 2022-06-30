@@ -24,6 +24,25 @@ summary.lmabc <- function(object, ...) {
 	summary_abc$summary.lm <- summary_base
 	summary_abc$coefficients <- coefficients_abc
 	summary_abc$correlation <- NULL  # remove the bad correlation matrix if it's there
+<<<<<<< HEAD
+=======
+
+	# New correlation matrix
+	if (correlation) {
+		rdf <- object$df.residual
+		p <- object$rank
+		p1 <- 1L:p
+		R <- chol2inv(object$qr$qr[p1, p1, drop = FALSE])
+		rss <- sum(object$residuals^2)
+		resvar <- rss/rdf
+
+		correlation <- (R * resvar)/outer(ses, ses)
+		dimnames(correlation) <- dimnames(summary_base$cov.unscaled)
+
+		summary_abc$correlation <- correlation
+		summary_abc$symbolic.cor <- symbolic.cor
+	}
+>>>>>>> 11eda268851545dc6da4024c0bb978b09fdc27f9
 
 	summary_abc
 }
