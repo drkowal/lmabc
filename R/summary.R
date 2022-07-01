@@ -13,7 +13,7 @@ summary.lmabc = function(object, correlation = FALSE, symbolic.cor = FALSE, ...)
 	summary_base <- summary(object$lm) # a lot of the information is the same between the base summary and the abc summary
 
 	ses = sqrt(diag(vcov(object))) # Calculating the new standard error
-	term_coeff = object$coefficients # extracting all the coefficents from the lmabc model
+	term_coeff = object$coefficients # extracting all the coefficients from the lmabc model
 	t_val = term_coeff/ses # New t-values
 	p_val = 2*pt(abs(t_val), object$df.residual, lower.tail = FALSE) # new probabilities calculated here
 
@@ -25,20 +25,21 @@ summary.lmabc = function(object, correlation = FALSE, symbolic.cor = FALSE, ...)
 
 	# New correlation matrix
 	if (correlation) {
-		rdf <- object$df.residual
-		p <- object$rank
-		p1 <- 1L:p
-		R <- chol2inv(object$qr$qr[p1, p1, drop = FALSE])
-		rss <- sum(object$residuals^2)
-		resvar <- rss/rdf
+		summary_base$correlation <- stats::cov2cor(object$cov.unscaled)
+		# rdf <- object$df.residual
+		# p <- object$rank
+		# p1 <- 1L:p
+		# R <- chol2inv(object$qr$qr[p1, p1, drop = FALSE])
+		# rss <- sum(object$residuals^2)
+		# resvar <- rss/rdf
 
-		summary_base$correlation <- (R * resvar)/outer(ses, ses)
-		dimnames(summary_base$correlation) <- dimnames(summary_base$cov.unscaled)
+		# summary_base$correlation <- (R * resvar)/outer(ses, ses)
+		# dimnames(summary_base$correlation) <- dimnames(object$cov.unscaled)
 		summary_base$symbolic.cor <- symbolic.cor
 	}
 	# class of the returned object is still summary.lm, is this something we want
 	# to change?
-	class(summary_base) <- "summary.lmabc"
+	# class(summary_base) <- "summary.lmabc"
 	summary_base
 }
 
