@@ -1,5 +1,5 @@
 #' @export
-lm_abc = function(formula, data, ..., cprobs = NULL){
+lmabc = function(formula, data, ..., cprobs = NULL){
 
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,

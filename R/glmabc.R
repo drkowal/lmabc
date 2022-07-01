@@ -1,5 +1,5 @@
 #' @export
-glm_abc <- function(formula, family = stats::gaussian, data, ..., cprobs = NULL) {
+glmabc <- function(formula, family = stats::gaussian, data, ..., cprobs = NULL) {
 
 	# Usual glm fit: this is a nice baseline
 	fit0 <- stats::glm(formula = formula,
