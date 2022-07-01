@@ -28,8 +28,8 @@ summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...
 		summary_abc$correlation <- stats::cov2cor(object$cov.unscaled)
 		summary_abc$symbolic.cor <- symbolic.cor
 	} else {
-		summary_abc[["correlation"]] <- NULL
-		summary_abc[["symbolic.cor"]] <- NULL
+		summary_abc$correlation <- NULL
+		summary_abc$symbolic.cor <- NULL
 	}
 
 	summary_abc
