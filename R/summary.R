@@ -8,9 +8,8 @@
 #' @returns A list of summary statistics of the fitted linear ABC model given in object.
 #' @seealso [stats::summary], [stats::summary.lm]
 #' @export
-summary.lmabc <- function(object, ...) {
+summary.lmabc <- function(object, object, correlation = FALSE, symbolic.cor = FALSE, ...) {
 	summary_base <- summary(object$lm, ...) # a lot of the information is the same between the base summary and the abc summary
-
 
 	ses <- sqrt(diag(vcov(object))) # Calculating the new standard error
 	term_coeff <- object$coefficients # extracting all the coefficents from the lmabc model
@@ -21,21 +20,19 @@ summary.lmabc <- function(object, ...) {
 	# renaming the dimensions of the new coeff matrix
 	dimnames(coefficients_abc) <- list(names(term_coeff), c("Estimate", "Std. Error", "t value", "Pr(>|t|)"))
 
-	if (correlation) {
-		summary_base$correlation <- stats::cov2cor(object$cov.unscaled)
-		summary_base$symbolic.cor <- symbolic.cor
-	}
-	# class of the returned object is still summary.lm, is this something we want
-	# to change?
-	# class(summary_base) <- "summary.lmabc"
-	summary_base
-
 	summary_abc <- summary_base; attr(summary_abc, 'class') <- "summary.lmabc"
 	summary_abc$summary.lm <- summary_base
 	summary_abc$coefficients <- coefficients_abc
 
-	summary_abc
+	if (correlation) {
+		summary_abc$correlation <- stats::cov2cor(object$cov.unscaled)
+		summary_abc$symbolic.cor <- symbolic.cor
+	} else {
+		summary_abc[["correlation"]] <- NULL
+		summary_abc[["symbolic.cor"]] <- NULL
+	}
 
+	summary_abc
 }
 
 #' @export
