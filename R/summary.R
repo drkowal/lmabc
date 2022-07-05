@@ -8,3 +8,8 @@ summary.lmabc = function(object, ...){
 vcov.lmabc = function(object, ...){
 	object$sigma^2*object$cov.unscaled
 }
+
+#' @export
+nobs.lmabc <- function(object, ...) {
+	stats::nobs(object$lm, ...)
+}
