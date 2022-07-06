@@ -11,8 +11,8 @@
 summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...) {
 	summary_base <- summary(object$lm, correlation = correlation, symbolic.cor = symbolic.cor, ...) # a lot of the information is the same between the base summary and the abc summary
 
-	ses <- sqrt(diag(vcov(object))) # Calculating the new standard error
 	term_coeff <- object$coefficients # extracting all the coefficents from the lmabc model
+	ses <- sqrt(diag(vcov(object))) # Calculating the new standard error
 	t_val <- term_coeff/ses # New t-values
 	p_val <- 2*pt(abs(t_val), object$df.residual, lower.tail = FALSE) # new probabilities calculated here
 
