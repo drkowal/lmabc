@@ -2,9 +2,6 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom stats nobs
-#' @importFrom stats coef
-#' @importFrom stats lm
-#' @importFrom stats sd
+#' @import stats
 ## usethis namespace: end
 NULL
