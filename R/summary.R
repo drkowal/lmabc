@@ -47,5 +47,6 @@ nobs.lmabc <- function(object, ...) {
 
 #' @export
 print.summary.lmabc <- function(x, digits = max(3L, getOption("digits") - 3L), symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"), ...) {
-	stats:::print.summary.lm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
+	summary.lm <- utils::getFromNamespace("print.summary.lm", "stats")
+	summary.lm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
 }
