@@ -6,7 +6,7 @@
 #' @inheritParams stats::summary.lm
 #'
 #' @returns A list of summary statistics of the fitted linear ABC model given in object.
-#' @seealso [base::summary], [stats::summary.lm]
+#' @seealso [base::summary()], [stats::summary.lm()]
 #' @export
 summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...) {
 	summary_base <- summary(object$lm, correlation = correlation, symbolic.cor = symbolic.cor, ...) # a lot of the information is the same between the base summary and the abc summary
@@ -47,5 +47,6 @@ nobs.lmabc <- function(object, ...) {
 
 #' @export
 print.summary.lmabc <- function(x, digits = max(3L, getOption("digits") - 3L), symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"), ...) {
-	stats:::print.summary.lm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
+	summary.lm <- utils::getFromNamespace("print.summary.lm", "stats")
+	summary.lm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
 }
