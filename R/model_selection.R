@@ -1,4 +1,4 @@
 #' @export
 logLik.lmabc <- function(object, REML = FALSE, ...) {
-	logLik(object$lm, REML = REML, ...)
+	stats::logLik(object$lm, REML = REML, ...)
 }
