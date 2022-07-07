@@ -13,4 +13,5 @@ Imports:
     genlasso,
     glmnet,
     graphics,
-    stats
+    stats,
+    utils
