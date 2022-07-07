@@ -24,5 +24,5 @@ A list of summary statistics of the fitted linear ABC model given in object.
 \code{summary} method for class "lmabc".
 }
 \seealso{
-\link[base:summary]{base::summary}, \link[stats:summary.lm]{stats::summary.lm}
+\code{\link[base:summary]{base::summary()}}, \code{\link[stats:summary.lm]{stats::summary.lm()}}
 }
