@@ -1,0 +1,128 @@
+---
+title: "lmabc-vignette1"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{lmabc-vignette1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(lmabc)
+```
+
+
+```{r}
+#library(tidyverse)
+#install.packages("DataExplorer")
+#library(DataExplorer)
+#install.packages("mice")
+#library(mice)
+#install.packages("Hmisc")
+#library("Hmisc")
+library(MASS)
+library(lmabc)
+```
+
+For this vignette, use publicly available birthwt dataset.   
+The birthwt dataset from the MASS package has data on 189 births at the Baystate Medical Centre, Springfield, Massachusetts during 1986 (Venables & Ripley, 2002). 
+The dataframe contains these columns (taken directly from documentation):  
+
+|Field|Description|
+|---:|:---|
+|low|indicator of birth weight less than 2.5kg|
+|age|mother’s age in years|
+|lwt|mother’s weight in pounds at last menstrual period|
+|race|mother’s race (1 = white, 2 = black, 3 = other)|
+|smoke|smoking status during pregnancy|
+|ptl|number of previous premature labors|
+|ht|history of hypertension|
+|ui|presence of uterine irritability|
+|ftv|number of physician visits during the first trimester|
+|bwt|birth weight in grams|
+
+
+```{r}
+head(birthwt)
+```
+
+```{r}
+birthweight3 <- with(birthwt, {
+	race <- factor(race, labels = c("white", "black", "other"))
+	ptd <- factor(ptl > 0)
+	data.frame(age, lwt, race, smoke = factor(smoke), ptd, ht = factor(ht > 0), ui = factor(ui > 0 ), ftv, bwt)
+})
+
+head(birthweight3)
+```
+
+```{r}
+
+```
+
+
+
+FROM OLD FIRAT DRAFT OF VIGNETTE 
+
+```{r}
+birthweight <- with(birthwt, {
+	race <- factor(race, labels = c("white", "black", "other"))
+	ptd <- factor(ptl > 0)
+	ftv <- factor(ftv)
+	levels(ftv)[-(1:2)] <- "2+"
+	data.frame(age, lwt, race, smoke = (smoke > 0), ptd, ht = (ht > 0), ui = (ui > 0), ftv, bwt)
+})
+```
+
+```{r}
+birthweight2 <- with(birthwt, {
+	race <- factor(race, labels = c("white", "black", "other"))
+	ptd <- factor(ptl > 0)
+	ftv <- factor(ftv)
+	data.frame(age, lwt, race, smoke = factor(smoke > 0), ptd, ht = factor(ht > 0), ui = factor(ui > 0), ftv, bwt)
+})
+
+```
+
+```{r}
+birthweight3 <- with(birthwt, {
+	race <- factor(race, labels = c("white", "black", "other"))
+	ptd <- factor(ptl > 0)
+	data.frame(age, lwt, race, smoke = factor(smoke), ptd, ht = factor(ht > 0), ui = factor(ui > 0 ), ftv, bwt)
+})
+
+birthweight3
+```
+
+```{r}
+lm_ft <- lm(bwt~., birthweight3)
+lm_ft
+summary(lm_ft)
+```
+
+Low R^2 score, but...
+"Some fields of study have an inherently greater amount of unexplainable variation. In these areas, your R^2 values are bound to be lower. For example, studies that try to explain human behavior generally have R^2 values less than 50%. People are just harder to predict than things like physical processes."
+```{r}
+#null hypothesis for lm, no linear relationship between x val and the response 
+lmabc_bwt <- lmabc::lm_abc(bwt~., birthweight3)
+lmabc_bwt
+summary(lmabc_bwt)
+```
+
+
+```{r}
+plot(lm_ft)
+```
+
+```{r}
+plot(lmabc_bwt)
+```
+
+No apparent bias from plotting residuals 

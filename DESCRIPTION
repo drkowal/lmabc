@@ -15,3 +15,7 @@ Imports:
     graphics,
     stats,
     utils
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
