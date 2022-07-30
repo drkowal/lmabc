@@ -23,7 +23,8 @@ glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 
 		# Compute the full design matrix:
 		X = getFullDesign(formula = formula,
-											data = data)
+											data = data,
+											center = TRUE) #CHANGED TO BE CENTERED
 		xnames = colnames(X) # variable names
 
 		# Number of constraints
@@ -78,8 +79,9 @@ glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 		fit$Con = Con # store the constraint matrix
 		fit$coefficients = beta_con # coefficient estimates
 		fit$cov.unscaled = cov.unscaled_con # covariance matrix
-		fit$sigma = sigma_hat # estimated standard deviation
+		fit$sigma = sigma_hat # estimated standard deviation (NOT NEEDED?)
 		# fit$residuals # already there
+		#ADD: call
 
 		return(fit) # return the glmabc object
 	}

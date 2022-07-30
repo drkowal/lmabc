@@ -6,16 +6,18 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+The aim of this vignette is to demonstrate when and how to use lmabc, and how to interpret results compared to normal lm.  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
-
+First, load necessary libraries/packages:
 ```{r setup}
 library(lmabc)
+library(MASS)
+require(DataExplorer)
 ```
 
 
@@ -27,11 +29,10 @@ library(lmabc)
 #library(mice)
 #install.packages("Hmisc")
 #library("Hmisc")
-library(MASS)
-library(lmabc)
+
 ```
 
-For this vignette, use publicly available birthwt dataset.   
+For this vignette, lets use the publicly available birthwt dataset.   
 The birthwt dataset from the MASS package has data on 189 births at the Baystate Medical Centre, Springfield, Massachusetts during 1986 (Venables & Ripley, 2002). 
 The dataframe contains these columns (taken directly from documentation):  
 
@@ -48,28 +49,59 @@ The dataframe contains these columns (taken directly from documentation):
 |ftv|number of physician visits during the first trimester|
 |bwt|birth weight in grams|
 
-
+First, look at dataset to understand its format and characteristics.
 ```{r}
 head(birthwt)
 ```
 
+Variables like ptl are zero inflated.  
+Most are categorical (race, smoke, ptl, ht, ui, ftv, low).  
+Only age, lwt, and bwt are continuous 
+
+First, lets reformat our variables.   
+1. Change race from numbers to the correct category label.  
+2. Make smoke, ptl, ht, and ui T/F.  
+
+
+
 ```{r}
 birthweight3 <- with(birthwt, {
 	race <- factor(race, labels = c("white", "black", "other"))
-	ptd <- factor(ptl > 0)
-	data.frame(age, lwt, race, smoke = factor(smoke), ptd, ht = factor(ht > 0), ui = factor(ui > 0 ), ftv, bwt)
+	data.frame(age, lwt, race, smoke = factor(smoke > 0), ptl = factor(ptl > 0), ht = factor(ht > 0), ui = factor(ui > 0 ), ftv, bwt)
 })
 
 head(birthweight3)
 ```
 
-```{r}
+Now that we have our data formatted, lets investigate relationships between them.  
 
+Let's say we want to explore if the variation birthweight (bwt) can be explained by .... (variables we want)..   Do we want to build up the model slowly and show different interpretations/interations or just go for it? 
+
+
+
+
+Plot normal lm model for dataset
+```{r}
+lm_ft <- lm(bwt~., birthweight3)
+lm_ft
+summary(lm_ft)
 ```
 
+Low R^2 score, but...
+"Some fields of study have an inherently greater amount of unexplainable variation. In these areas, your R^2 values are bound to be lower. For example, studies that try to explain human behavior generally have R^2 values less than 50%. People are just harder to predict than things like physical processes."
+
+```{r}
+#null hypothesis for lm, no linear relationship between x val and the response 
+lmabc_bwt <- lmabc::lm_abc(bwt~., birthweight3)
+lmabc_bwt
+summary(lmabc_bwt)
+```
+
+DO WE NEED TO CENTER CONTINUOUS COVARIATES?? IF SO, ADD 
 
 
-FROM OLD FIRAT DRAFT OF VIGNETTE 
+
+FROM OLD FIRST DRAFT OF VIGNETTE 
 
 ```{r}
 birthweight <- with(birthwt, {
@@ -88,6 +120,7 @@ birthweight2 <- with(birthwt, {
 	ftv <- factor(ftv)
 	data.frame(age, lwt, race, smoke = factor(smoke > 0), ptd, ht = factor(ht > 0), ui = factor(ui > 0), ftv, bwt)
 })
+#ftv is a factor here
 
 ```
 
@@ -97,7 +130,7 @@ birthweight3 <- with(birthwt, {
 	ptd <- factor(ptl > 0)
 	data.frame(age, lwt, race, smoke = factor(smoke), ptd, ht = factor(ht > 0), ui = factor(ui > 0 ), ftv, bwt)
 })
-
+#ftv continuous
 birthweight3
 ```
 
@@ -115,7 +148,11 @@ lmabc_bwt <- lmabc::lm_abc(bwt~., birthweight3)
 lmabc_bwt
 summary(lmabc_bwt)
 ```
-
+ASSUMPTIONS:
+linearity 
+homoscesticity - the varance around the line of prediction is about the same for all values of x 
+independence
+normality 
 
 ```{r}
 plot(lm_ft)
@@ -124,5 +161,7 @@ plot(lm_ft)
 ```{r}
 plot(lmabc_bwt)
 ```
+Check if residuals are normally distributed
+Q-Q
 
-No apparent bias from plotting residuals 
+The relationship between the sample percentiles and theoretical percentiles is  linear. The condition that the error terms are normally distributed is met to use lm. 

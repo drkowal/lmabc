@@ -22,7 +22,8 @@ lm_abc = function(formula, data, ..., cprobs = NULL){
 
 		# Compute the full design matrix:
 		X = getFullDesign(formula = formula,
-											data = data)
+											data = data,
+											center = TRUE) #WHY ARENT WE CENTERING OUR DATA
 		xnames = colnames(X) # variable names
 
 		# Number of constraints
@@ -80,6 +81,8 @@ lm_abc = function(formula, data, ..., cprobs = NULL){
 		fit$cov.unscaled = cov.unscaled_con # covariance matrix
 		fit$sigma = sigma_hat # estimated standard deviation
 		# fit$residuals # already there
+		#add call
+
 
 		return(fit) # return the lmabc object
 	}
@@ -112,7 +115,8 @@ getConstraints = function(formula, data, cprobs = NULL){
 
 		# Compute the full design matrix:
 		X = getFullDesign(formula = formula,
-											data = data)
+											data = data,
+											center = TRUE)
 		xnames = colnames(X) # variable names
 
 		# Compute the ABCs:
