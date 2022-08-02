@@ -23,6 +23,7 @@ summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...
 	summary_abc <- summary_base; attr(summary_abc, 'class') <- "summary.lmabc"
 	summary_abc$summary.lm <- summary_base
 	summary_abc$coefficients <- coefficients_abc
+	summary_abc$call <- object$call
 
 	if (correlation) {
 		summary_abc$correlation <- stats::cov2cor(object$cov.unscaled)
