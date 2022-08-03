@@ -73,6 +73,7 @@ glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 
 		# New class:
 		fit = fit0;  attr(fit, 'class') = 'glmabc'
+		fit$call = match.call()  # store the function call
 		fit$glm = fit0 #  store the original object
 		fit$X = X # store the full design matrix
 		fit$Con = Con # store the constraint matrix
