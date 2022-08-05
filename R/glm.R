@@ -69,7 +69,8 @@ glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 			stop('Fitted values are not the same;
          may be an issue with the constraint matrix')
 		}
-		sigma_hat = summary(fit_con)$sigma # error SD
+		#sigma_hat = summary(fit_con)$sigma # error SD
+		#^this is not going to work for glm, summary.glm does not have a sigma component
 
 		# New class:
 		fit = fit0;  attr(fit, 'class') = 'glmabc'
@@ -78,7 +79,7 @@ glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 		fit$Con = Con # store the constraint matrix
 		fit$coefficients = beta_con # coefficient estimates
 		fit$cov.unscaled = cov.unscaled_con # covariance matrix
-		fit$sigma = sigma_hat # estimated standard deviation
+		#fit$sigma = sigma_hat # estimated standard deviation
 		# fit$residuals # already there
 
 		return(fit) # return the glmabc object
