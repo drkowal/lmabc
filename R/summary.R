@@ -68,6 +68,7 @@ summary.glmabc <- function(object, ...) {
 	summary_glmabc <- summary_base ; attr(summary_glmabc, 'class') <- "summary.glmabc"
 	summary_glmabc$summary.glm <- summary_base
 	summary_glmabc$coefficients <- coefficients_abc
+	summary_glmabc$call <- object$call
 
 	summary_glmabc
 }
