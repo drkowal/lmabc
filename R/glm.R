@@ -73,7 +73,7 @@ glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 		#^this is not going to work for glm, summary.glm does not have a sigma component
 
 		# New class:
-		fit = fit0;  attr(fit, 'class') = 'glmabc'
+		fit = fit0;  attr(fit, 'class') = c('glmabc', 'lmabc')
 		fit$glm = fit0 #  store the original object
 		fit$X = X # store the full design matrix
 		fit$Con = Con # store the constraint matrix
