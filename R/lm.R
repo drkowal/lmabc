@@ -23,7 +23,7 @@ lm_abc = function(formula, data, ..., cprobs = NULL){
 		# Compute the full design matrix:
 		X = getFullDesign(formula = formula,
 											data = data,
-											center = TRUE) #WHY ARENT WE CENTERING OUR DATA
+											center = TRUE)
 		xnames = colnames(X) # variable names
 
 		# Number of constraints

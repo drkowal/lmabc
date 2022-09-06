@@ -1,12 +1,14 @@
 ---
-title: "lmabc-vignette1"
+title: "`lm_abc`: Linear Regression"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{lmabc-vignette1}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-The aim of this vignette is to demonstrate when and how to use lmabc, and how to interpret results compared to normal lm.  
+## Vignette 1
+
+The aim of this vignette is to demonstrate when and how to use lm_abc, and how to interpret results compared to normal lm linear regression models.  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -14,23 +16,12 @@ knitr::opts_chunk$set(
 )
 ```
 First, load necessary libraries/packages:
-```{r setup}
+```{r setup, message=FALSE}
 library(lmabc)
 library(MASS)
 require(DataExplorer)
 ```
 
-
-```{r}
-#library(tidyverse)
-#install.packages("DataExplorer")
-#library(DataExplorer)
-#install.packages("mice")
-#library(mice)
-#install.packages("Hmisc")
-#library("Hmisc")
-
-```
 
 For this vignette, lets use the publicly available birthwt dataset.   
 The birthwt dataset from the MASS package has data on 189 births at the Baystate Medical Centre, Springfield, Massachusetts during 1986 (Venables & Ripley, 2002). 
@@ -54,114 +45,108 @@ First, look at dataset to understand its format and characteristics.
 head(birthwt)
 ```
 
-Variables like ptl are zero inflated.  
-Most are categorical (race, smoke, ptl, ht, ui, ftv, low).  
-Only age, lwt, and bwt are continuous 
+From this we can see:     
+Most variables are categorical (*race*, *smoke*, *ptl*, *ht*, *ui*, *ftv*, *low*).  
+Only *age*, *lwt*, and *bwt* are continuous 
 
 First, lets reformat our variables.   
-1. Change race from numbers to the correct category label.  
-2. Make smoke, ptl, ht, and ui T/F.  
+1. Change *race* from numbers to the correct category label.  
+2. Make *smoke*, *ptl*, *ht*, and *ui* T/F.  
 
 
-
-```{r}
-birthweight3 <- with(birthwt, {
-	race <- factor(race, labels = c("white", "black", "other"))
-	data.frame(age, lwt, race, smoke = factor(smoke > 0), ptl = factor(ptl > 0), ht = factor(ht > 0), ui = factor(ui > 0 ), ftv, bwt)
-})
-
-head(birthweight3)
-```
-
-Now that we have our data formatted, lets investigate relationships between them.  
-
-Let's say we want to explore if the variation birthweight (bwt) can be explained by .... (variables we want)..   Do we want to build up the model slowly and show different interpretations/interations or just go for it? 
-
-
-
-
-Plot normal lm model for dataset
-```{r}
-lm_ft <- lm(bwt~., birthweight3)
-lm_ft
-summary(lm_ft)
-```
-
-Low R^2 score, but...
-"Some fields of study have an inherently greater amount of unexplainable variation. In these areas, your R^2 values are bound to be lower. For example, studies that try to explain human behavior generally have R^2 values less than 50%. People are just harder to predict than things like physical processes."
-
-```{r}
-#null hypothesis for lm, no linear relationship between x val and the response 
-lmabc_bwt <- lmabc::lm_abc(bwt~., birthweight3)
-lmabc_bwt
-summary(lmabc_bwt)
-```
-
-DO WE NEED TO CENTER CONTINUOUS COVARIATES?? IF SO, ADD 
-
-
-
-FROM OLD FIRST DRAFT OF VIGNETTE 
 
 ```{r}
 birthweight <- with(birthwt, {
 	race <- factor(race, labels = c("white", "black", "other"))
-	ptd <- factor(ptl > 0)
-	ftv <- factor(ftv)
-	levels(ftv)[-(1:2)] <- "2+"
-	data.frame(age, lwt, race, smoke = (smoke > 0), ptd, ht = (ht > 0), ui = (ui > 0), ftv, bwt)
+	data.frame(age, lwt, race, smoke = factor(smoke > 0), ptl = factor(ptl > 0), 
+						 ht = factor(ht > 0), ui = factor(ui > 0 ), ftv, bwt)
 })
+
+head(birthweight)
+```
+
+Now that we have our data formatted, let's investigate relationships between them. Let us assume for the sake of demonstration all assumptions for linear regression are met. 
+
+Let's say we want to explore the relationships between the fields in the dataset and the variation birthweight (bwt). 
+
+First, let's use lm package.   
+
+## `lm` Model
+```{r}
+lm_fit <- lm(bwt ~ ., data = birthweight)
+summary(lm_fit)
+```
+<p style="font-family: times, serif; font-size:10pt; font-style:italic">
+A note on the low R^2^ score: 
+"Some fields of study have an inherently greater amount of unexplainable variation. In these areas, your R^2^ values are bound to be lower. For example, studies that try to explain human behavior generally have R^2^ values less than $50%$. People are just harder to predict than things like physical processes." (source: https://statisticsbyjim.com/regression/interpret-r-squared-regression/)
+</p>
+\
+&nbsp;
+
+
+Notice the results of summary(lm_fit). There are only values for *smokeTRUE*, not *smokeFALSE* and likewise only *raceblack* and *raceother* but not *racewhite*. How can we decern what effect being white has on birth weight?  
+
+Standard linear regression models chose one level for each categorical factor and make it the baseline. This necessary to not over-parameterize the model. More often than not when race is a covariate, Non-Hispanic White is the baseline. This can be problematic if an R user does not understand that all the factor-specific effects are *in comparison* to that group-specific baseline.   
+
+Fortunately, lm_abc packages utilizes *abundance based constraints* to avoid this issue of overparameterization without the use of group-specific baselines.   
+Unlike the lm package, lm_abc introduces a "universal" baseline, which takes into account the relative frequency of the different levels of each factor in the data and creates a neutral/proportionally average baseline to compare level specific effects to. Let's see this in action.
+
+## `lm_abc` Model
+
+**EXTREMELY IMPORTANT: You must center your predictors for lm_abc models!**  
+**UPDATE: lm_abc centers continuous predictors for you now :)**
+```{r}
+lmabc_fit <- lmabc::lm_abc(bwt~., birthweight)
+summary(lmabc_fit)
+```
+
+Notice the number of coefficient values for lm_abc compared to traditional lm! There are now coefficients for *racewhite*, *smokeFALSE*, *ptlFALSE*, and all the levels that previously had been absorbed into the baseline of lm. The effects of any level of a given factor can now be reported and interpreted relative to the general baseline instead of a group baseline.    
+
+## Relationship between `lm` and `lm_abc`
+
+It is important to understand the relationship between lm and lm_abc. Under the hood, these are both fitting/estimating the same model, and this can be seen a number of ways.   
+
+Look at the *raceother* coefficient value from lm: $-340.268$. This is the relative effect being raceother has on the regression *in comparison to* being *racewhite* with all other predictors held constant.   
+
+We can get the same conclusion from lm_abc but with more detail. The coefficient value of *raceother* is $-154.438$, and the value for *racewhite* is $185.831$. Therefore, the effect of being *raceother* *in comparison to* being *racewhite* with all other predictors held constant is $-154.438 - 185.831 = -340.268$, the same value we get from lm. We can see from this small demonstration that lm and lm_abc do fit the same model given the data, but lm_abc gives categorical coefficient values for each factor level in comparison to a neutral baseline. This elimination of group-specific baselines leads to more interpretable and equitable inferences.
+
+For testing the validity of the model, you can employ the same tools as you would for lm. The residuals of lm vs lm_abc models are the same.   
+ 
+
+
+
+Check: these plots are the same: 
+
+```{r}
+plot(lm_fit)
 ```
 
 ```{r}
-birthweight2 <- with(birthwt, {
-	race <- factor(race, labels = c("white", "black", "other"))
-	ptd <- factor(ptl > 0)
-	ftv <- factor(ftv)
-	data.frame(age, lwt, race, smoke = factor(smoke > 0), ptd, ht = factor(ht > 0), ui = factor(ui > 0), ftv, bwt)
-})
-#ftv is a factor here
-
+plot(lmabc_fit)
 ```
 
-```{r}
-birthweight3 <- with(birthwt, {
-	race <- factor(race, labels = c("white", "black", "other"))
-	ptd <- factor(ptl > 0)
-	data.frame(age, lwt, race, smoke = factor(smoke), ptd, ht = factor(ht > 0), ui = factor(ui > 0 ), ftv, bwt)
-})
-#ftv continuous
-birthweight3
+\
+&nbsp; 
+
+## Conclusion 
+It is our intention to have lm_abc become the standard package used when creating a regression model with categorical covariates. The inclusion of the population baseline provides more equitable interpretations. Instead of reporting a race-specific effect in comparison to the Non-Hispanic White group, a race effect (with all other predictors held constant) can be reported compared to the population baseline, truly isolating the race-specific effect. We hope as well that it will reduce incorrect interpretations of lm outputs.      
+
+Looking towards the future, this methodology will be available of glm, as well as penalized estimation (like lasso).    
+
+### End of Vignette    
+
+This research is by Dr. Daniel Kowal of the Rice University Statistics Department.
+
+\
+&nbsp; 
+Question: 
+```{r, results='hide'}
+lmabc_fit2 <- lmabc::lm_abc(bwt~ age + lwt + race + smoke + ht + ui + age*smoke, birthweight)
+summary(lmabc_fit2)
+#include its use with interactions or is that unnecessary? it is the same as lm
 ```
 
-```{r}
-lm_ft <- lm(bwt~., birthweight3)
-lm_ft
-summary(lm_ft)
-```
+  
 
-Low R^2 score, but...
-"Some fields of study have an inherently greater amount of unexplainable variation. In these areas, your R^2 values are bound to be lower. For example, studies that try to explain human behavior generally have R^2 values less than 50%. People are just harder to predict than things like physical processes."
-```{r}
-#null hypothesis for lm, no linear relationship between x val and the response 
-lmabc_bwt <- lmabc::lm_abc(bwt~., birthweight3)
-lmabc_bwt
-summary(lmabc_bwt)
-```
-ASSUMPTIONS:
-linearity 
-homoscesticity - the varance around the line of prediction is about the same for all values of x 
-independence
-normality 
 
-```{r}
-plot(lm_ft)
-```
-
-```{r}
-plot(lmabc_bwt)
-```
-Check if residuals are normally distributed
-Q-Q
-
-The relationship between the sample percentiles and theoretical percentiles is  linear. The condition that the error terms are normally distributed is met to use lm. 
+   
