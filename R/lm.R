@@ -1,10 +1,8 @@
+#' `lm_abc` is used to fit linear models using abundance-based constraints.
 #'
+#' @inheritParams stats::lm
 #'
-#' @param formula
-#'
-#' @param data
-#' @param ...
-#' @param cprobs
+#' @param cprobs a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category
 #'
 #' @export
 lm_abc = function(formula, data, ..., cprobs = NULL){
