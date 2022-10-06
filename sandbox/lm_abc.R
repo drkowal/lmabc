@@ -79,8 +79,8 @@ vcov(fit_base)
 vcov(fit_abc)
 
 # Diagnostic plots:
-# plot(fit_base)
-# plot(fit_abc)
+plot(fit_base)
+plot(fit_abc)
 
 # Summaries:
 summary(fit_base)
