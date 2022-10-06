@@ -12,16 +12,12 @@ lm_abc(formula, data, ..., cprobs = NULL)
     model to be fitted.  The details of model specification are given
     under \sQuote{Details}.}
 
-\item{data}{an optional data frame, list or environment (or object
-    coercible by \code{\link{as.data.frame}} to a data frame) containing
-    the variables in the model.  If not found in \code{data}, the
-    variables are taken from \code{environment(formula)},
-    typically the environment from which \code{lm} is called.}
+\item{data}{a data frame (or object coercible by \link{as.data.frame} to a data frame) containing the variables in the model.}
 
 \item{...}{additional arguments to be passed to the low level
     regression fitting functions (see below).}
 
-\item{cprobs}{a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category}
+\item{cprobs}{a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.}
 }
 \description{
 \code{lm_abc} is used to fit linear models using abundance-based constraints.
