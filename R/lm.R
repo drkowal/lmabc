@@ -1,3 +1,11 @@
+#'
+#'
+#' @param formula
+#'
+#' @param data
+#' @param ...
+#' @param cprobs
+#'
 #' @export
 lm_abc = function(formula, data, ..., cprobs = NULL){
 
@@ -87,6 +95,13 @@ lm_abc = function(formula, data, ..., cprobs = NULL){
 
 }
 
+#'
+#'
+#' @param formula
+#'
+#' @param data
+#' @param cprobs
+#'
 #' @export
 getConstraints = function(formula, data, cprobs = NULL){
 
@@ -233,6 +248,13 @@ getConstraints = function(formula, data, cprobs = NULL){
 	return(Con)
 }
 
+#'
+#'
+#' @param formula
+#'
+#' @param data
+#' @param center
+#'
 #' @export
 getFullDesign = function(formula, data, center = TRUE){
 
