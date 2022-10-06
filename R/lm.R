@@ -2,7 +2,8 @@
 #'
 #' @inheritParams stats::lm
 #'
-#' @param cprobs a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category
+#' @param data a data frame (or object coercible by [as.data.frame] to a data frame) containing the variables in the model.
+#' @param cprobs a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.
 #'
 #' @export
 lm_abc = function(formula, data, ..., cprobs = NULL){
@@ -93,14 +94,6 @@ lm_abc = function(formula, data, ..., cprobs = NULL){
 
 }
 
-#'
-#'
-#' @param formula
-#'
-#' @param data
-#' @param cprobs
-#'
-#' @export
 getConstraints = function(formula, data, cprobs = NULL){
 
 	# Model frame has some useful information
@@ -246,14 +239,6 @@ getConstraints = function(formula, data, cprobs = NULL){
 	return(Con)
 }
 
-#'
-#'
-#' @param formula
-#'
-#' @param data
-#' @param center
-#'
-#' @export
 getFullDesign = function(formula, data, center = TRUE){
 
 	# Model frame has some useful information
