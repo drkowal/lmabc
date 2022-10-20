@@ -2,7 +2,7 @@
 % Please edit documentation in R/lm.R
 \name{lm_abc}
 \alias{lm_abc}
-\title{\code{lm_abc} is used to fit linear models using abundance-based constraints.}
+\title{Fitting Linear Models with Abundance-Based Constraints}
 \usage{
 lm_abc(formula, data, ..., cprobs = NULL)
 }
@@ -22,3 +22,11 @@ lm_abc(formula, data, ..., cprobs = NULL)
 \description{
 \code{lm_abc} is used to fit linear models using abundance-based constraints.
 }
+\section{Differences from \link{lm}}{
+Standard linear regression models chose one level for each categorical factor and make it the baseline. This necessary to not over-parameterize the model. More often than not when race is a covariate, Non-Hispanic White is the baseline. This can be problematic if an R user does not understand that all the factor-specific effects are in comparison to that group-specific baseline. Fortunately, lm_abc packages utilizes abundance based constraints to avoid this issue of overparameterization without the use of group-specific baselines. Unlike the lm package, lm_abc introduces a "universal" baseline, which takes into account the relative frequency of the different levels of each factor in the data and creates a neutral/proportionally average baseline to compare level specific effects to. Let's see this in action.
+}
+
+\section{Value}{
+blah blah
+}
+

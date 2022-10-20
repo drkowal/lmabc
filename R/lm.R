@@ -1,9 +1,20 @@
+#' Fitting Linear Models with Abundance-Based Constraints
+#'
 #' `lm_abc` is used to fit linear models using abundance-based constraints.
 #'
 #' @inheritParams stats::lm
 #'
 #' @param data a data frame (or object coercible by [as.data.frame] to a data frame) containing the variables in the model.
 #' @param cprobs a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.
+#'
+#' @details
+#' # Differences from [lm]
+#'
+#' Standard linear regression models chose one level for each categorical factor and make it the baseline. This necessary to not over-parameterize the model. More often than not when race is a covariate, Non-Hispanic White is the baseline. This can be problematic if an R user does not understand that all the factor-specific effects are in comparison to that group-specific baseline. Fortunately, lm_abc packages utilizes abundance based constraints to avoid this issue of overparameterization without the use of group-specific baselines. Unlike the lm package, lm_abc introduces a "universal" baseline, which takes into account the relative frequency of the different levels of each factor in the data and creates a neutral/proportionally average baseline to compare level specific effects to. Let's see this in action.
+#'
+#' # Value
+#'
+#' blah blah
 #'
 #' @export
 lm_abc = function(formula, data, ..., cprobs = NULL){
