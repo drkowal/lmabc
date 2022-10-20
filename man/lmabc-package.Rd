@@ -4,7 +4,7 @@
 \name{lmabc-package}
 \alias{lmabc}
 \alias{lmabc-package}
-\title{lmabc: What the Package Does (One Line, Title Case)}
+\title{lmabc: Linear Regression with Abudance Based Constraints}
 \description{
 What the package does (one paragraph).
 }
