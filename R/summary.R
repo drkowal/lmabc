@@ -48,6 +48,33 @@ nobs.lmabc <- function(object, ...) {
 
 #' @export
 print.summary.lmabc <- function(x, digits = max(3L, getOption("digits") - 3L), symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"), ...) {
-	summary.lm <- utils::getFromNamespace("print.summary.lm", "stats")
-	summary.lm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
+	print.summary.lm <- utils::getFromNamespace("print.summary.lm", "stats")
+	print.summary.lm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
+}
+
+#' @export
+summary.glmabc <- function(object, ...) {
+	summary_base <- summary(object$glm, ...) # a lot of the information is the same between the base summary and the abc summary
+
+	term_coeff <- object$coefficients # extracting all the coefficents from the lmabc model
+	ses <- sqrt(diag(object$cov.unscaled)) # Calculating the new standard error
+	t_val <- term_coeff/ses # New t-values
+	p_val <- 2*pt(abs(t_val), object$df.residual, lower.tail = FALSE) # new probabilities calculated here
+
+	coefficients_abc <- cbind(term_coeff, ses, t_val, p_val) # entering the new values of the coeff matrix
+	# renaming the dimensions of the new coeff matrix
+	dimnames(coefficients_abc) <- list(names(term_coeff), c("Estimate", "Std. Error", "t value", "Pr(>|t|)"))
+
+	summary_glmabc <- summary_base ; attr(summary_glmabc, 'class') <- "summary.glmabc"
+	summary_glmabc$summary.glm <- summary_base
+	summary_glmabc$coefficients <- coefficients_abc
+	summary_glmabc$call <- object$call
+
+	summary_glmabc
+}
+
+#' @export
+print.summary.glmabc <- function(x, digits = max(3L, getOption("digits") - 3L), symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"), ...) {
+	print.summary.glm <- utils::getFromNamespace("print.summary.glm", "stats")
+	print.summary.glm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
 }
