@@ -21,3 +21,12 @@ Ey <- 1 + 2*x1 + -2*x2 + 3*I(k_1==groups_1[1]) -.5*I(k_1==groups_1[2]) + .5*I(k_
 
 # Observed y-value:
 y <- as.numeric(Ey); table(y)
+
+f0 <- formula(y ~ x1 + x2 + x1*k_1)
+
+# Data frame w/ variables needed:
+dat <- data.frame(y, x1, x2, k_1)
+
+fit_base <- glm(f0, family = "binomial")
+
+fit_abc <- glm_abc(f0, data = dat, family = "binomial")
