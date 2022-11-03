@@ -65,7 +65,8 @@ summary.glmabc <- function(object, ...) {
 	# renaming the dimensions of the new coeff matrix
 	dimnames(coefficients_abc) <- list(names(term_coeff), c("Estimate", "Std. Error", "t value", "Pr(>|t|)"))
 
-	summary_glmabc <- summary_base ; attr(summary_glmabc, 'class') <- "summary.glmabc"
+	summary_glmabc <- summary_base; attr(summary_glmabc, 'class') <- "summary.glmabc"
+	summary_glmabc$aliased <- is.na(coef(object))
 	summary_glmabc$summary.glm <- summary_base
 	summary_glmabc$coefficients <- coefficients_abc
 	summary_glmabc$call <- object$call
