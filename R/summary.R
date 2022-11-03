@@ -54,7 +54,7 @@ print.summary.lmabc <- function(x, digits = max(3L, getOption("digits") - 3L), s
 }
 
 #' @export
-summary.glmabc <- function(object, ...) {
+summary.glmabc <- function(object, dispersion = NULL, correlation = FALSE, symbolic.cor = FALSE, ...) {
 	summary_base <- summary(object$glm, ...) # a lot of the information is the same between the base summary and the abc summary
 
 	term_coeff <- object$coefficients # extracting all the coefficents from the lmabc model
