@@ -22,11 +22,29 @@ lm_abc(formula, data, ..., cprobs = NULL)
 \description{
 \code{lm_abc} is used to fit linear models using abundance-based constraints.
 }
+\section{Details}{
+An \link{lmabc} model is specified identically to the corresponding \link{lm} model. At this time, \link{lmabc} only supports a single response variable, and the data must be passed into the \link{data} parameter.
+}
+
 \section{Differences from \link{lm}}{
-Standard linear regression models chose one level for each categorical factor and make it the baseline. This necessary to not over-parameterize the model. More often than not when race is a covariate, Non-Hispanic White is the baseline. This can be problematic if an R user does not understand that all the factor-specific effects are in comparison to that group-specific baseline. Fortunately, lm_abc packages utilizes abundance based constraints to avoid this issue of overparameterization without the use of group-specific baselines. Unlike the lm package, lm_abc introduces a "universal" baseline, which takes into account the relative frequency of the different levels of each factor in the data and creates a neutral/proportionally average baseline to compare level specific effects to. Let's see this in action.
+Standard linear regression models chose one level for each categorical factor and make it a "baseline," which is necessary to not over-parameterize the model. The coefficients on the continuous \eqn{X} variables are specifically for the baseline category and do not represent a global effect. Similarly, the coefficients on the non-baseline levels are in comparison to the baseline level.
+
+This framework can lead to biases in interpretation. Suppose a researcher includes \link{age} and \link{race} as explanatory variables. \link{lm} will report the coefficient for \link{age}, which is really the baseline-specific coefficient for \link{age}; the baseline is often chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global effect. The coefficient for any other race dummy is the expected change in the \eqn{Y} variable compared to the baseline—again, not the true effect of identifying as that race.
+
+\link{lmabc} introduces abundance-based constraints (ABCs). Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by \link{cprobs}. That is, the coefficient on \link{age} is the weighted average of each race-specific effect.
 }
 
 \section{Value}{
-blah blah
+\link{lmabc} returns an object of class "lmabc." Many generics commonly used for \link{lm} objects have been implemented for \link{lmabc}: \link{summary}, \link{coefficients}, \link{plot}, \link{predict}, and more. See the DESCRIPTION file for all implemented S3 methods.
 }
 
+\examples{
+fit <- lm_abc(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
+summary(fit)
+
+predict(fit, newdata = data.frame(Petal.Length = 1.5, Species = "setosa"))
+
+}
+\seealso{
+\link[stats:lm]{stats::lm} for the standard linear regression implementation in R.
+}
