@@ -36,7 +36,7 @@ Ey = 1 + 2*x1 + -2*x2 +
 y  = Ey + rnorm(n=n)
 
 # check signal strength:
-plot(Ey, y)
+# plot(Ey, y)
 # --------------------------------------------
 # Now fit the models:
 # --------------------------------------------
@@ -47,10 +47,10 @@ f0 = formula(y ~ x1 + x2 + x1*k_1)
 dat = data.frame(y, x1, x2, k_1)
 
 # Fit the linear model using NHW as the reference group:
-fit_base = lm(f0)
+fit_base_lm = lm(f0)
 
 # Fit the linear model w/ ABCs:
-fit_abc = lm_abc(f0, data = dat)
+fit_abc_lm = lm_abc(f0, data = dat)
 # --------------------------------------------
 # Compare the outputs:
 # note: the parameters have different interpretations!
