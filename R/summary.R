@@ -71,6 +71,7 @@ summary.glmabc <- function(object, dispersion = NULL, correlation = FALSE, symbo
 	summary_abc$coefficients <- coefficients_abc
 	summary_abc$call <- object$call
 	summary_abc$cov.unscaled <- object$cov.unscaled
+	summary_abc$cov.scaled <- summary_base$dispersion * summary_abc$cov.unscaled
 
 	summary_abc
 }
