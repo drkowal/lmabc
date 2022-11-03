@@ -24,6 +24,7 @@ summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...
 	summary_abc$summary.lm <- summary_base
 	summary_abc$coefficients <- coefficients_abc
 	summary_abc$call <- object$call
+	summary_abc$cov.unscaled <- object$cov.unscaled
 
 	if (correlation) {
 		summary_abc$correlation <- stats::cov2cor(object$cov.unscaled)
@@ -53,7 +54,7 @@ print.summary.lmabc <- function(x, digits = max(3L, getOption("digits") - 3L), s
 }
 
 #' @export
-summary.glmabc <- function(object, ...) {
+summary.glmabc <- function(object, dispersion = NULL, correlation = FALSE, symbolic.cor = FALSE, ...) {
 	summary_base <- summary(object$glm, ...) # a lot of the information is the same between the base summary and the abc summary
 
 	term_coeff <- object$coefficients # extracting all the coefficents from the lmabc model
@@ -65,12 +66,24 @@ summary.glmabc <- function(object, ...) {
 	# renaming the dimensions of the new coeff matrix
 	dimnames(coefficients_abc) <- list(names(term_coeff), c("Estimate", "Std. Error", "t value", "Pr(>|t|)"))
 
-	summary_glmabc <- summary_base ; attr(summary_glmabc, 'class') <- "summary.glmabc"
-	summary_glmabc$summary.glm <- summary_base
-	summary_glmabc$coefficients <- coefficients_abc
-	summary_glmabc$call <- object$call
+	summary_abc <- summary_base ; attr(summary_abc, 'class') <- "summary.glmabc"
+	summary_abc$summary.glm <- summary_base
+	summary_abc$coefficients <- coefficients_abc
+	summary_abc$call <- object$call
+	summary_abc$cov.unscaled <- object$cov.unscaled
+	summary_abc$cov.scaled <- summary_base$dispersion * summary_abc$cov.unscaled
 
-	summary_glmabc
+	summary_abc
+}
+
+#' @export
+vcov.glmabc <- function(object, complete = TRUE, ...) {
+	vcov.summary.glmabc(summary.glmabc(object, ...), complete = complete)
+}
+
+vcov.summary.glmabc <- function(object, complete = TRUE, ...) {
+	.vcov.aliased <- utils::getFromNamespace(".vcov.aliased", "stats")
+	.vcov.aliased(object$aliased, object$cov.scaled, complete = complete)
 }
 
 #' @export
