@@ -24,6 +24,7 @@ summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...
 	summary_abc$summary.lm <- summary_base
 	summary_abc$coefficients <- coefficients_abc
 	summary_abc$call <- object$call
+	summary_abc$cov.unscaled <- object$cov.unscaled
 
 	if (correlation) {
 		summary_abc$correlation <- stats::cov2cor(object$cov.unscaled)
@@ -65,12 +66,13 @@ summary.glmabc <- function(object, ...) {
 	# renaming the dimensions of the new coeff matrix
 	dimnames(coefficients_abc) <- list(names(term_coeff), c("Estimate", "Std. Error", "t value", "Pr(>|t|)"))
 
-	summary_glmabc <- summary_base ; attr(summary_glmabc, 'class') <- "summary.glmabc"
-	summary_glmabc$summary.glm <- summary_base
-	summary_glmabc$coefficients <- coefficients_abc
-	summary_glmabc$call <- object$call
+	summary_abc <- summary_base ; attr(summary_abc, 'class') <- "summary.glmabc"
+	summary_abc$summary.glm <- summary_base
+	summary_abc$coefficients <- coefficients_abc
+	summary_abc$call <- object$call
+	summary_abc$cov.unscaled <- object$cov.unscaled
 
-	summary_glmabc
+	summary_abc
 }
 
 #' @export
