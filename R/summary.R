@@ -67,6 +67,7 @@ summary.glmabc <- function(object, dispersion = NULL, correlation = FALSE, symbo
 	dimnames(coefficients_abc) <- list(names(term_coeff), c("Estimate", "Std. Error", "t value", "Pr(>|t|)"))
 
 	summary_abc <- summary_base ; attr(summary_abc, 'class') <- "summary.glmabc"
+	summary_abc$aliased <- is.na(coef(object))
 	summary_abc$summary.glm <- summary_base
 	summary_abc$coefficients <- coefficients_abc
 	summary_abc$call <- object$call
@@ -84,6 +85,11 @@ vcov.glmabc <- function(object, complete = TRUE, ...) {
 vcov.summary.glmabc <- function(object, complete = TRUE, ...) {
 	.vcov.aliased <- utils::getFromNamespace(".vcov.aliased", "stats")
 	.vcov.aliased(object$aliased, object$cov.scaled, complete = complete)
+}
+
+#' @export
+family.glmabc <- function(object, ...) {
+	object$family
 }
 
 #' @export
