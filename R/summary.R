@@ -74,6 +74,11 @@ summary.glmabc <- function(object, ...) {
 }
 
 #' @export
+family.glmabc <- function(object, ...) {
+	object$family
+}
+
+#' @export
 print.summary.glmabc <- function(x, digits = max(3L, getOption("digits") - 3L), symbolic.cor = x$symbolic.cor, signif.stars = getOption("show.signif.stars"), ...) {
 	print.summary.glm <- utils::getFromNamespace("print.summary.glm", "stats")
 	print.summary.glm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
