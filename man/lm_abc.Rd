@@ -12,7 +12,7 @@ lm_abc(formula, data, ..., cprobs = NULL)
     model to be fitted.  The details of model specification are given
     under \sQuote{Details}.}
 
-\item{data}{a data frame (or object coercible by \link{as.data.frame} to a data frame) containing the variables in the model.}
+\item{data}{a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
 
 \item{...}{additional arguments to be passed to the low level
     regression fitting functions (see below).}
@@ -23,19 +23,19 @@ lm_abc(formula, data, ..., cprobs = NULL)
 \code{lm_abc} is used to fit linear models using abundance-based constraints.
 }
 \section{Details}{
-An \link{lmabc} model is specified identically to the corresponding \link{lm} model. At this time, \link{lmabc} only supports a single response variable, and the data must be passed into the \link{data} parameter.
+An \code{lmabc} model is specified identically to the corresponding \code{lm} model. At this time, \code{lmabc} only supports a single response variable, and the data must be passed into the \code{data} parameter.
 }
 
-\section{Differences from \link{lm}}{
+\section{Differences from KydwleAnQSE35Afyk4yCf08FrPHUgrDQ-5-}{
 Standard linear regression models chose one level for each categorical factor and make it a "baseline," which is necessary to not over-parameterize the model. The coefficients on the continuous \eqn{X} variables are specifically for the baseline category and do not represent a global effect. Similarly, the coefficients on the non-baseline levels are in comparison to the baseline level.
 
-This framework can lead to biases in interpretation. Suppose a researcher includes \link{age} and \link{race} as explanatory variables. \link{lm} will report the coefficient for \link{age}, which is really the baseline-specific coefficient for \link{age}; the baseline is often chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global effect. The coefficient for any other race dummy is the expected change in the \eqn{Y} variable compared to the baseline—again, not the true effect of identifying as that race.
+This framework can lead to biases in interpretation. Suppose a researcher includes \code{age} and \code{race} as explanatory variables. \code{lm} will report the coefficient for \code{age}, which is really the baseline-specific coefficient for \code{age}; the baseline is often chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global effect. The coefficient for any other race dummy is the expected change in the \eqn{Y} variable compared to the baseline—again, not the true effect of identifying as that race.
 
-\link{lmabc} introduces abundance-based constraints (ABCs). Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by \link{cprobs}. That is, the coefficient on \link{age} is the weighted average of each race-specific effect.
+\code{lmabc} introduces abundance-based constraints (ABCs). Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by \code{cprobs}. That is, the coefficient on \code{age} is the weighted average of each race-specific effect.
 }
 
 \section{Value}{
-\link{lmabc} returns an object of class "lmabc." Many generics commonly used for \link{lm} objects have been implemented for \link{lmabc}: \link{summary}, \link{coefficients}, \link{plot}, \link{predict}, and more. See the DESCRIPTION file for all implemented S3 methods.
+\code{lmabc} returns an object of class "lmabc." Many generics commonly used for \code{lm} objects have been implemented for \code{lmabc}: \code{summary}, \code{coefficients}, \code{plot}, \code{predict}, and more. See the DESCRIPTION file for all implemented S3 methods.
 }
 
 \examples{
@@ -46,5 +46,5 @@ predict(fit, newdata = data.frame(Petal.Length = 1.5, Species = "setosa"))
 
 }
 \seealso{
-\link[stats:lm]{stats::lm} for the standard linear regression implementation in R.
+\code{\link[stats:lm]{stats::lm()}} for the standard linear regression implementation in R.
 }

@@ -4,28 +4,28 @@
 #'
 #' @inheritParams stats::lm
 #'
-#' @param data a data frame (or object coercible by [as.data.frame] to a data frame) containing the variables in the model.
+#' @param data a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.
 #' @param cprobs a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.
 #'
 #' @details
 #'
 #' # Details
 #'
-#' An [lmabc] model is specified identically to the corresponding [lm] model. At this time, [lmabc] only supports a single response variable, and the data must be passed into the [data] parameter.
+#' An \code{lmabc} model is specified identically to the corresponding \code{lm} model. At this time, \code{lmabc} only supports a single response variable, and the data must be passed into the \code{data} parameter.
 #'
-#' # Differences from [lm]
+#' # Differences from \code{lm}
 #'
 #' Standard linear regression models chose one level for each categorical factor and make it a "baseline," which is necessary to not over-parameterize the model. The coefficients on the continuous \eqn{X} variables are specifically for the baseline category and do not represent a global effect. Similarly, the coefficients on the non-baseline levels are in comparison to the baseline level.
 #'
-#' This framework can lead to biases in interpretation. Suppose a researcher includes [age] and [race] as explanatory variables. [lm] will report the coefficient for [age], which is really the baseline-specific coefficient for [age]; the baseline is often chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global effect. The coefficient for any other race dummy is the expected change in the \eqn{Y} variable compared to the baseline—again, not the true effect of identifying as that race.
+#' This framework can lead to biases in interpretation. Suppose a researcher includes \code{age} and \code{race} as explanatory variables. \code{lm} will report the coefficient for \code{age}, which is really the baseline-specific coefficient for \code{age}; the baseline is often chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global effect. The coefficient for any other race dummy is the expected change in the \eqn{Y} variable compared to the baseline—again, not the true effect of identifying as that race.
 #'
-#' [lmabc] introduces abundance-based constraints (ABCs). Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by [cprobs]. That is, the coefficient on [age] is the weighted average of each race-specific effect.
+#' \code{lmabc} introduces abundance-based constraints (ABCs). Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by \code{cprobs}. That is, the coefficient on \code{age} is the weighted average of each race-specific effect.
 #'
 #' # Value
 #'
-#' [lmabc] returns an object of class "lmabc." Many generics commonly used for [lm] objects have been implemented for [lmabc]: [summary], [coefficients], [plot], [predict], and more. See the DESCRIPTION file for all implemented S3 methods.
+#' \code{lmabc} returns an object of class "lmabc." Many generics commonly used for \code{lm} objects have been implemented for \code{lmabc}: \code{summary}, \code{coefficients}, \code{plot}, \code{predict}, and more. See the DESCRIPTION file for all implemented S3 methods.
 #'
-#' @seealso [stats::lm] for the standard linear regression implementation in R.
+#' @seealso [stats::lm()] for the standard linear regression implementation in R.
 #'
 #' @examples
 #' fit <- lm_abc(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
