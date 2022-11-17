@@ -4,7 +4,8 @@ cv.penlm = function(formula,
 										lambda_path = NULL,
 										type = 'lasso',
 										K = 10,
-										plot = FALSE){
+										plot = FALSE) {
+
 
 	# Quick check: ridge or lasso
 	if(!(type == 'ridge' | type == 'lasso')){
@@ -40,6 +41,13 @@ cv.penlm = function(formula,
 	# Ridge version:
 	if(type == 'ridge') {
 
+		if (!requireNamespace("glmnet", quietly = TRUE)) {
+			stop(
+				"Package \"glmnet\" must be installed to use this function.",
+				call. = FALSE
+			)
+		}
+
 		# Get the lambda path, if unspecified
 		if(is.null(lambda_path)){
 			lambda_path = glmnet::glmnet(x = X[,-1],
@@ -63,6 +71,14 @@ cv.penlm = function(formula,
 
 	# Lasso version:
 	if(type == 'lasso') {
+
+		if (!requireNamespace("genlasso", quietly = TRUE)) {
+			stop(
+				"Package \"genlasso\" must be installed to use this function.",
+				call. = FALSE
+			)
+		}
+
 		# Recurring term:
 		Dlasso = penwt*Qm
 
