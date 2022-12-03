@@ -63,10 +63,10 @@ probs = rgamma(L, 10/L); probs = probs/sum(probs)
 
 X = matrix(rcauchy(n*p), nrow = n)
 K = factor(sample(letters[1:L], size = n, replace = T, prob = probs))
-Kx = diag(X[,1]) %*% as.matrix(one_hot(data.table(K)))
+Kx = diag(X[,1]) %*% one_hot(K)
 beta = as.matrix(rnorm(1 + p + 2 * L, 1, 1)) 
 
-Ey = cbind(1,X,as.matrix(one_hot(data.table(K))), Kx) %*% beta 
+Ey = cbind(1,X,one_hot(K), Kx) %*% beta 
 y = Ey + rnorm(n,0,5)
 
 #centering does not effect:
