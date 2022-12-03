@@ -61,7 +61,7 @@ p = 3
 L = 4
 probs = rgamma(L, 10/L); probs = probs/sum(probs)
 
-X = matrix(rcauchy(n*p), nrow = n)
+X = matrix(rnorm(n*p), nrow = n)
 K = factor(sample(letters[1:L], size = n, replace = T, prob = probs))
 Kx = diag(X[,1]) %*% one_hot(K)
 beta = as.matrix(rnorm(1 + p + 2 * L, 1, 1)) 
