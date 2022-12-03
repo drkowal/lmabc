@@ -52,4 +52,28 @@ diag(vcov(lm(y ~ X2, data = resid))) * (n - K)
 diag(vcov(lm(y ~ X1 + X2))) * (n - K - L)
 ```
 
+## Section 3
+```{r}
+p = 3
+L = 4
+probs = rgamma(L, 10/L); probs = probs/sum(probs)
 
+X = matrix(rcauchy(n*p), nrow = n)
+K = factor(sample(letters[1:L], size = n, replace = T, prob = probs))
+Kx = diag(X[,1]) %*% as.matrix(one_hot(data.table(K)))
+beta = as.matrix(rnorm(1 + p + 2 * L, 1, 1)) 
+
+Ey = cbind(1,X,as.matrix(one_hot(data.table(K))), Kx) %*% beta 
+y = Ey + rnorm(n,0,5)
+
+#centering does not effect:
+#X = scale(X, scale = F)
+
+resid = data.frame(X = lm(X ~ K + Kx)$residuals, y = lm(y ~ K + Kx)$residuals)
+
+lm(y ~ X, data = resid)$coefficients
+lm(y ~ X + K + Kx)$coefficients
+
+diag(vcov(lm(y ~ X, data = resid))) / sigma(lm(y ~ X, data = resid))^2 * (n - p)
+diag(vcov(lm(y ~ X + K + Kx))) / sigma(lm(y ~ X + K + Kx))^2 * (n - p - L )
+```
