@@ -27,7 +27,7 @@ one_hot <- function(K) {
 }
 ```
 
-#
+## Section 1
 ```{r}
 n <- 1000
 K <- 2
@@ -46,7 +46,7 @@ lm(y ~ X2, data = resid)$coefficients
 lm(y ~ X1 + X2)$coefficients
 ```
 
-#
+## Section 2
 ```{r}
 diag(vcov(lm(y ~ X2, data = resid))) * (n - K)
 diag(vcov(lm(y ~ X1 + X2))) * (n - K - L)
