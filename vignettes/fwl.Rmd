@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+# When you start, run devtools::load_all() in the console
+# When you want to knit the vignette, run devtools::build_rmd("vignettes/fwl.Rmd") in the console
+
 library(lmabc)
 
 set.seed(123)
