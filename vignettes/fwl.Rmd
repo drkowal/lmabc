@@ -38,9 +38,9 @@ X2 <- matrix(rnorm(n*L), nrow = n)
 beta <- as.matrix(rnorm(1 + K + L, 1, 1)) 
 
 Ey <- cbind(1,X1,X2) %*% beta
-y <- Ey + rnorm(n,0,.1)
+y <- Ey + rnorm(n, sd = 5)
 
-resid <- data.frame(X2 = lm(X2 ~ X1-1)$residuals, y = lm(y ~ X1-1) $residuals)
+resid <- data.frame(X2 = lm(X2 ~ X1-1)$residuals, y = lm(y ~ X1-1)$residuals)
 
 lm(y ~ X2, data = resid)$coefficients
 lm(y ~ X1 + X2)$coefficients
