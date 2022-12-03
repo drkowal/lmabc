@@ -1,8 +1,9 @@
 ---
-title: "fwl"
+title: "STAT 413 Final Project"
+author: "Caleb Fikes and Prayag Gordy"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{fwl}
+  %\VignetteIndexEntry{STAT 413 Final Project}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,4 +17,39 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(lmabc)
+
+set.seed(123)
 ```
+
+```{r helpers}
+one_hot <- function(K) {
+  model.matrix(~ 0 + K)
+}
+```
+
+#
+```{r}
+n <- 1000
+K <- 2
+L <- 2
+
+X1 <- matrix(rnorm(n*K), nrow = n)
+X2 <- matrix(rnorm(n*L), nrow = n)
+beta <- as.matrix(rnorm(1 + K + L, 1, 1)) 
+
+Ey <- cbind(1,X1,X2) %*% beta
+y <- Ey + rnorm(n,0,.1)
+
+resid <- data.frame(X2 = lm(X2 ~ X1-1)$residuals, y = lm(y ~ X1-1) $residuals)
+
+lm(y ~ X2, data = resid)$coefficients
+lm(y ~ X1 + X2)$coefficients
+```
+
+#
+```{r}
+diag(vcov(lm(y ~ X2, data = resid))) * (n - K)
+diag(vcov(lm(y ~ X1 + X2))) * (n - K - L)
+```
+
+
