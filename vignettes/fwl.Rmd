@@ -57,14 +57,16 @@ diag(vcov(lm(y ~ X1 + X2))) * (n - K - L)
 
 ## Section 3
 ```{r}
-p = 3
+p = 3 #hardcoded
 L = 4
 probs = rgamma(L, 10/L); probs = probs/sum(probs)
 
-X = matrix(rnorm(n*p), nrow = n)
+X = matrix(rcauchy(n*p), nrow = n)
 K = factor(sample(letters[1:L], size = n, replace = T, prob = probs))
-Kx = diag(X[,1]) %*% one_hot(K)
-beta = as.matrix(rnorm(1 + p + 2 * L, 1, 1)) 
+Kx = cbind(diag(X[,1]) %*% one_hot(K),
+					 diag(X[,2]) %*% one_hot(K),
+					 diag(X[,3]) %*% one_hot(K))
+beta = as.matrix(rnorm((p + 1) * (L + 1), 1, 1))
 
 Ey = cbind(1,X,one_hot(K), Kx) %*% beta 
 y = Ey + rnorm(n,0,5)
@@ -72,11 +74,30 @@ y = Ey + rnorm(n,0,5)
 #centering does not effect:
 #X = scale(X, scale = F)
 
-resid = data.frame(X = lm(X ~ K + Kx)$residuals, y = lm(y ~ K + Kx)$residuals)
+resid = data.frame(X = lm(X ~ K + Kx-1)$residuals, 
+									 y = lm(y ~ K + Kx-1)$residuals)
 
 lm(y ~ X, data = resid)$coefficients
 lm(y ~ X + K + Kx)$coefficients
 
 diag(vcov(lm(y ~ X, data = resid))) / sigma(lm(y ~ X, data = resid))^2 * (n - p)
+diag(vcov(lm(y ~ X + K + Kx))) / sigma(lm(y ~ X + K + Kx))^2 * (n - p - L )
+```
+^good. all of x1 - 3 coefs are different
+
+```{r}
+dta = data.frame(y, X, K, Kx)
+names(dta)[5:9] = c("Cat", "Kxa", "Kxb", "Kxc", "Kxd")
+
+
+resid = data.frame(X.1 = lm_abc(formula = as.formula(X1 ~ Cat + Kxa + Kxb + Kxc + Kxd), data = dta)$residuals, 
+									 X.2 = lm_abc(formula = as.formula(X2 ~ Cat + Kxa + Kxb + Kxc + Kxd), data = dta)$residuals,
+									 X.3 = lm_abc(formula = as.formula(X3 ~ Cat + Kxa + Kxb + Kxc + Kxd), data = dta)$residuals,
+									 y = lm_abc(formula = as.formula(y ~ Cat + Kxa + Kxb + Kxc + Kxd), data = dta)$residuals)
+
+lm_abc(y ~ X.1 + X.2 + X.3, data = resid)$coefficients
+lm_abc(as.formula(y ~ (X1 + X2 + X3) * Cat), data = dta)$coefficients
+
+diag(vcov(lm(y ~ X.1 + X.2 + X.3, data = resid))) / sigma(lm(y ~ X, data = resid))^2 * (n - p)
 diag(vcov(lm(y ~ X + K + Kx))) / sigma(lm(y ~ X + K + Kx))^2 * (n - p - L )
 ```
