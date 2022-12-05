@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 library(lmabc)
 
-set.seed(123)
+set.seed(8675309)
 ```
 
 ```{r helpers}
@@ -61,7 +61,7 @@ p = 3 #hardcoded
 L = 4
 probs = rgamma(L, 10/L); probs = probs/sum(probs)
 
-X = matrix(rcauchy(n*p), nrow = n)
+X = matrix(rnorm(n*p), nrow = n)
 K = factor(sample(letters[1:L], size = n, replace = T, prob = probs))
 Kx = cbind(diag(X[,1]) %*% one_hot(K),
 					 diag(X[,2]) %*% one_hot(K),
@@ -74,30 +74,51 @@ y = Ey + rnorm(n,0,5)
 #centering does not effect:
 #X = scale(X, scale = F)
 
-resid = data.frame(X = lm(X ~ K + Kx-1)$residuals, 
-									 y = lm(y ~ K + Kx-1)$residuals)
+resid = data.frame(X.1 = lm(X[,1] ~ X[,c(2,3)] * K - 1)$residuals, 
+									 X.2 = lm(X[,2] ~ X[,c(1,3)] * K - 1)$residuals,
+									 X.3 = lm(X[,3] ~ X[,c(1,2)] * K - 1)$residuals,
+									 y = lm(y ~ K -1)$residuals)
 
-lm(y ~ X, data = resid)$coefficients
-lm(y ~ X + K + Kx)$coefficients
+lm(y ~ X.1 + X.2 + X.3, data = resid)$coefficients
+lm(y ~ X * K)$coefficients
 
-diag(vcov(lm(y ~ X, data = resid))) / sigma(lm(y ~ X, data = resid))^2 * (n - p)
-diag(vcov(lm(y ~ X + K + Kx))) / sigma(lm(y ~ X + K + Kx))^2 * (n - p - L )
+diag(vcov(lm(y ~ X.1 + X.2 + X.3, data = resid))) / 
+	sigma(lm(y ~ X.1 + X.2 + X.3, data = resid))^2 * (n - ((p+1)*L))
+diag(vcov(lm(y ~ X * K))) / sigma(lm(y ~ X * K))^2 * (n - ((p+1)*(L+1)))
 ```
 ^good. all of x1 - 3 coefs are different
 
 ```{r}
-dta = data.frame(y, X, K, Kx)
-names(dta)[5:9] = c("Cat", "Kxa", "Kxb", "Kxc", "Kxd")
+dta = data.frame(y, X, K)
+dta$X1 = scale(dta$X1, scale = F)
+dta$X2 = scale(dta$X2, scale = F)
+dta$X3 = scale(dta$X3, scale = F)
+dta[,c("Kx1a","Kx1b","Kx1c","Kx1d",
+			 "Kx2a","Kx2b","Kx2c","Kx2d",
+			 "Kx3a","Kx3b","Kx3c","Kx3d")] = 
+	cbind(diag(c(dta$X1)) %*% one_hot(K),
+					 diag(c(dta$X2)) %*% one_hot(K),
+					 diag(c(dta$X3)) %*% one_hot(K))
+names(dta)[5] = "Cat"
 
+ybar = mean(dta$y)
 
-resid = data.frame(X.1 = lm_abc(formula = as.formula(X1 ~ Cat + Kxa + Kxb + Kxc + Kxd), data = dta)$residuals, 
-									 X.2 = lm_abc(formula = as.formula(X2 ~ Cat + Kxa + Kxb + Kxc + Kxd), data = dta)$residuals,
-									 X.3 = lm_abc(formula = as.formula(X3 ~ Cat + Kxa + Kxb + Kxc + Kxd), data = dta)$residuals,
-									 y = lm_abc(formula = as.formula(y ~ Cat + Kxa + Kxb + Kxc + Kxd), data = dta)$residuals)
+resid = data.frame(X.1 = lm_abc(formula = as.formula(X1 ~ (X2 + X3) * Cat), 
+																data = dta)$residuals, 
+									 X.2 = lm_abc(formula = as.formula(X2 ~ (X1 + X3) * Cat), 
+									 						 data = dta)$residuals,
+									 X.3 = lm_abc(formula = as.formula(X3 ~ (X1 + X2) * Cat), 
+									 						 data = dta)$residuals,
+									 y = lm_abc(formula = as.formula(y ~ Cat), 
+									 						data = dta)$residuals
+									 )
+resid$y = resid$y + ybar
 
 lm_abc(y ~ X.1 + X.2 + X.3, data = resid)$coefficients
 lm_abc(as.formula(y ~ (X1 + X2 + X3) * Cat), data = dta)$coefficients
 
-diag(vcov(lm(y ~ X.1 + X.2 + X.3, data = resid))) / sigma(lm(y ~ X, data = resid))^2 * (n - p)
-diag(vcov(lm(y ~ X + K + Kx))) / sigma(lm(y ~ X + K + Kx))^2 * (n - p - L )
+diag(vcov(lm_abc(y ~ X.1 + X.2 + X.3, data = resid)))  * (n - ((p+1)*L))
+diag(vcov(lm_abc(as.formula(y ~ (X1 + X2 + X3) * Cat), data = dta))) * 
+	(n - ((p+1)*(L+1)))
 ```
+
