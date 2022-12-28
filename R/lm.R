@@ -142,7 +142,7 @@ getConstraints = function(formula, data, cprobs = NULL){
 	data = data[,vnames]
 
 	# Handle the categorical variables:
-	f_inds = which(sapply(data, function(k) is.factor(k) | is.character)) # factor indices
+	f_inds = which(sapply(data, function(k) is.factor(k) | is.character(k))) # factor indices
 
 	if(length(f_inds) > 0){
 		cdat = data.frame(data[,f_inds]) # data frame
