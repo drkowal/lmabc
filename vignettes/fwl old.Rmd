@@ -1,0 +1,89 @@
+---
+title: "STAT 413 Final Project"
+author: "Caleb Fikes and Prayag Gordy"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{STAT 413 Final Project}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+# When you start, run devtools::load_all() in the console
+# When you want to knit the vignette, run devtools::build_rmd("vignettes/fwl.Rmd") in the console
+
+library(lmabc)
+
+set.seed(8675309)
+```
+
+```{r helpers}
+one_hot <- function(K) {
+  model.matrix(~ 0 + K)
+}
+```
+
+## Section 1
+```{r}
+n <- 1000
+K <- 2
+L <- 2
+
+X1 <- matrix(rnorm(n*K), nrow = n)
+X2 <- matrix(rnorm(n*L), nrow = n)
+beta <- as.matrix(rnorm(1 + K + L, 1, 1)) 
+
+Ey <- cbind(1,X1,X2) %*% beta
+y <- Ey + rnorm(n, sd = 5)
+
+resid <- data.frame(X2 = lm(X2 ~ X1-1)$residuals, y = lm(y ~ X1-1)$residuals)
+
+lm(y ~ X2, data = resid)$coefficients
+lm(y ~ X1 + X2)$coefficients
+```
+
+## Section 2
+```{r}
+diag(vcov(lm(y ~ X2, data = resid))) * (n - K)
+diag(vcov(lm(y ~ X1 + X2))) * (n - K - L)
+```
+
+## Section 3
+```{r}
+n = 10 ^ 4
+L = 4
+x = runif(n,0,1.5)
+k = as.factor(sample(letters[1:L],n, replace = T))
+x = x + 2*I(k == "a") + 100*I(k == "b") - I(k == "c")
+
+Ey = 2 + 3 * x + 2*I(k == "a") - .5 * I(k == "b") + 2 * x * I(k == "d") -
+	x * I(k == "b")
+y = Ey + rnorm(n,0,1)
+
+#with lm
+lm(y ~ x * k)$coefficients
+interact = diag(x) %*% one_hot(k)
+resid = data.frame(x = lm(x ~ interact -1)$residuals,
+									 lm(one_hot(k) ~ interact - 1)$residuals,
+									 y = lm(y ~ interact -1)$residuals)
+
+lm(y ~ x + Ka + Kb + Kc + Kd, data = resid)$coefficients
+
+#with lmabc
+x = scale(x, scale = F)
+dta = data.frame(y,x,k)
+
+lm_abc(as.formula(y ~ x + k), data = dta)$coefficients
+lm_abc(as.formula(y ~ x * k), data = dta)$coefficients
+#plots about variances
+```
+Interpretation: One cannot interpret the x coefficient in an lm model as the effect of x independent of the categorical data because of baseline encoding. If one wants to be able to 
+interpret coefficients as such, then lm_abc should be used, and no partialling-out is required.
+
