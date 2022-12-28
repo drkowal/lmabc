@@ -179,6 +179,9 @@ getConstraints = function(formula, data, cprobs = NULL){
 			stop('Entries of cprob must be nonnegative')
 		}
 
+		# matrix of formula terms (shows interactions)
+		terms_mx <- attr(terms(formula), "factors")
+
 		# Check for categorical-categorical pairs
 		# (these will be handled separately below)
 		inds_catcat = match(
@@ -187,10 +190,12 @@ getConstraints = function(formula, data, cprobs = NULL){
 		inds_catcat = inds_catcat[!is.na(inds_catcat)]
 		if(length(inds_catcat) > 0){
 			covar_all = covar; covar = covar[-inds_catcat]
+			terms_mx <- terms_mx[,-inds_catcat]
 		}
 
 		# Indices of the categorical variables/interactions w/in 'covar' (excluding cat-cat)
-		c_inds = lapply(cnames, function(na) unname(which(attr(terms(formula), "factors")[na,] == 1))); names(c_inds) = cnames
+		c_inds = lapply(cnames, function(na) unname(which(terms_mx[na,] == 1)))
+		names(c_inds) = cnames
 
 		# Some dimensions:
 		p = ncol(X) # number of covariates
