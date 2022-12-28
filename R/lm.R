@@ -187,7 +187,6 @@ getConstraints = function(formula, data, cprobs = NULL){
 		}
 
 		# Indices of the categorical variables/interactions w/in 'covar' (excluding cat-cat)
-		c_inds = lapply(cnames, function(na) grep(na, covar)); names(c_inds) = cnames
 		c_inds = lapply(cnames, function(na) unname(which(attr(terms(formula), "factors")[na,] == 1))); names(c_inds) = cnames
 
 		# Some dimensions:
@@ -209,8 +208,6 @@ getConstraints = function(formula, data, cprobs = NULL){
 
 				# Update the names to match the model.matrix labeling
 				# Replace the variable name with the name *and* level
-				names_kl = sapply(paste(cnames[k], names(pi_hat[[k]]), sep=''),
-													function(g) gsub(cnames[k], g, v_kl))
 				names_kl = sapply(paste(cnames[k], names(pi_hat[[k]]), sep=''),
 													function(g) gsub("(^:)|(:$)", "", gsub(paste0("(^", cnames[k], "$)|(^", cnames[k], ":)|(:", cnames[k], "$)"), paste0(":", g, ":"), v_kl)))
 
