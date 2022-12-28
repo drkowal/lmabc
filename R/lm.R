@@ -141,8 +141,11 @@ getConstraints = function(formula, data, cprobs = NULL){
 	# Subset to the variables included in the model:
 	data = data[,vnames]
 
+	# Handle character variables:
+	data = as.data.frame(lapply(data, function(k) if (is.character(k)) as.factor(k) else k))
+
 	# Handle the categorical variables:
-	f_inds = which(sapply(data, function(k) is.factor(k) | is.character(k))) # factor indices
+	f_inds = which(sapply(data, is.factor)) # factor indices
 
 	if(length(f_inds) > 0){
 		cdat = data.frame(data[,f_inds]) # data frame
@@ -287,6 +290,9 @@ getFullDesign = function(formula, data, center = TRUE){
 	# Subset to the variables included in the model:
 	data = data[,vnames]
 
+	# Handle character variables:
+	data = as.data.frame(lapply(data, function(k) if (is.character(k)) as.factor(k) else k))
+
 	# If specified, center the non-categorical variables
 	# note: do this *before* computing the interactions
 	if(center){
@@ -301,7 +307,7 @@ getFullDesign = function(formula, data, center = TRUE){
 	}
 
 	# Handle the categorical variables:
-	f_inds = which(sapply(data, function(k) is.factor(k) | is.character(k))) # factor indices
+	f_inds = which(sapply(data, is.factor)) # factor indices
 
 	if(length(f_inds) > 0){
 		cdat = data.frame(data[,f_inds]) # data frame
