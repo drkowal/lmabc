@@ -42,7 +42,7 @@ lm_abc = function(formula, data, ..., cprobs = NULL){
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
-		stop('NAs found in the OLS estimators;
+		abort('NAs found in the OLS estimators;
        consider a different formula statement')
 	}
 
@@ -102,7 +102,7 @@ lm_abc = function(formula, data, ..., cprobs = NULL){
 		tol = 10^-8 # tolerance
 		if(mean((stats::fitted(fit_con) - stats::fitted(fit0))^2)
 			 + mean((X%*%beta_con - stats::fitted(fit0))^2) > tol){
-			stop('Fitted values are not the same;
+			abort('Fitted values are not the same;
          may be an issue with the constraint matrix')
 		}
 		sigma_hat = summary(fit_con)$sigma # error SD
@@ -163,7 +163,7 @@ getConstraints = function(formula, data, cprobs = NULL){
 		} else {
 			# Check that cprobs is proper:
 			if(any(is.na(match(cnames, names(cprobs))))){
-				stop('cprobs must be a named list with an entry for each named categorical variable in the model')
+				abort('cprobs must be a named list with an entry for each named categorical variable in the model')
 			}
 			# Match with the correct variable names:
 			pi_hat = lapply(cnames, function(cn)
@@ -173,7 +173,7 @@ getConstraints = function(formula, data, cprobs = NULL){
 
 		# One more check:
 		if(any(unlist(lapply(pi_hat, function(p) any(p < 0))))){
-			stop('Entries of cprob must be nonnegative')
+			abort('Entries of cprob must be nonnegative')
 		}
 
 		# Check for categorical-categorical pairs

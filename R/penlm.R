@@ -9,7 +9,7 @@ cv.penlm = function(formula,
 
 	# Quick check: ridge or lasso
 	if(!(type == 'ridge' | type == 'lasso')){
-		stop('type must be "ridge" or "lasso"')
+		abort('type must be "ridge" or "lasso"')
 	}
 
 	# Get constraint matrix:
@@ -42,7 +42,7 @@ cv.penlm = function(formula,
 	if(type == 'ridge') {
 
 		if (!requireNamespace("glmnet", quietly = TRUE)) {
-			stop(
+			abort(
 				"Package \"glmnet\" must be installed to use this function.",
 				call. = FALSE
 			)
@@ -73,7 +73,7 @@ cv.penlm = function(formula,
 	if(type == 'lasso') {
 
 		if (!requireNamespace("genlasso", quietly = TRUE)) {
-			stop(
+			abort(
 				"Package \"genlasso\" must be installed to use this function.",
 				call. = FALSE
 			)

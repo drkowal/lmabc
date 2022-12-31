@@ -8,7 +8,7 @@ glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
-		stop('NAs found in the OLS estimators;
+		abort('NAs found in the OLS estimators;
        consider a different formula statement')
 	}
 
@@ -67,7 +67,7 @@ glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 		# Check fitted values to make sure the fits are identical:
 		tol = 10^-8 # tolerance
 		if(mean((stats::fitted(fit_con) - stats::fitted(fit0))^2) > tol){
-			stop('Fitted values are not the same;
+			abort('Fitted values are not the same;
          may be an issue with the constraint matrix')
 		}
 		#sigma_hat = summary(fit_con)$sigma # error SD

@@ -17,5 +17,6 @@ Suggests:
     genlasso,
     glmnet,
     knitr,
+    rlang,
     rmarkdown
 VignetteBuilder: knitr
