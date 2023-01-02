@@ -44,7 +44,7 @@ Our outcome (`mpg`) and two predictors are numeric, one predictor is a factor wi
 
 ## The constraint matrix
 ```{r}
-getConstraints(formula = f, data = df)
+lmabc:::getConstraints(formula = f, data = df)
 ```
 
 
