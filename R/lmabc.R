@@ -1,6 +1,6 @@
 #' Fitting Linear Models with Abundance-Based Constraints
 #'
-#' `lm_abc` is used to fit linear models using abundance-based constraints.
+#' `lmabc` is used to fit linear models using abundance-based constraints.
 #'
 #' @inheritParams stats::lm
 #'
@@ -28,13 +28,13 @@
 #' @seealso [stats::lm()] for the standard linear regression implementation in R.
 #'
 #' @examples
-#' fit <- lm_abc(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
+#' fit <- lmabc(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
 #' summary(fit)
 #'
 #' predict(fit, newdata = data.frame(Petal.Length = 1.5, Species = "setosa"))
 #'
 #' @export
-lm_abc = function(formula, data, ..., cprobs = NULL){
+lmabc = function(formula, data, ..., cprobs = NULL){
 
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,
