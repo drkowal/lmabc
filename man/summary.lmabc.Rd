@@ -7,7 +7,7 @@
 \method{summary}{lmabc}(object, correlation = FALSE, symbolic.cor = FALSE, ...)
 }
 \arguments{
-\item{object}{An object of class "lmabc", usually, a direct result of a call to \link{lm_abc}}
+\item{object}{An object of class "lmabc", usually, a direct result of a call to \link{lmabc}}
 
 \item{correlation}{logical; if \code{TRUE}, the correlation matrix of
     the estimated parameters is returned and printed.}
