@@ -1,4 +1,3 @@
-#' @inherit stats::summary.lm
 #' @export
 summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...) {
 	summary_base <- summary(object$lm, correlation = correlation, symbolic.cor = symbolic.cor, ...) # a lot of the information is the same between the base summary and the abc summary
