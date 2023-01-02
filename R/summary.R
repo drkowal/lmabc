@@ -1,12 +1,4 @@
-#' Summarizing Linear ABC Model Fits
-#'
-#' \code{summary} method for class "lmabc".
-#'
-#' @param object An object of class "lmabc", usually, a direct result of a call to [lmabc::lmabc]
-#' @inheritParams stats::summary.lm
-#'
-#' @returns A list of summary statistics of the fitted linear ABC model given in object.
-#' @seealso [base::summary()], [stats::summary.lm()]
+#' @inherit stats::summary.lm
 #' @export
 summary.lmabc <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...) {
 	summary_base <- summary(object$lm, correlation = correlation, symbolic.cor = symbolic.cor, ...) # a lot of the information is the same between the base summary and the abc summary
