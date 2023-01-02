@@ -1,6 +1,6 @@
 #' Fitting Generalized Linear Models with Abundance-Based Constraints
 #'
-#' `glm_abc` is used to fit generalized linear models using abundance-based constraints. Like [`stats::glm`], the model is specified by giving a symbolic description of the linear predictor and a description of the error distribution.
+#' `glmabc` is used to fit generalized linear models using abundance-based constraints. Like [`stats::glm`], the model is specified by giving a symbolic description of the linear predictor and a description of the error distribution.
 #'
 #' @inheritParams stats::glm
 #'
@@ -29,13 +29,13 @@
 #'
 #' @examples
 #' mtcars$cyl <- as.factor(mtcars$cyl)
-#' fit <- glm_abc(am ~ mpg + cyl + mpg:cyl, family = "binomial", data = mtcars)
+#' fit <- glmabc(am ~ mpg + cyl + mpg:cyl, family = "binomial", data = mtcars)
 #' summary(fit)
 #'
 #' predict(fit, newdata = data.frame(mpg = 21, cyl = "6"))
 #'
 #' @export
-glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
+glmabc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 
 	# Usual glm fit: this is a nice baseline
 	fit0 = stats::glm(formula = formula,
