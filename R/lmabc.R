@@ -125,7 +125,6 @@ lmabc = function(formula, data, ..., cprobs = NULL){
 
 }
 
-#' @export
 getConstraints = function(formula, data, cprobs = NULL){
 
 	# Model frame has some useful information
@@ -280,7 +279,6 @@ getConstraints = function(formula, data, cprobs = NULL){
 	return(Con)
 }
 
-#' @export
 getFullDesign = function(formula, data, center = TRUE){
 
 	# Model frame has some useful information
