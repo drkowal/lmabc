@@ -15,11 +15,11 @@
 #'
 #' # Differences from `lm`
 #'
-#' Standard linear regression models chose one level for each categorical factor and make it a "baseline," which is necessary to not over-parameterize the model. The coefficients on the continuous \eqn{X} variables are specifically for the baseline category and do not represent a global effect. Similarly, the coefficients on the non-baseline levels are in comparison to the baseline level.
+#' Standard linear regression models chose one level for each categorical factor and make it a "baseline," which is necessary to not over-parameterize the model. The coefficients on the continuous \eqn{X} variables are specifically for the baseline category and do not represent a global intercept or, with interaction terms, effect. Similarly, the coefficients on the non-baseline levels are in comparison to the baseline level.
 #'
-#' This framework can lead to biases in interpretation. Suppose a researcher includes `age` and `race` as explanatory variables. `lm` will report the coefficient for `age`, which is really the baseline-specific coefficient for `age`; the baseline is often chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global effect. The coefficient for any other race dummy is the expected change in the \eqn{Y} variable compared to the baseline—again, not the true effect of identifying as that race.
+#' This framework can lead to biases in interpretation. Suppose a researcher includes `age` and `race` as explanatory variables. `lm` will report the coefficient for `age`, which is really the baseline-specific coefficient for `age`; the baseline is often chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global effect. The coefficient for any other race dummy is the expected change compared to the baseline—again, not the true effect of identifying as that race.
 #'
-#' `lmabc` introduces abundance-based constraints (ABCs). Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by `cprobs`. That is, the coefficient on `age` is the weighted average of each race-specific effect.
+#' `lmabc` introduces abundance-based constraints. Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by `cprobs`. For instance, the coefficient on `age` is the weighted average of each race-specific effect.
 #'
 #' # Value
 #'
