@@ -2,7 +2,7 @@
 #'
 #' \code{summary} method for class "lmabc".
 #'
-#' @param object An object of class "lmabc", usually, a direct result of a call to [lmabc::lm_abc]
+#' @param object An object of class "lmabc", usually, a direct result of a call to [lmabc::lmabc]
 #' @inheritParams stats::summary.lm
 #'
 #' @returns A list of summary statistics of the fitted linear ABC model given in object.
