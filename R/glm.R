@@ -1,3 +1,39 @@
+#' Fitting Generalized Linear Models with Abundance-Based Constraints
+#'
+#' `glm_abc` is used to fit generalized linear models using abundance-based constraints. Like [`stats::glm`], the model is specified by giving a symbolic description of the linear predictor and a description of the error distribution.
+#'
+#' @inheritParams stats::glm
+#'
+#' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
+#' @param cprobs a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.
+#'
+#' @details
+#'
+#' # Details
+#'
+#' A `glmabc` model is specified identically to the corresponding `glm` model. At this time, `glmabc` only supports a single response variable, and the data must be passed into the `data` parameter.
+#'
+#' # Differences from `glm`
+#'
+#' Standard generalized linear regression models chose one level for each categorical factor and make it a "baseline," which is necessary to not over-parameterize the model. The coefficients on the continuous \eqn{X} variables are specifically for the baseline category and do not represent a global effect. Similarly, the coefficients on the non-baseline levels are in comparison to the baseline level.
+#'
+#' This framework can lead to biases in interpretation. Suppose a researcher includes `age` and `race` as explanatory variables. `glm` will report the coefficient for `age`, which is really the baseline-specific coefficient for `age`; the baseline is generally chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global intercept or, with interaction terms, effect. The coefficient for any other race dummy is the expected change compared to the baseline—again, not the true effect of identifying as that race.
+#'
+#' `glmabc` introduces abundance-based constraints. Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by `cprobs`. For instance, the coefficient on `age` is the weighted average of each race-specific effect.
+#'
+#' # Value
+#'
+#' `glmabc` returns an object of classes "glmabc" and "lmabc." Many generics commonly used for `glm` objects have been implemented for `glmabc`: `summary`, `coefficients`, `plot`, `predict`, and more. See the DESCRIPTION file for all implemented S3 methods.
+#'
+#' @seealso [stats::glm()] for the standard generalized linear regression implementation in R.
+#'
+#' @examples
+#' mtcars$cyl <- as.factor(mtcars$cyl)
+#' fit <- glm_abc(am ~ mpg + cyl + mpg:cyl, family = "binomial", data = mtcars)
+#' summary(fit)
+#'
+#' predict(fit, newdata = data.frame(mpg = 21, cyl = "6"))
+#'
 #' @export
 glm_abc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 
