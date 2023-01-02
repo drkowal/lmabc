@@ -2,8 +2,8 @@
 % Please edit documentation in R/lmabc-package.R
 \docType{package}
 \name{lmabc-package}
-\alias{lmabc}
 \alias{lmabc-package}
+\alias{_PACKAGE}
 \title{lmabc: Linear Regression with Abudance Based Constraints}
 \description{
 What the package does (one paragraph).
