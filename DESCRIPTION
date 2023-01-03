@@ -14,6 +14,7 @@ Imports:
     stats,
     utils
 Suggests: 
+    dplyr,
     genlasso,
     glmnet,
     knitr,

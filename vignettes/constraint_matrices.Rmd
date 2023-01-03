@@ -1,0 +1,50 @@
+---
+title: "Constraint matrices"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Constraint matrices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(lmabc)  # devtools::load_all(); devtools::build_rmd("vignettes/constraint_matrices.Rmd")
+```
+
+## Data
+Let's use a subset of the `mtcars` dataset as an example.
+
+```{r}
+df <- mtcars |>
+  dplyr::select(mpg, cyl, disp, wt, hp) |>
+  dplyr::mutate(cyl = as.factor(cyl),
+                wt = dplyr::case_when(
+                  wt < 3 ~ "low",
+                  wt < 4 ~ "medium",
+                  TRUE ~ "high"
+                ))
+rownames(df) <- NULL
+
+# temp until I fix this...
+df <- df |> dplyr::slice_sample(n = 10000, replace = TRUE) |> dplyr::mutate(wt = sample(wt, 10000, replace = TRUE))
+
+f <- formula(mpg ~ cyl + disp + wt + hp + disp:hp + wt:hp + cyl:wt)
+
+str(df)
+```
+
+Our outcome (`mpg`) and two predictors are numeric, one predictor is a factor with three levels written as numerals, and the final predictor is a character column. Now, we'll use `getConstraints()` to build the constraint matrix. We also include continuous-continuous, categorical-continuous, and categorical-categorical interactions.
+
+## The constraint matrix
+```{r}
+getConstraints(formula = f, data = df)
+```
+
+
