@@ -1,6 +1,6 @@
 helper_fitted <- function(f, df) {
 	df_used <- df[,attr(terms(f), "term.labels")]
-	df_factors <- df_used[,which(sapply(df_used, is.factor))]
+	df_factors <- df_used[,c(which(sapply(df_used, is.factor))), drop = FALSE]
 	mm <- stats::model.matrix(object = f[-2],
 													  data = df_used,
 													  contrasts.arg = lapply(df_factors,
