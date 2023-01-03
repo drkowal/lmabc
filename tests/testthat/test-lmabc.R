@@ -1,6 +1,9 @@
 test_that("lmabc works with f_contY_contX", {
-	coefs <- as.matrix(coef(lmabc(f_contY_contX, df)))
-	X <- as.matrix(cbind(1, df[,rownames(coefs)[-1]]))
-	expect_equal((X %*% coefs)[,1],
-							 predict(lm(f_contY_contX, df), df))
+	f <- f_contY_contX
+	expect_equal(helper_fitted(f, df), lm(f, df)$fitted.values)
+})
+
+test_that("lmabc works with f_contY_catX", {
+	f <- f_contY_catX
+	expect_equal(helper_fitted(f, df), lm(f, df)$fitted.values)
 })
