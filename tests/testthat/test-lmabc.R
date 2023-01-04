@@ -1,3 +1,14 @@
+test_that("lmabc has correct class in only continuous", {
+	skip(message = "Current design decision means this will fail")
+	f <- f_contY_contX
+	expect_s3_class(lmabc(f, df), "lmabc")
+})
+
+test_that("lmabc has correct class with some categoricals", {
+	f <- f_contY_catX
+	expect_s3_class(lmabc(f, df), "lmabc")
+})
+
 test_that("lmabc works with f_contY_contX", {
 	skip(message = "Current design decision means this will fail")
 	f <- f_contY_contX
