@@ -1,7 +1,7 @@
-df <- mtcars
-df$cyl <- as.factor(df$cyl)
-df$gear <- as.factor(df$gear)
-df$carb <- as.factor(df$carb)
+df <- mtcars |>
+	dplyr::slice_sample(n = 1000, replace = TRUE) |>
+	dplyr::mutate(dplyr::across(c(cyl, gear, carb), as.factor),
+								dplyr::across(c(cyl, gear, carb), ~ sample(., 1000, replace = TRUE)))
 
 f_contY_contX <- formula(mpg ~ hp + disp)
 f_contY_mixedX <- formula(mpg ~ disp + cyl)
