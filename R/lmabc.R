@@ -51,7 +51,16 @@ lmabc = function(formula, data, ..., cprobs = NULL){
 
 	if(is.null(Con)){
 		# No categorical variables, so no constraints
-		return(fit0) # return the lm object
+		# Get fit0 version of X, Con, beta_con, cov.unscaled_con, sigma_hat
+		y <- data[[formula[[2]]]]
+		X <- getFullDesign(formula = formula,
+											 data = data,
+											 center = TRUE)[,-1, drop = FALSE]
+
+		fit0_centered <- lm(y ~ X)
+		beta_con <- coef(fit0_centered)
+		cov.unscaled_con <- vcov(fit0_centered)
+		sigma_hat <- sigma(fit0_centered)
 	} else {
 		# Incorporate the constraints
 
@@ -106,23 +115,19 @@ lmabc = function(formula, data, ..., cprobs = NULL){
          may be an issue with the constraint matrix')
 		}
 		sigma_hat = summary(fit_con)$sigma # error SD
-
-		# New class:
-		fit = fit0;  attr(fit, 'class') = 'lmabc'
-		fit$call = match.call()  # store the function call
-		fit$lm = fit0 #  store the original object
-		fit$X = X # store the full design matrix
-		fit$Con = Con # store the constraint matrix
-		fit$coefficients = beta_con # coefficient estimates
-		fit$cov.unscaled = cov.unscaled_con # covariance matrix
-		fit$sigma = sigma_hat # estimated standard deviation
-		# fit$residuals # already there
-		#add call
-
-
-		return(fit) # return the lmabc object
 	}
 
+	# New class:
+	fit = fit0;  attr(fit, 'class') = 'lmabc'
+	fit$call = match.call()  # store the function call
+	fit$lm = fit0 #  store the original object
+	fit$X = X # store the full design matrix
+	fit$Con = Con # store the constraint matrix
+	fit$coefficients = beta_con # coefficient estimates
+	fit$cov.unscaled = cov.unscaled_con # covariance matrix
+	fit$sigma = sigma_hat # estimated standard deviation
+
+	return(fit) # return the lmabc object
 }
 
 getConstraints = function(formula, data, cprobs = NULL){
