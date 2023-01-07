@@ -17,3 +17,6 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(lmabc)
 ```
+
+## Motivation
+Consider a linear regression $y \sim x_1 + x_2 + k_1 + k_2 + x_1:k_2$, where $x_1$ and $x_2$ are continuous predictors, $k_1$ and $k_2$ are categorical predictors, and $x_1:k_2$ is the interaction between $x_1$ and $k_2$.
