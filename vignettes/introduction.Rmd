@@ -63,7 +63,7 @@ In the corresponding paper to this R package, we explain in great depth the math
 Consider a simple model using the data from the previous section. Now, let's use `lmABC`.
 
 ```{r}
-fit_no_int <- lm_abc(y ~ age + race, df)
+fit_no_int <- lmabc(y ~ age + race, df)
 summary(fit_no_int)
 ```
 
@@ -72,7 +72,7 @@ In this new model output, `age` corresponds to the global effect, and the other 
 We can add interaction terms.
 
 ```{r}
-fit_int <- lm_abc(y ~ age + race + age:race, df)
+fit_int <- lmabc(y ~ age + race + age:race, df)
 summary(fit_int)
 ```
 
