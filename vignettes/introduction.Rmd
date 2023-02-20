@@ -60,11 +60,24 @@ Together, we see that the default "baseline" method of linear regression creates
 ## Our solution: abundance-based constraints
 In the corresponding paper to this R package, we explain in great depth the mathematical properties of our `lmABC` operation. This vignette will briefly explain model interpretation.
 
-Consider the model from the previous section. Now, let's use `lmABC`.
+Consider a simple model using the data from the previous section. Now, let's use `lmABC`.
 
 ```{r}
-fit <- lm_abc(y ~ age + race + age:race, df)
-summary(fit)
+fit_no_int <- lm_abc(y ~ age + race, df)
+summary(fit_no_int)
 ```
 
-In this new model output, `age` corresponds to the global effect, and the other slopes modify the global effect. For instance, being in the NHW category is associated with an expected change of `r round(coef(fit)[["raceNHW"]], 3)` units in $y$ compared to the population as a whole, all else equal.
+In this new model output, `age` corresponds to the global effect, and the other slopes modify the global effect. For instance, being in the NHW category shifts the intercept by `r round(coef(fit_no_int)[["raceNHW"]], 3)` units in $y$ compared to the population as a whole.
+
+We can add interaction terms.
+
+```{r}
+fit_int <- lm_abc(y ~ age + race + age:race, df)
+summary(fit_int)
+```
+
+Here, the interaction terms modify the coefficient of `age`, which is now the global effect of age on $y$.
+
+Crucially, the model itself is the same. Thus, all properties of the model—residuals, R-squared, information for diagnostics—remain the same. `lmABC` just shares a different, more fair expression of the model.
+
+The `lmABC` package includes implementations for many common methods: `summary`, `print`, `plot`, `predict`, `logLik`, `vcov`, and more. And we don't just have the abundance-based constraints version of `lm`—check out `glmABC`, too!
