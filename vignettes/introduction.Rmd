@@ -18,5 +18,53 @@ knitr::opts_chunk$set(
 library(lmabc)
 ```
 
+```{r generate_data, include=FALSE}
+n <- 200
+
+groups_1 <- c("Asian", "Hisp", "NHB", "NHW")
+pi_1 <- c(0.10, 0.15, 0.20, 0.55)
+K_1 <- length(groups_1)
+k_1 <- factor(sample(groups_1,
+                    size = n, replace = TRUE,
+                    prob = pi_1),
+             levels = c("NHW", "Asian", "Hisp", "NHB"))
+
+x1 <- rnorm(n = n, mean = 5,  sd = 2)
+
+Ey <- 1 + 2*x1 + 3*I(k_1==groups_1[1]) -.5*I(k_1==groups_1[2]) + .5*I(k_1==groups_1[2])*x1
+y <- Ey + rnorm(n=n)
+
+df <- data.frame(y, age = x1, race = k_1)
+```
+
 ## Motivation
-Consider a linear regression $y \sim x_1 + x_2 + k_1 + k_2 + x_1:k_2$, where $x_1$ and $x_2$ are continuous predictors, $k_1$ and $k_2$ are categorical predictors, and $x_1:k_2$ is the interaction between $x_1$ and $k_2$.
+Regression analysis commonly features both continuous predictors and categorical predictors. A particular scenario of interest occurs when the categorical predictors include race. Due to the broad and pervasive effects of race, it is often necessary and appropriate to include not only an additive term for race, but also race-specific effects for other covariates, i.e., interaction terms. However, current methods are problematic:
+- Admitting race-specific effects increases the number of parameters by a large factor, especially if we include interaction terms. We often address this via some sort of regularization.
+- The large number of predictors introduces challenges for interpretability of the model parameters. Most importantly, it can create fundamental (racial) inequities in the presentation of results.
+
+### Inequitable interpretation
+We generally select the baseline category as the most abundant level in the data, which for race is typically non-Hispanic white (NHW). When we present model-based results, we typically label the slope coefficients by the $x$ variable, e.g., age. Crucially, this labeling fails to reference the baseline group. As a consequence, the results are implicitly presented through the lens of NHW participants, while other the interactions “modify” the NHW-specific effect.
+
+This is easy to see with model output in R. Let's look at an example with some simulated data:
+
+```{r}
+summary(lm(y ~ age + race + age:race, df))
+```
+
+The output does not explicitly identify that the continuous effect (`age`) is specific to the NHW race group and not a global effect for the population; similarly, the `age:Hisp` and `age:NHB` effects do not actually correspond to the race-specific slopes, but rather the _difference_ between the NHW-specific slope and the race-specific slopes for Hispanic and NH Black individuals, respectively.
+
+Furthermore, purely from a modeling perspective, the estimation and inference depend undesirably on the baseline. This is particularly concerning in the presence of regularization, such as penalized estimation, prior specification, or variable selection, since these tools will lack symmetry in the categories. For instance, consider regularization the sparsifies or shrinks coefficients toward zero: The effect is to pull the race-specific effects toward the NHW-specific effect (and only the NHW-specific effect), rather than toward some global effect. The (racial) asymmetry is clear, and model-based inferences may differ depending on the choice of baseline.
+
+Together, we see that the default "baseline" method of linear regression creates inequities in interpretation and analysis. We believe it is important to deploy a more fair strategy, such as linear regression with abundance-based constraints.
+
+## Our solution: abundance-based constraints
+In the corresponding paper to this R package, we explain in great depth the mathematical properties of our `lmABC` operation. This vignette will briefly explain model interpretation.
+
+Consider the model from the previous section. Now, let's use `lmABC`.
+
+```{r}
+fit <- lm_abc(y ~ age + race + age:race, df)
+summary(fit)
+```
+
+In this new model output, `age` corresponds to the global effect, and the other slopes modify the global effect. For instance, being in the NHW category is associated with an expected change of `r round(coef(fit)[["raceNHW"]], 3)` units in $y$ compared to the population as a whole, all else equal.
