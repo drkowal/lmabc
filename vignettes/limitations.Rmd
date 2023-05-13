@@ -32,3 +32,6 @@ The standard implementation of `lm` can handle data passed as vectors, thus rend
 We implemented many of the common generic methods associated with linear regression models, but many remain, especially in non-base packages. `lmabc` objects only have class "lmabc," so methods only implemented for class "lm" will fail unless the generic method has a default.
 
 We will implement additional generic methods throughout the development process.
+
+## Outcome types
+For `lmabc`, the outcome variable must be continuous. Further, there may only be one outcome variable.
