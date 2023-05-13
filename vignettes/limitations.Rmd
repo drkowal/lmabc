@@ -17,3 +17,18 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(lmabc)
 ```
+
+As a method still under development, our implementation of `lmabc` is not exhaustive. This vignette will serve as a running list of limitations of `lmabc`. Email the package maintainer with questions or suggestions.
+
+## `lmabc` throws an error for missing factor levels
+Consider an interaction between two categorical variables, `k1` and `k2`, with levels `a`, `b`, and `c` and `x`, `y`, and `z`, respectively. If any pair has no observations—for instance, if there are no observations with `k1 = a`, and `k2 = z`—then `lmabc` will throw an error.
+
+The standard, baseline-encoded `lm` ignores this level and returns an `NA` for its coefficient. However, we do not believe this is a good solution.
+
+## Data must be passed as a data.frame
+The standard implementation of `lm` can handle data passed as vectors, thus rendering the `data` argument optional. `lmabc` requires the columns referenced in the formula to be passed to `lmabc` as a data frame.
+
+## Missing implementations of generic methods
+We implemented many of the common generic methods associated with linear regression models, but many remain, especially in non-base packages. `lmabc` objects only have class "lmabc," so methods only implemented for class "lm" will fail unless the generic method has a default.
+
+We will implement additional generic methods throughout the development process.
