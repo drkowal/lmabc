@@ -2,7 +2,7 @@ Package: lmabc
 Title: Linear Regression with Abudance Based Constraints
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "Daniel", middle = "R.", family = "Kowal", email = "daniel.r.kowal@gmail.com", role = c("aut", "cre")),
+    c(person(given = "Daniel R.", family = "Kowal", email = "daniel.r.kowal@gmail.com", role = c("aut", "cre")),
       person(given = "Prayag", family = "Gordy", role = c("aut")),
       person(given = "Virginia", family = "Baskin", role = c("aut")),
       person(given = "Jai", family = "Uparkar", role = c("aut")),
