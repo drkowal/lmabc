@@ -1,8 +1,8 @@
 ---
-title: "Introduction to Linear Regression with Abundance-Based Constraints"
+title: "Interpretation of Linear Regression Models with Abundance-Based Constraints"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to Linear Regression with Abundance-Based Constraints}
+  %\VignetteIndexEntry{Interpretation of Linear Regression Models with Abundance-Based Constraints}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
