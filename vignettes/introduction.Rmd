@@ -51,7 +51,7 @@ This is easy to see with model output in R. Let's look at an example with some s
 summary(lm(y ~ age + race + age:race, df))
 ```
 
-The output does not explicitly identify that the continuous effect (`age`) is specific to the NHW race group and not a global effect for the population; similarly, the `age:Hisp` and `age:NHB` effects do not actually correspond to the race-specific slopes, but rather the _difference_ between the NHW-specific slope and the race-specific slopes for Hispanic and NH Black individuals, respectively.
+The output does not explicitly note that the continuous effect (`age`) is specific to the NHW race group and not a global effect for the population; similarly, the `age:Hisp` and `age:NHB` effects do not actually correspond to the race-specific slopes, but rather the _difference_ between the NHW-specific slope and the race-specific slopes for Hispanic and NH Black individuals, respectively.
 
 Furthermore, purely from a modeling perspective, the estimation and inference depend undesirably on the baseline. This is particularly concerning in the presence of regularization, such as penalized estimation, prior specification, or variable selection, since these tools will lack symmetry in the categories. For instance, consider regularization the sparsifies or shrinks coefficients toward zero: The effect is to pull the race-specific effects toward the NHW-specific effect (and only the NHW-specific effect), rather than toward some global effect. The (racial) asymmetry is clear, and model-based inferences may differ depending on the choice of baseline.
 
@@ -78,6 +78,6 @@ summary(fit_int)
 
 Here, the interaction terms modify the coefficient of `age`, which is now the global effect of age on $y$.
 
-Crucially, the model itself is the same. Thus, all properties of the model—residuals, R-squared, information for diagnostics—remain the same. `lmABC` just shares a different, more fair expression of the model.
+Crucially, the model itself is the same as the traditional baseline-encoded linear regression model. Thus, all properties of the model—residuals, R-squared, information for diagnostics—remain the same. `lmABC` just computes a different, fairer expression of the model than `lm` provides.
 
 The `lmABC` package includes implementations for many common methods: `summary`, `print`, `plot`, `predict`, `logLik`, `vcov`, and more. And we don't just have the abundance-based constraints version of `lm`—check out `glmABC`, too!
