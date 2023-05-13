@@ -37,15 +37,8 @@ y <- Ey + rnorm(n=n)
 df <- data.frame(y, age = x1, race = k_1)
 ```
 
-## Motivation
-Regression analysis commonly features both continuous predictors and categorical predictors. A particular scenario of interest occurs when the categorical predictors include race. Due to the broad and pervasive effects of race, it is often necessary and appropriate to include not only an additive term for race, but also race-specific effects for other covariates, i.e., interaction terms. However, current methods are problematic:
-- Admitting race-specific effects increases the number of parameters by a large factor, especially if we include interaction terms. We often address this via some sort of regularization.
-- The large number of predictors introduces challenges for interpretability of the model parameters. Most importantly, it can create fundamental (racial) inequities in the presentation of results.
-
-### Inequitable interpretation
-We generally select the baseline category as the most abundant level in the data, which for race is typically non-Hispanic white (NHW). When we present model-based results, we typically label the slope coefficients by the $x$ variable, e.g., age. Crucially, this labeling fails to reference the baseline group. As a consequence, the results are implicitly presented through the lens of NHW participants, while other the interactions “modify” the NHW-specific effect.
-
-This is easy to see with model output in R. Let's look at an example with some simulated data:
+## Motivation: inequitable interpretation
+The inequities in traditional baseline-encoded linear regression are easy to see with model output in R. Let's look at an example with some simulated data:
 
 ```{r}
 summary(lm(y ~ age + race + age:race, df))
@@ -53,7 +46,7 @@ summary(lm(y ~ age + race + age:race, df))
 
 The output does not explicitly note that the continuous effect (`age`) is specific to the NHW race group and not a global effect for the population; similarly, the `age:Hisp` and `age:NHB` effects do not actually correspond to the race-specific slopes, but rather the _difference_ between the NHW-specific slope and the race-specific slopes for Hispanic and NH Black individuals, respectively.
 
-Furthermore, purely from a modeling perspective, the estimation and inference depend undesirably on the baseline. This is particularly concerning in the presence of regularization, such as penalized estimation, prior specification, or variable selection, since these tools will lack symmetry in the categories. For instance, consider regularization the sparsifies or shrinks coefficients toward zero: The effect is to pull the race-specific effects toward the NHW-specific effect (and only the NHW-specific effect), rather than toward some global effect. The (racial) asymmetry is clear, and model-based inferences may differ depending on the choice of baseline.
+Furthermore, regularization methods like variable selection would unfairly shrink coefficients toward the NHW-specific effect. The (racial) asymmetry is clear, and model-based inferences may differ depending on the choice of baseline.
 
 Together, we see that the default "baseline" method of linear regression creates inequities in interpretation and analysis. We believe it is important to deploy a more fair strategy, such as linear regression with abundance-based constraints.
 
