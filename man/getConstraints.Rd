@@ -14,7 +14,7 @@ getConstraints(formula, data, cprobs = NULL)
 \item{cprobs}{an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, \code{cprobs} will be calculated from the proportions in the data.}
 }
 \description{
-Generating an Abundance-Based Constraint Matrix
+\code{getConstraints} is used to generate the constraint matrix for linear regression with ABCs.
 }
 \section{Details}{
 The constraint matrix incorporates all the constraints present in the regression. Under the baseline encoding, this is equivalent to a vector with a single 1 in the slot designated as the baseline for each categorical variable. We suggest using population or sample proportions, which are calculated by default. Thus, the reference category for coefficients is the global average.

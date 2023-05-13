@@ -1,5 +1,7 @@
 #' Generating the Full Design Matrix
 #'
+#' `getFullDesign` is used to generate the design matrix for linear regression with ABCs.
+#'
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
 #' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
 #' @param center Boolean, whether to center continuous predictors. `TRUE` by default for `lmabc`.

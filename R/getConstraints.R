@@ -1,5 +1,7 @@
 #' Generating an Abundance-Based Constraint Matrix
 #'
+#' `getConstraints` is used to generate the constraint matrix for linear regression with ABCs.
+#'
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
 #' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
 #' @param cprobs an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, `cprobs` will be calculated from the proportions in the data.

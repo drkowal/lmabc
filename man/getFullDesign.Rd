@@ -14,7 +14,7 @@ getFullDesign(formula, data, center = TRUE)
 \item{center}{Boolean, whether to center continuous predictors. \code{TRUE} by default for \code{lmabc}.}
 }
 \description{
-Generating the Full Design Matrix
+\code{getFullDesign} is used to generate the design matrix for linear regression with ABCs.
 }
 \section{Details}{
 The full design matrix is similar to the design matrix in standard linear regression. However, instead of removing one level from each categorical variable, \code{getFullDesign} retains all levels by manipulating contrast matrices.
