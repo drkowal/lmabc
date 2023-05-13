@@ -1,13 +1,29 @@
-#' Title
+#' Generating an Abundance-Based Constraint Matrix
 #'
-#' @param formula
-#' @param data
-#' @param cprobs
+#' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
+#' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
+#' @param cprobs an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, `cprobs` will be calculated from the proportions in the data.
 #'
-#' @return
-#' @export
+#' @details
+#'
+#' # Details
+#'
+#' The constraint matrix incorporates all the constraints present in the regression. Under the baseline encoding, this is equivalent to a vector with a single 1 in the slot designated as the baseline for each categorical variable. We suggest using population or sample proportions, which are calculated by default. Thus, the reference category for coefficients is the global average.
+#'
+#' `cprobs` must incorporate all categorical predictors and all interactions including at least one categorical predictor.
+#'
+#' This method is called by [lmabc()]. This method is useful for implementing additional variations of the ABCs.
+#'
+#' # Value
+#'
+#' `getConstraints` returns a matrix representing the constraint matrix for a particular regression model.
+#'
+#' @seealso [lmabc()] for a use case of `getConstraints`.
 #'
 #' @examples
+#' getConstraints(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
+#'
+#' @export
 getConstraints = function(formula, data, cprobs = NULL){
 
 	# Model frame has some useful information

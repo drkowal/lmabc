@@ -1,13 +1,33 @@
-#' Title
+#' Generating the Full Design Matrix
 #'
-#' @param formula
-#' @param data
-#' @param center
+#' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
+#' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
+#' @param center Boolean, whether to center continuous predictors. `TRUE` by default for `lmabc`.
 #'
-#' @return
-#' @export
+#' @details
+#'
+#' # Details
+#'
+#' The full design matrix is similar to the design matrix in standard linear regression. However, instead of removing one level from each categorical variable, `getFullDesign` retains all levels by manipulating contrast matrices.
+#'
+#' The full design matrix is used with the constraint matrix from [getConstraints()] to fit a model with the ABCs.
+#'
+#' This method is called by [lmabc()]. This method is useful for implementing additional variations of the ABCs.
+#'
+#' # Value
+#'
+#' `getFullDesign` returns a matrix representing the full design matrix for a particular regression model.
+#'
+#' @seealso [lmabc()] for a use case of `getFullDesign`.
 #'
 #' @examples
+#' # full design matrix
+#' getFullDesign(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
+#'
+#' # lm's standard, baseline-encoded design matrix
+#' model.matrix(lm(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris))
+#'
+#' @export
 getFullDesign = function(formula, data, center = TRUE){
 
 	# Model frame has some useful information

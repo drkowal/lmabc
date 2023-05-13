@@ -7,17 +7,14 @@
 lmabc(formula, data, ..., cprobs = NULL)
 }
 \arguments{
-\item{formula}{an object of class \code{"\link[stats]{formula}"} (or one that
-    can be coerced to that class): a symbolic description of the
-    model to be fitted.  The details of model specification are given
-    under \sQuote{Details}.}
+\item{formula}{an object of class "\code{\link[=formula]{formula()}}" (or one that can be coerced to that class); a symbolic description of the model to be fitted.}
 
 \item{data}{a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
 
 \item{...}{additional arguments to be passed to the low level
     regression fitting functions (see below).}
 
-\item{cprobs}{a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.}
+\item{cprobs}{an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, \code{cprobs} will be calculated from the proportions in the data.}
 }
 \description{
 \code{lmabc} is used to fit linear models using abundance-based constraints.
@@ -46,5 +43,5 @@ predict(fit, newdata = data.frame(Petal.Length = 1.5, Species = "setosa"))
 
 }
 \seealso{
-\code{\link[stats:lm]{stats::lm()}} for the standard linear regression implementation in R.
+\code{\link[=lm]{lm()}} for the standard linear regression implementation in R.
 }
