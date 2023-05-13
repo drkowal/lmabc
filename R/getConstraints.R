@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param formula
+#' @param data
+#' @param cprobs
+#'
+#' @return
+#' @export
+#'
+#' @examples
 getConstraints = function(formula, data, cprobs = NULL){
 
 	# Model frame has some useful information

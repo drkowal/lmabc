@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param formula
+#' @param data
+#' @param center
+#'
+#' @return
+#' @export
+#'
+#' @examples
 getFullDesign = function(formula, data, center = TRUE){
 
 	# Model frame has some useful information
