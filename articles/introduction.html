@@ -94,24 +94,24 @@ simulated data:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residuals:</span></span>
 <span><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
-<span><span class="co">#&gt; -2.34117 -0.51134  0.00511  0.63847  2.09589 </span></span>
+<span><span class="co">#&gt; -2.69828 -0.66134  0.05796  0.65001  2.80611 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;               Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; (Intercept)    0.70022    0.22261   3.146  0.00192 ** </span></span>
-<span><span class="co">#&gt; age            2.04025    0.04040  50.499  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; raceAsian      3.49441    0.72232   4.838 2.69e-06 ***</span></span>
-<span><span class="co">#&gt; raceHisp      -0.34605    0.44172  -0.783  0.43435    </span></span>
-<span><span class="co">#&gt; raceNHB        0.08176    0.47838   0.171  0.86447    </span></span>
-<span><span class="co">#&gt; age:raceAsian -0.05741    0.13021  -0.441  0.65975    </span></span>
-<span><span class="co">#&gt; age:raceHisp   0.42890    0.07675   5.588 7.79e-08 ***</span></span>
-<span><span class="co">#&gt; age:raceNHB   -0.06402    0.08764  -0.730  0.46598    </span></span>
+<span><span class="co">#&gt; (Intercept)    0.47137    0.27820   1.694   0.0918 .  </span></span>
+<span><span class="co">#&gt; age            2.07857    0.05209  39.905  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; raceAsian      4.17725    0.63071   6.623 3.44e-10 ***</span></span>
+<span><span class="co">#&gt; raceHisp      -0.29598    0.54837  -0.540   0.5900    </span></span>
+<span><span class="co">#&gt; raceNHB        0.68452    0.51145   1.338   0.1824    </span></span>
+<span><span class="co">#&gt; age:raceAsian -0.14482    0.11491  -1.260   0.2091    </span></span>
+<span><span class="co">#&gt; age:raceHisp   0.47869    0.10444   4.583 8.22e-06 ***</span></span>
+<span><span class="co">#&gt; age:raceNHB   -0.14926    0.09953  -1.500   0.1354    </span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Residual standard error: 0.8525 on 192 degrees of freedom</span></span>
-<span><span class="co">#&gt; Multiple R-squared:  0.9648, Adjusted R-squared:  0.9635 </span></span>
-<span><span class="co">#&gt; F-statistic: 752.3 on 7 and 192 DF,  p-value: &lt; 2.2e-16</span></span></code></pre></div>
+<span><span class="co">#&gt; Residual standard error: 1.03 on 192 degrees of freedom</span></span>
+<span><span class="co">#&gt; Multiple R-squared:  0.9497, Adjusted R-squared:  0.9479 </span></span>
+<span><span class="co">#&gt; F-statistic: 518.3 on 7 and 192 DF,  p-value: &lt; 2.2e-16</span></span></code></pre></div>
 <p>The output does not explicitly note that the continuous effect
 (<code>age</code>) is specific to the NHW race group and not a global
 effect for the population; similarly, the <code>age:Hisp</code> and
@@ -144,26 +144,26 @@ Now, let’s use <code>lmABC</code>.</p>
 <span><span class="co">#&gt; lmabc(formula = y ~ age + race, data = df)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residuals:</span></span>
-<span><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
-<span><span class="co">#&gt; -2.77153 -0.54055 -0.03515  0.62279  1.98307 </span></span>
+<span><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span><span class="co">#&gt; -3.5349 -0.6846  0.0937  0.6620  2.7776 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; (Intercept) 11.74847    0.06535 179.777  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; age          2.12037    0.03302  64.221  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; raceNHW     -0.47465    0.05677  -8.360 1.17e-14 ***</span></span>
-<span><span class="co">#&gt; raceAsian    2.70371    0.21444  12.608  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; raceHisp     1.43225    0.16545   8.657 1.82e-15 ***</span></span>
-<span><span class="co">#&gt; raceNHB     -0.72676    0.12675  -5.734 3.69e-08 ***</span></span>
+<span><span class="co">#&gt; (Intercept) 11.39449    0.07813 145.847  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; age          2.11149    0.03983  53.011  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; raceNHW     -0.67719    0.06390 -10.597  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; raceAsian    2.74555    0.19800  13.866  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; raceHisp     1.25275    0.22257   5.629 6.25e-08 ***</span></span>
+<span><span class="co">#&gt; raceNHB     -0.65896    0.18299  -3.601 0.000402 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Residual standard error: 0.9242 on 195 degrees of freedom</span></span>
-<span><span class="co">#&gt; Multiple R-squared:  0.958,  Adjusted R-squared:  0.9572 </span></span>
-<span><span class="co">#&gt; F-statistic:  1112 on 4 and 195 DF,  p-value: &lt; 2.2e-16</span></span></code></pre></div>
+<span><span class="co">#&gt; Residual standard error: 1.105 on 195 degrees of freedom</span></span>
+<span><span class="co">#&gt; Multiple R-squared:  0.9413, Adjusted R-squared:  0.9401 </span></span>
+<span><span class="co">#&gt; F-statistic: 781.6 on 4 and 195 DF,  p-value: &lt; 2.2e-16</span></span></code></pre></div>
 <p>In this new model output, <code>age</code> corresponds to the global
 effect, and the other slopes modify the global effect. For instance,
-being in the NHW category shifts the intercept by -0.475 units in <span class="math inline">\(y\)</span> compared to the population as a
+being in the NHW category shifts the intercept by -0.677 units in <span class="math inline">\(y\)</span> compared to the population as a
 whole.</p>
 <p>We can add interaction terms.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -175,26 +175,26 @@ whole.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residuals:</span></span>
 <span><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
-<span><span class="co">#&gt; -2.34117 -0.51134  0.00511  0.63847  2.09589 </span></span>
+<span><span class="co">#&gt; -2.69828 -0.66134  0.05796  0.65001  2.80611 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;               Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span><span class="co">#&gt; (Intercept)   11.74333    0.06031 194.727  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; age            2.07982    0.03139  66.257  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; raceNHW       -0.47253    0.05238  -9.021  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; raceAsian      2.72443    0.19820  13.746  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; raceHisp       1.40355    0.15270   9.192  &lt; 2e-16 ***</span></span>
-<span><span class="co">#&gt; raceNHB       -0.72245    0.11693  -6.178 3.80e-09 ***</span></span>
-<span><span class="co">#&gt; age:raceNHW   -0.03958    0.02751  -1.439    0.152    </span></span>
-<span><span class="co">#&gt; age:raceAsian -0.09699    0.11706  -0.829    0.408    </span></span>
-<span><span class="co">#&gt; age:raceHisp   0.38932    0.06399   6.084 6.22e-09 ***</span></span>
-<span><span class="co">#&gt; age:raceNHB   -0.10360    0.06703  -1.545    0.124    </span></span>
+<span><span class="co">#&gt;                Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span><span class="co">#&gt; (Intercept)   11.407076   0.073212 155.810  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; age            2.088538   0.037946  55.039  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; raceNHW       -0.686625   0.059883 -11.466  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; raceAsian      2.776528   0.185787  14.945  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; raceHisp       1.377720   0.208806   6.598 3.95e-10 ***</span></span>
+<span><span class="co">#&gt; raceNHB       -0.738101   0.172183  -4.287 2.87e-05 ***</span></span>
+<span><span class="co">#&gt; age:raceNHW   -0.009969   0.029955  -0.333    0.740    </span></span>
+<span><span class="co">#&gt; age:raceAsian -0.154791   0.095389  -1.623    0.106    </span></span>
+<span><span class="co">#&gt; age:raceHisp   0.468718   0.088495   5.297 3.21e-07 ***</span></span>
+<span><span class="co">#&gt; age:raceNHB   -0.159232   0.080023  -1.990    0.048 *  </span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Residual standard error: 0.8525 on 192 degrees of freedom</span></span>
-<span><span class="co">#&gt; Multiple R-squared:  0.9648, Adjusted R-squared:  0.9635 </span></span>
-<span><span class="co">#&gt; F-statistic: 752.3 on 7 and 192 DF,  p-value: &lt; 2.2e-16</span></span></code></pre></div>
+<span><span class="co">#&gt; Residual standard error: 1.03 on 192 degrees of freedom</span></span>
+<span><span class="co">#&gt; Multiple R-squared:  0.9497, Adjusted R-squared:  0.9479 </span></span>
+<span><span class="co">#&gt; F-statistic: 518.3 on 7 and 192 DF,  p-value: &lt; 2.2e-16</span></span></code></pre></div>
 <p>Here, the interaction terms modify the coefficient of
 <code>age</code>, which is now the global effect of age on <span class="math inline">\(y\)</span>.</p>
 <p>Crucially, the model itself is the same as the traditional
