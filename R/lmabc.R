@@ -3,9 +3,9 @@
 #' `lmabc` is used to fit linear models using abundance-based constraints.
 #'
 #' @inheritParams stats::lm
-#'
+#' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
 #' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
-#' @param cprobs a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.
+#' @param cprobs an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, `cprobs` will be calculated from the proportions in the data.
 #'
 #' @details
 #'
@@ -25,7 +25,7 @@
 #'
 #' `lmabc` returns an object of class "lmabc." Many generics commonly used for `lm` objects have been implemented for `lmabc`: `summary`, `coefficients`, `plot`, `predict`, and more. See the DESCRIPTION file for all implemented S3 methods.
 #'
-#' @seealso [stats::lm()] for the standard linear regression implementation in R.
+#' @seealso [lm()] for the standard linear regression implementation in R.
 #'
 #' @examples
 #' fit <- lmabc(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
