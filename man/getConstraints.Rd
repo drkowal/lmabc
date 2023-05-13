@@ -19,7 +19,7 @@ getConstraints(formula, data, cprobs = NULL)
 \section{Details}{
 The constraint matrix incorporates all the constraints present in the regression. Under the baseline encoding, this is equivalent to a vector with a single 1 in the slot designated as the baseline for each categorical variable. We suggest using population or sample proportions, which are calculated by default. Thus, the reference category for coefficients is the global average.
 
-\code{cprobs} must incorporate all categorical predictors and all interactions including at least one categorical predictor.
+\code{cprobs} must include every level for all categorical predictors and all interactions including at least one categorical predictor. It should be a named list of named vectors.
 
 This method is called by \code{\link[=lmabc]{lmabc()}}. This method is useful for implementing additional variations of the ABCs.
 }
