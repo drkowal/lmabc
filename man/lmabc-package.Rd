@@ -6,10 +6,30 @@
 \alias{_PACKAGE}
 \title{lmabc: Linear Regression with Abudance Based Constraints}
 \description{
-What the package does (one paragraph).
+lmabc introduces an implementation of linear regression with abundance-based constraints, which seeks to increase equity and interpretability in statistical analyses. Traditional linear regression models with categorical predictors choose a "baseline" category, generally the most prevalent one, which tends to be non-Hispanic White for race. This creates inequities in the presentation and interpretation of such models. lmabc uses an averaging approach to change the baseline from a single arbitrarily-chosen level to the global average.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://prayaggordy.github.io/lmabc/}
+  \item \url{https://github.com/prayaggordy/lmabc}
+}
+
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Daniel R. Kowal \email{daniel.r.kowal@gmail.com}
+
+Authors:
+\itemize{
+  \item Prayag Gordy
+  \item Virginia Baskin
+  \item Jai Uparkar
+}
+
+Other contributors:
+\itemize{
+  \item Caleb Fikes [contributor]
+}
 
 }
 \keyword{internal}
