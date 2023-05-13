@@ -26,7 +26,7 @@ Consider an interaction between two categorical variables, `k1` and `k2`, with l
 The standard, baseline-encoded `lm` ignores this level and returns an `NA` for its coefficient. However, we do not believe this is a good solution.
 
 ## Data must be passed as a data.frame
-The standard implementation of `lm` can handle data passed as vectors, thus rendering the `data` argument optional. `lmabc` requires the columns referenced in the formula to be passed to `lmabc` as a data frame.
+The standard implementation of `lm` can handle data passed as vectors, thus rendering the `data` argument optional. `lmabc` requires the columns referenced in both sides of the formula to be passed to `lmabc` together in a single data frame.
 
 ## Missing implementations of generic methods
 We implemented many of the common generic methods associated with linear regression models, but many remain, especially in non-base packages. `lmabc` objects only have class "lmabc," so methods only implemented for class "lm" will fail unless the generic method has a default.
