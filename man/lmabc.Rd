@@ -11,7 +11,7 @@ lmabc(formula, data, ..., cprobs = NULL)
 
 \item{data}{a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
 
-\item{...}{additional arguments to be passed to the low level
+\item{...}{For \code{lm()}: additional arguments to be passed to the low level
     regression fitting functions (see below).}
 
 \item{cprobs}{an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, \code{cprobs} will be calculated from the proportions in the data.}

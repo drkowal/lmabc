@@ -5,7 +5,6 @@ cv.penlm = function(formula,
 										K = 10,
 										plot = FALSE) {
 
-
 	# Quick check: ridge or lasso
 	if(!(type == 'ridge' | type == 'lasso')){
 		stop('type must be "ridge" or "lasso"')
