@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Daniel R. Kowal \email{daniel.r.kowal@gmail.com}
+\strong{Maintainer}: Dan Kowal \email{daniel.r.kowal@gmail.com}
 
 Authors:
 \itemize{
