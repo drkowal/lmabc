@@ -2,7 +2,7 @@
 % Please edit documentation in R/getConstraints.R
 \name{getConstraints}
 \alias{getConstraints}
-\title{Generating an Abundance-Based Constraint Matrix}
+\title{Generating the Constraint Matrix for Abundance-Based Constraints (ABCs)}
 \usage{
 getConstraints(formula, data, cprobs = NULL)
 }
@@ -17,9 +17,9 @@ getConstraints(formula, data, cprobs = NULL)
 \code{getConstraints} is used to generate the constraint matrix for linear regression with ABCs.
 }
 \section{Details}{
-The constraint matrix incorporates all the constraints present in the regression. Under the baseline encoding, this is equivalent to a vector with a single 1 in the slot designated as the baseline for each categorical variable. We suggest using population or sample proportions, which are calculated by default. Thus, the reference category for coefficients is the global average.
+The constraint matrix incorporates all the constraints present in the regression. Under the reference group encoding, this is equivalent to a vector with a single 1 in the slot designated as the reference for each categorical variable. We suggest using population or sample (default) proportions.
 
-\code{cprobs} must include every level for all categorical predictors and all interactions including at least one categorical predictor. It should be a named list of named vectors.
+\code{cprobs} must include every level for all categorical predictors and all interactions that include at least one categorical predictor. It should be a named list of named vectors.
 
 This method is called by \code{\link[=lmabc]{lmabc()}}. This method is useful for implementing additional variations of the ABCs.
 }

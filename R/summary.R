@@ -88,3 +88,14 @@ print.summary.glmabc <- function(x, digits = max(3L, getOption("digits") - 3L), 
 	print.summary.glm <- utils::getFromNamespace("print.summary.glm", "stats")
 	print.summary.glm(x = x, digits = digits, symbolic.cor = symbolic.cor, signif.stars = signif.stars, ...)
 }
+
+# Include/modify to allow robust HC/HAC SEs...
+# #' @export
+# estfun.lmabc<-function(object, ...) {
+# 	residuals(object)*model.matrix(object)
+#}
+
+# #' @export
+#model.matrix.lmabc<-function(object, ...) {
+#	object$X
+#}

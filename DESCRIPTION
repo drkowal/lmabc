@@ -1,5 +1,5 @@
 Package: lmabc
-Title: Linear Regression with Abudance Based Constraints
+Title: Linear Regression with Abundance-Based Constraints (ABCs)
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Dan", family = "Kowal", email = "daniel.r.kowal@gmail.com", role = c("aut", "cre")),

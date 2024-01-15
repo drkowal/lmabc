@@ -1,6 +1,10 @@
-#' Fitting Generalized Linear Models with Abundance-Based Constraints
+#' Fitting Generalized Linear Models with Abundance-Based Constraints (ABCs)
 #'
-#' `glmabc` is used to fit generalized linear models using abundance-based constraints. Like [`stats::glm`], the model is specified by giving a symbolic description of the linear predictor and a description of the error distribution.
+#' `glmabc` is used to fit generalized linear models using abundance-based constraints (ABCs).
+#' Like [`stats::glm`], the model is specified by giving a symbolic description of the linear predictor
+#' and a description of the error distribution. ABCs provide more equitable and interpretable output
+#' for regression models with categorical covariates.
+#
 #'
 #' @inheritParams stats::glm
 #'
@@ -11,19 +15,46 @@
 #'
 #' # Details
 #'
-#' A `glmabc` model is specified identically to the corresponding `glm` model. At this time, `glmabc` only supports a single response variable, and the data must be passed into the `data` parameter.
+#' A `glmabc` model is specified identically to the corresponding `glm` model.
+#' At this time, `glmabc` only supports a single response variable, and the data must be passed into the `data` parameter.
 #'
 #' # Differences from `glm`
 #'
-#' Standard generalized linear regression models chose one level for each categorical factor and make it a "baseline," which is necessary to not over-parameterize the model. The coefficients on the continuous \eqn{X} variables are specifically for the baseline category and do not represent a global effect. Similarly, the coefficients on the non-baseline levels are in comparison to the baseline level.
+#' The default approach for generalized linear regression with categorical covariates
+#' is reference group encoding (RGE): one category is selected as the "reference group"
+#' for each categorical variable, and all results are presented
+#' relative to this group. This output is inequitable and can be
+#' misleading, especially for categorical covariates like race/ethnicity,
+#' gender identity, religion, national origin, etc.
 #'
-#' This framework can lead to biases in interpretation. Suppose a researcher includes `age` and `race` as explanatory variables. `glm` will report the coefficient for `age`, which is really the baseline-specific coefficient for `age`; the baseline is generally chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global intercept or, with interaction terms, effect. The coefficient for any other race dummy is the expected change compared to the baseline—again, not the true effect of identifying as that race.
+#' For example, suppose an analyst fits a generalized linear model of the form \code{y ~ x + race + x:race},
+#' where \code{x} is a continuous covariate. This model allows for race-specific
+#' coefficients on \eqn{x}. However, RGE requires a reference group, typically
+#' White (or selected alphabetically), and the `glm` output is presented relative to this group:
+#' \code{(Intercept)} refers to the intercept for the White group and
+#' \code{x} refers to the coefficients on \eqn{x} for the White group. The remaining
+#' race-specific parameters are all presented as differences relative to the White group.
+#' Clearly, this output is inequitable: it elevates one group (White) above others,
+#' and presents this group as "normal" while others are "deviations from normal".
+#' The output is also unclear: that the \code{(Intercept)} and \code{x} effects
+#' refer *only* to the reference (White) group is nowhere mentioned in any default
+#' output.
 #'
-#' `glmabc` introduces abundance-based constraints. Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by `cprobs`. For instance, the coefficient on `age` is the weighted average of each race-specific effect.
+#' `glmabc` addresses these issues. ABCs parametrize the regression model so that the main effect terms, here
+#' \code{(Intercept)} and \code{x}, are *averages* of the race-specific terms.
+#' For instance, the coefficients on \eqn{x} represent the race-averaged effect
+#' of \eqn{x}, and the race-specific coefficients on \eqn{x} represent deviations
+#' from the average, rather than from the reference (White) group. The
+#' notion of "average" derives from the argument \code{cprob}: these can be
+#' input by the user (e.g., population proportions), otherwise
+#' they will be set to the sample proportions for each group.
 #'
 #' # Value
 #'
-#' `glmabc` returns an object of classes "glmabc" and "lmabc." Many generics commonly used for `glm` objects have been implemented for `glmabc`: `summary`, `coefficients`, `plot`, `predict`, and more. See the DESCRIPTION file for all implemented S3 methods.
+#' `glmabc` returns an object of classes "glmabc" and "lmabc."
+#' Many generics commonly used for `glm` objects have been implemented for `glmabc`:
+#' `summary`, `coefficients`, `plot`, `predict`, and more.
+#' See the DESCRIPTION file for all implemented S3 methods.
 #'
 #' @seealso [stats::glm()] for the standard generalized linear regression implementation in R.
 #'
@@ -32,7 +63,7 @@
 #' fit <- glmabc(am ~ mpg + cyl + mpg:cyl, family = "binomial", data = mtcars)
 #' summary(fit)
 #'
-#' predict(fit, newdata = data.frame(mpg = 21, cyl = "6"))
+#' predict(fit, newdata = data.frame(mpg = 21, cyl = "6"), type = 'response')
 #'
 #' @export
 glmabc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){

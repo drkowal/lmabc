@@ -4,7 +4,7 @@
 \name{lmabc-package}
 \alias{lmabc-package}
 \alias{_PACKAGE}
-\title{lmabc: Linear Regression with Abudance Based Constraints}
+\title{lmabc: Linear Regression with Abundance-Based Constraints (ABCs)}
 \description{
 lmabc introduces an implementation of linear regression with abundance-based constraints, which seeks to increase equity and interpretability in statistical analyses. Traditional linear regression models with categorical predictors choose a "baseline" category, generally the most prevalent one, which tends to be non-Hispanic White for race. This creates inequities in the presentation and interpretation of such models. lmabc uses an averaging approach to change the baseline from a single arbitrarily-chosen level to the global average.
 }

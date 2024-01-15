@@ -1,4 +1,4 @@
-#' Generating an Abundance-Based Constraint Matrix
+#' Generating the Constraint Matrix for Abundance-Based Constraints (ABCs)
 #'
 #' `getConstraints` is used to generate the constraint matrix for linear regression with ABCs.
 #'
@@ -10,9 +10,9 @@
 #'
 #' # Details
 #'
-#' The constraint matrix incorporates all the constraints present in the regression. Under the baseline encoding, this is equivalent to a vector with a single 1 in the slot designated as the baseline for each categorical variable. We suggest using population or sample proportions, which are calculated by default. Thus, the reference category for coefficients is the global average.
+#' The constraint matrix incorporates all the constraints present in the regression. Under the reference group encoding, this is equivalent to a vector with a single 1 in the slot designated as the reference for each categorical variable. We suggest using population or sample (default) proportions.
 #'
-#' `cprobs` must include every level for all categorical predictors and all interactions including at least one categorical predictor. It should be a named list of named vectors.
+#' `cprobs` must include every level for all categorical predictors and all interactions that include at least one categorical predictor. It should be a named list of named vectors.
 #'
 #' This method is called by [lmabc()]. This method is useful for implementing additional variations of the ABCs.
 #'
@@ -48,7 +48,7 @@ getConstraints = function(formula, data, cprobs = NULL){
 	# Handle the categorical variables:
 	f_inds = which(sapply(data, is.factor)) # factor indices
 
-	if(length(f_inds) > 0){
+	if(length(f_inds) > 0){ # if cat variables, need constrains (o/w NULL)
 		cdat = data.frame(data[,f_inds]) # data frame
 		cnames = names(cdat) = names(data)[f_inds] # correct the names
 
@@ -148,7 +148,8 @@ getConstraints = function(formula, data, cprobs = NULL){
 													 sep='')
 					# Add the constraint at the right indices:
 					inds_kl = match(names_kl, xnames)
-					Con1[k,inds_kl] = pi_hat[[v1]]
+					#Con1[k,inds_kl] = pi_hat[[v1]]
+					Con1[k,inds_kl] = colMeans(X[,inds_kl]) # joint probs (FIXME: generalize!)
 				}
 				# add the constraints for variable 2:
 				Con2 = array(0, c(length(pi_hat[[v1]]), p),
@@ -161,7 +162,8 @@ getConstraints = function(formula, data, cprobs = NULL){
 													 sep='')
 					# Add the constraint at the right indices:
 					inds_kl = match(names_kl, xnames)
-					Con2[k,inds_kl] = pi_hat[[v2]]
+					#Con2[k,inds_kl] = pi_hat[[v2]]
+					Con2[k,inds_kl] = colMeans(X[,inds_kl]) # joint probs (FIXME: generalize!)
 				}
 				# Combine:
 				Con_cat = rbind(Con_cat,

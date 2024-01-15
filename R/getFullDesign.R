@@ -26,7 +26,7 @@
 #' # full design matrix
 #' getFullDesign(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
 #'
-#' # lm's standard, baseline-encoded design matrix
+#' # lm's default design matrix, which removes a reference category
 #' model.matrix(lm(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris))
 #'
 #' @export

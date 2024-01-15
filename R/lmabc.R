@@ -1,6 +1,9 @@
-#' Fitting Linear Models with Abundance-Based Constraints
+#' Fitting Linear Models with Abundance-Based Constraints (ABCs)
 #'
-#' `lmabc` is used to fit linear models using abundance-based constraints.
+#' `lmabc` is used to fit linear models using abundance-based constraints (ABCs).
+#' ABCs provide more equitable and interpretable output
+#' for regression models with categorical covariates.
+#'
 #'
 #' @inheritParams stats::lm
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
@@ -15,11 +18,35 @@
 #'
 #' # Differences from `lm`
 #'
-#' Standard linear regression models chose one level for each categorical factor and make it a "baseline," which is necessary to not over-parameterize the model. The coefficients on the continuous \eqn{X} variables are specifically for the baseline category and do not represent a global intercept or, with interaction terms, effect. Similarly, the coefficients on the non-baseline levels are in comparison to the baseline level.
+#' The default approach for linear regression with categorical covariates
+#' is reference group encoding (RGE): one category is selected as the "reference group"
+#' for each categorical variable, and all results are presented
+#' relative to this group. This output is inequitable and can be
+#' misleading, especially for categorical covariates like race/ethnicity,
+#' gender identity, religion, national origin, etc.
 #'
-#' This framework can lead to biases in interpretation. Suppose a researcher includes `age` and `race` as explanatory variables. `lm` will report the coefficient for `age`, which is really the baseline-specific coefficient for `age`; the baseline is often chosen to be the most prevalent category, often non-Hispanic White (NHW). Thus, the coefficient for NHW is implicitly represented as the global effect. The coefficient for any other race dummy is the expected change compared to the baseline—again, not the true effect of identifying as that race.
+#' For example, suppose an analyst fits a model of the form \code{y ~ x + race + x:race},
+#' where \code{x} is a continuous covariate. This model allows for race-specific
+#' coefficients on \eqn{x}. However, RGE requires a reference group, typically
+#' White (or selected alphabetically), and the `lm` output is presented relative to this group:
+#' \code{(Intercept)} refers to the intercept for the White group and
+#' \code{x} refers to the coefficients on \eqn{x} for the White group. The remaining
+#' race-specific parameters are all presented as differences relative to the White group.
+#' Clearly, this output is inequitable: it elevates one group (White) above others,
+#' and presents this group as "normal" while others are "deviations from normal".
+#' The output is also unclear: that the \code{(Intercept)} and \code{x} effects
+#' refer *only* to the reference (White) group is nowhere mentioned in any default
+#' output.
 #'
-#' `lmabc` introduces abundance-based constraints. Each "baseline" coefficient now represents the group-averaged coefficient with weights given by the sample proportions or by `cprobs`. For instance, the coefficient on `age` is the weighted average of each race-specific effect.
+#' `lmabc` addresses these issues. ABCs parametrize the regression model so that the main effect terms, here
+#' \code{(Intercept)} and \code{x}, are *averages* of the race-specific terms.
+#' For instance, the coefficients on \eqn{x} represent the race-averaged effect
+#' of \eqn{x}, and the race-specific coefficients on \eqn{x} represent deviations
+#' from the average, rather than from the reference (White) group. The
+#' notion of "average" derives from the argument \code{cprob}: these can be
+#' input by the user (e.g., population proportions), otherwise
+#' they will be set to the sample proportions for each group.
+#'
 #'
 #' # Value
 #'
@@ -79,7 +106,6 @@ lmabc = function(formula, data, ..., cprobs = NULL){
 
 		# Covariate matrix to be used in the *unconstrained* model
 		data$Xuse = X%*%Qm
-
 
 		# Note: this is more efficient, but more cumbersome
 		# cQR = qr(t(Con)) # QR decomposition
