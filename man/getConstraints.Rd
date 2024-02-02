@@ -11,21 +11,34 @@ getConstraints(formula, data, cprobs = NULL)
 
 \item{data}{a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
 
-\item{cprobs}{an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, \code{cprobs} will be calculated from the proportions in the data.}
+\item{cprobs}{an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category. By default, \code{cprobs} will be calculated from the sample proportions in the data.}
 }
 \description{
 \code{getConstraints} is used to generate the constraint matrix for linear regression with ABCs.
 }
 \section{Details}{
-The constraint matrix incorporates all the constraints present in the regression. Under the reference group encoding, this is equivalent to a vector with a single 1 in the slot designated as the reference for each categorical variable. We suggest using population or sample (default) proportions.
+For linear regression with categorical covariates (and interactions, etc.),
+constraints are needed for model identifiability. \code{getConstraints()} incorporates
+all the necessary constraints for a given \code{formula} statement within a single matrix.
 
-\code{cprobs} must include every level for all categorical predictors and all interactions that include at least one categorical predictor. It should be a named list of named vectors.
+\code{cprobs} must include every level for all categorical covariates and all interactions that include at least one categorical covariate.
+It should be a named list of named vectors.
+It provides several useful options, including
+alternatives to ABCs:
+\itemize{
+\item ABCs using the sample proportions of each category (default);
+\item ABCs using population proportions of each category (if known);
+\item Reference group encoding (RGE), which fixes a reference
+category proportion at 1 and all others at 0 (default in \code{lm()});
+\item Sum-to-zero (STZ) constraints, which use the same
+proportions for every category level.
+}
 
-This method is called by \code{\link[=lmabc]{lmabc()}}. This method is useful for implementing additional variations of the ABCs.
+This method is called by \code{\link[=lmabc]{lmabc()}}.
 }
 
 \section{Value}{
-\code{getConstraints} returns a matrix representing the constraint matrix for a particular regression model.
+\code{getConstraints} returns a matrix of constraints based on the given model \code{formula}.
 }
 
 \examples{
