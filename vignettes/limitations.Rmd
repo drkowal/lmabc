@@ -1,8 +1,8 @@
 ---
-title: "Limitations of lmABC"
+title: "Limitations of lmabc"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Limitations of lmABC}
+  %\VignetteIndexEntry{Limitations of lmabc}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,20 +18,18 @@ knitr::opts_chunk$set(
 library(lmabc)
 ```
 
-As a method still under development, our implementation of `lmabc` is not exhaustive. This vignette will serve as a running list of limitations of `lmabc`. Email the package maintainer with questions or suggestions.
+The statistical methods, theory, and algorithms for regression with Abundance-Based Constraints (ABCs) are under active development. As such, the current implementation of `lmabc` is not exhaustive. This vignette will serve as a running list of limitations of `lmabc`. Please email the package maintainer with questions or suggestions.
 
 ## `lmabc` throws an error for missing factor levels
-Consider an interaction between two categorical variables, `k1` and `k2`, with levels `a`, `b`, and `c` and `x`, `y`, and `z`, respectively. If any pair has no observations—for instance, if there are no observations with `k1 = a`, and `k2 = z`—then `lmabc` will throw an error.
+Suppose we have two categorical variables, `k1` and `k2`, with levels `a`, `b`, and `c` and `uu`, `vv`, respectively. If either `k1` or `k2` has zero observations in at least one level, then a model of the form `y ~ k1 + k2 + ...` will throw an error. Similarly, if an interaction is included, `y ~ k1 + k2 + k1:k2 + ...`, but a joint category (e.g., `k1 = a` and `k2 = uu`) has zero observations, then `lmabc` will throw an error.
 
-The standard, baseline-encoded `lm` ignores this level and returns an `NA` for its coefficient. However, we do not believe this is a good solution.
+This behavior is different from `lm`, which instead removes each unobserved level from the model and returns an `NA` for its coefficient. 
 
 ## Data must be passed as a data.frame
-The standard implementation of `lm` can handle data passed as vectors, thus rendering the `data` argument optional. `lmabc` requires the columns referenced in both sides of the formula to be passed to `lmabc` together in a single data frame.
+The standard implementation of `lm` can handle data passed as vectors, thus rendering the `data` argument optional. `lmabc` requires all variables in the formula statement to be passed to `lmabc` as a single data frame.
 
 ## Missing implementations of generic methods
-We implemented many of the common generic methods associated with linear regression models, but many remain, especially in non-base packages. `lmabc` objects only have class "lmabc," so methods only implemented for class "lm" will fail unless the generic method has a default.
+We implemented many of the common generic methods associated with linear regression models. However, our implementation is not exhaustive, especially for non-base packages. `lmabc` objects only have class "lmabc", so methods only implemented for class "lm" will fail unless the generic method has a default.
 
 We will implement additional generic methods throughout the development process.
 
-## Outcome types
-For `lmabc`, the outcome variable must be continuous. Further, there may only be one outcome variable.
