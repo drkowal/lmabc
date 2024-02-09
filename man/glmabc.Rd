@@ -39,37 +39,11 @@ for regression models with categorical covariates.
 \section{Details}{
 A \code{glmabc} model is specified identically to the corresponding \code{glm} model.
 At this time, \code{glmabc} only supports a single response variable, and the data must be passed into the \code{data} parameter.
-}
 
-\section{Differences from \code{glm}}{
-The default approach for generalized linear regression with categorical covariates
-is reference group encoding (RGE): one category is selected as the "reference group"
-for each categorical variable, and all results are presented
-relative to this group. This output is inequitable and can be
-misleading, especially for categorical covariates like race/ethnicity,
-gender identity, religion, national origin, etc.
-
-For example, suppose an analyst fits a generalized linear model of the form \code{y ~ x + race + x:race},
-where \code{x} is a continuous covariate. This model allows for race-specific
-coefficients on \eqn{x}. However, RGE requires a reference group, typically
-White (or selected alphabetically), and the \code{glm} output is presented relative to this group:
-\code{(Intercept)} refers to the intercept for the White group and
-\code{x} refers to the coefficients on \eqn{x} for the White group. The remaining
-race-specific parameters are all presented as differences relative to the White group.
-Clearly, this output is inequitable: it elevates one group (White) above others,
-and presents this group as "normal" while others are "deviations from normal".
-The output is also unclear: that the \code{(Intercept)} and \code{x} effects
-refer \emph{only} to the reference (White) group is nowhere mentioned in any default
-output.
-
-\code{glmabc} addresses these issues. ABCs parametrize the regression model so that the main effect terms, here
-\code{(Intercept)} and \code{x}, are \emph{averages} of the race-specific terms.
-For instance, the coefficients on \eqn{x} represent the race-averaged effect
-of \eqn{x}, and the race-specific coefficients on \eqn{x} represent deviations
-from the average, rather than from the reference (White) group. The
-notion of "average" derives from the argument \code{cprob}: these can be
-input by the user (e.g., population proportions), otherwise
-they will be set to the sample proportions for each group.
+See \code{\link[=lmabc]{lmabc()}} for details and motivation about ABCs for categorical
+covariates. Note that the ABCs estimation/inference invariance
+properties no longer apply for GLMs, but the arguments for equitability
+and interpretability remain valid.
 }
 
 \section{Value}{

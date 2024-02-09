@@ -1,9 +1,10 @@
 #' Fitting Linear Models with Abundance-Based Constraints (ABCs)
 #'
 #' `lmabc` is used to fit linear models using abundance-based constraints (ABCs).
-#' ABCs provide more equitable and interpretable output
-#' for regression models with categorical covariates.
-#'
+#' For regression models with categorical covariates, ABCs
+#' provide 1) more equitable output, 2) better statistical efficiency,
+#' and 3) more interpretable parameters, especially in the
+#' presence of interaction (or modifier) effects.
 #'
 #' @inheritParams stats::lm
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
@@ -14,39 +15,67 @@
 #'
 #' # Details
 #'
-#' An `lmabc` model is specified identically to the corresponding `lm` model. At this time, `lmabc` only supports a single response variable, and the data must be passed into the `data` parameter.
+#' An `lmabc` model is specified identically to the corresponding `lm` model.
+#' At this time, `lmabc` only supports a single response variable, and the data must be passed into the `data` parameter.
 #'
 #' # Differences from `lm`
 #'
 #' The default approach for linear regression with categorical covariates
 #' is reference group encoding (RGE): one category is selected as the "reference group"
 #' for each categorical variable, and all results are presented
-#' relative to this group. This output is inequitable and can be
-#' misleading, especially for categorical covariates like race/ethnicity,
-#' gender identity, religion, national origin, etc.
+#' relative to this group. However, this approach produces output that is
+#' inequitable (and potentially misleading), estimators that are statistically inefficient,
+#' and model parameters that are difficult to interpret.
 #'
-#' For example, suppose an analyst fits a model of the form \code{y ~ x + race + x:race},
-#' where \code{x} is a continuous covariate. This model allows for race-specific
-#' coefficients on \eqn{x}. However, RGE requires a reference group, typically
-#' White (or selected alphabetically), and the `lm` output is presented relative to this group:
-#' \code{(Intercept)} refers to the intercept for the White group and
-#' \code{x} refers to the coefficients on \eqn{x} for the White group. The remaining
-#' race-specific parameters are all presented as differences relative to the White group.
-#' Clearly, this output is inequitable: it elevates one group (White) above others,
-#' and presents this group as "normal" while others are "deviations from normal".
-#' The output is also unclear: that the \code{(Intercept)} and \code{x} effects
-#' refer *only* to the reference (White) group is nowhere mentioned in any default
-#' output.
+#' For example, suppose an analyst fits a model of the form `y ~ x + race + x:race`,
+#' where `x` is a continuous covariate. This model allows for `race`-specific
+#' coefficients on `x` (or slopes). However, RGE requires a reference group;
+#' for `race`, this is typically non-Hispanic White (NHW). This creates several problems:
+#' 1. All output is presented relative to the reference (NHW) group:
+#' the results for `(Intercept)` and `x` refer to the intercept and slope, respectively,
+#' *for the reference (NHW) group*. This can lead to misleading conclusions
+#' about the overall `x` effect, since the dependence on the reference
+#' group is not made clear. All other `race` and `x:race` effects
+#' are presented relative to the reference (NHW) group, which
+#' elevates this group above all others.
+#' 2. Compared to the main-only model `y ~ x + race`, adding the
+#' `x:race` interaction alters the estimates and standard errors of
+#' the `x` effect. This typically results in a loss of statistical power:
+#'  the `x` effect now refers to a subset of the data (the reference group).
+#' 3. Since all categorical covariates and interactions are
+#' anchored at a reference group, it becomes increasingly
+#' difficult to interpret the model parameters in the
+#' presence of multiple categorical variables (`race`, `sex`, etc.)
+#' and interactions.
 #'
 #' `lmabc` addresses these issues. ABCs parametrize the regression model so that the main effect terms, here
-#' \code{(Intercept)} and \code{x}, are *averages* of the race-specific terms.
-#' For instance, the coefficients on \eqn{x} represent the race-averaged effect
-#' of \eqn{x}, and the race-specific coefficients on \eqn{x} represent deviations
-#' from the average, rather than from the reference (White) group. The
-#' notion of "average" derives from the argument \code{cprob}: these can be
+#' `(Intercept)` and `x`, are *averages* of the race-specific terms.
+#' The notion of "average" derives from the argument `cprob`: these can be
 #' input by the user (e.g., population proportions), otherwise
-#' they will be set to the sample proportions for each group.
+#' they will be set to the sample proportions for each group. ABCs provide
+#' several key advantages:
+#' 1. **Equitability**: the main `x` effect is
+#' parameterized as "group-averaged" effect. It does not
+#' elevate any single group (e.g., NHW). All other group-specific effects
+#' are relative to this global term, rather than any
+#' single group.
+#' 2. **Efficiency**: comparing the main-only model `y ~ x + race`
+#' with the race-modified model `y ~ x + race + x:race`, ABCs
+#' (with the default `cprobs`) ensure that the main `x` effect estimates
+#' are (nearly) unchanged and the standard errors are (nearly) unchanged
+#' or smaller. Remarkably, there are no negative (statistical) consequences for
+#' including the interaction `x:race`, even if it is irrelevant.
+#' 3. **Interpretability**: The `x` and `x:race` coefficients are
+#' "group-averaged" `x`-effects and "group-specific deviations", respectively.
+#' Coupled with the ABCs estimation/inference invariance, this
+#' yields simple interpretations of main and interaction effects.
 #'
+#' # Similarities to `lm`
+#' `lmabc` is a reparametrization of the linear model,
+#' but the fitted values, predictions, and residuals will be the same
+#' as `lm` (see [cv.penlmabc()] for an example where this is no longer the case).
+#' Without categorical covariates, `lmabc` output will be
+#' identical to `lm`.
 #'
 #' # Value
 #'

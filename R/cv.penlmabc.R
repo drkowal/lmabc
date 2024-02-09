@@ -1,8 +1,99 @@
-cv.penlm = function(formula,
+#' Fitting Lasso/Ridge Regression with Abundance-Based Constraints (ABCs)
+#'
+#' `cv.penlmabc` fits penalized (lasso or ridge) linear models
+#'  using abundance-based constraints (ABCs). For penalized regression
+#'  with categorical covariates, ABCs eliminate harmful biases
+#'  (e.g., with respect to race, sex, religion, etc.), provide
+#'  more meaningful notions of sparsity, and improve interpretability.
+#'
+#' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
+#' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
+#' @param type either "lasso" or "ridge"
+#' @param lambda_path optional vector of tuning parameters;
+#' defaults are inherited from `glmnet` (for ridge) or `genlasso` (for lasso)
+#' @param K number of folds for cross-validation; default is 10
+#' @param cprobs an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, `cprobs` will be calculated from the proportions in the data.
+#' @param plot logical; if TRUE, include a plot of the cross-validated
+#' MSE across `lambda_path` values
+#'
+#' @details
+#'
+#' # Details
+#' `cv.penlmabc` solves the penalized least squares problem
+#'
+#' \eqn{|| y - X\beta||^2 + \lambda \sum_j |\beta_j|^\gamma}
+#'
+#' for lasso (\eqn{\gamma=1}) or ridge (\eqn{\gamma=2}) regression,
+#' and specifically using ABCs for categorical covariates and interactions.
+#'
+#' Default strategies for categorical covariates typically
+#' use reference group encoding (RGE), which removes
+#' the coefficient for one group for each
+#' categorical variable (and their interactions).
+#' However, because lasso and ridge shrink coefficients
+#' toward zero, this implies that all other coefficients are
+#' *biased* toward their reference group. Such bias is
+#' clearly problematic for variables such as race, sex, and other
+#' protected groups, but also it attenuates the estimated differences
+#' among groups, which can obscure important group-specific
+#' effects (e.g., for `x:race`). The penalized estimates and predictions
+#' under RGE are dependent on the choice of the reference group.
+#'
+#' Alternatively, it is possible to fit penalized least squares
+#' with an overparametrized model, i.e., without deleting a
+#' reference group (or applying any types of constraints). However,
+#' the parameters are not identifiable and thus not interpretable
+#' in general. With lasso estimation, this approach empirically tends
+#' to select a reference group, and therefore suffers
+#' from the same significant problems as RGE.
+#'
+#' Instead, ABCs provide a parametrization of the main
+#' effects as "group-averaged" effects, with interaction terms
+#' (e.g., `x:race`) as "group-specific deviations".
+#' These estimators are not biased toward any single group
+#' and the predictive performance does not depend on the
+#' choice of a reference group. ABCs provide appealing estimation
+#' invariance properties for models with or without interactions
+#' (e.g., `x:race`), and therefore offer a natural parametrization
+#' for sparse (e.g., lasso) estimation with categorical covariates
+#' and their interactions.
+#'
+#' # Value
+#'
+#' `cv.penlmabc` returns a list with the following elements:
+#' \itemize{
+#'	\item `coefficients` estimated coefficients at each tuning
+#'	parameter in `lambda_path`
+#'	\item `lambda_path` vector of tuning parameters
+#'	\item `df` degrees of freedom at each tuning
+#'	parameter in `lambda_path`
+#'	\item `mse` cross-validated mean squared error (MSE) at each tuning
+#'	parameter in `lambda_path`
+#'	\item `se` standard error of the CV-MSE at each tuning
+#'	parameter in `lambda_path`
+#'	\item `ind.min` index of the minimum CV-MSE in `lambda_path`
+#'	\item `ind.1se` index of the one-standard error rule in `lambda_path`
+#'	\item `lambda.min` tuning parameter that achieves the minimum CV-MSE
+#'	\item `lambda.1se` tuning parameter that achieves the one-standard error rule
+#' }
+#'
+#' @examples
+#' # Example lasso fit:
+#' fit <- cv.penlmabc(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
+#' names(fit)
+#'
+#' # Estimated coefficients at the one-standard error rule:
+#' coef(fit)[,fit$ind.1se]
+#'
+# #' @importFrom glmnet glmnet
+# #' @importFrom genlasso genlasso
+#' @export
+cv.penlmabc = function(formula,
 										data,
-										lambda_path = NULL,
 										type = 'lasso',
+										lambda_path = NULL,
 										K = 10,
+										cprobs = NULL,
 										plot = FALSE) {
 
 	# Quick check: ridge or lasso
@@ -11,7 +102,7 @@ cv.penlm = function(formula,
 	}
 
 	# Get constraint matrix:
-	Con = getConstraints(formula, data)
+	Con = getConstraints(formula, data, cprobs)
 	m = nrow(Con)
 
 	# Full design matrix:

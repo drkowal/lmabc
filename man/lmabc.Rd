@@ -18,42 +18,78 @@ lmabc(formula, data, ..., cprobs = NULL)
 }
 \description{
 \code{lmabc} is used to fit linear models using abundance-based constraints (ABCs).
-ABCs provide more equitable and interpretable output
-for regression models with categorical covariates.
+For regression models with categorical covariates, ABCs
+provide 1) more equitable output, 2) better statistical efficiency,
+and 3) more interpretable parameters, especially in the
+presence of interaction (or modifier) effects.
 }
 \section{Details}{
-An \code{lmabc} model is specified identically to the corresponding \code{lm} model. At this time, \code{lmabc} only supports a single response variable, and the data must be passed into the \code{data} parameter.
+An \code{lmabc} model is specified identically to the corresponding \code{lm} model.
+At this time, \code{lmabc} only supports a single response variable, and the data must be passed into the \code{data} parameter.
 }
 
 \section{Differences from \code{lm}}{
 The default approach for linear regression with categorical covariates
 is reference group encoding (RGE): one category is selected as the "reference group"
 for each categorical variable, and all results are presented
-relative to this group. This output is inequitable and can be
-misleading, especially for categorical covariates like race/ethnicity,
-gender identity, religion, national origin, etc.
+relative to this group. However, this approach produces output that is
+inequitable (and potentially misleading), estimators that are statistically inefficient,
+and model parameters that are difficult to interpret.
 
 For example, suppose an analyst fits a model of the form \code{y ~ x + race + x:race},
-where \code{x} is a continuous covariate. This model allows for race-specific
-coefficients on \eqn{x}. However, RGE requires a reference group, typically
-White (or selected alphabetically), and the \code{lm} output is presented relative to this group:
-\code{(Intercept)} refers to the intercept for the White group and
-\code{x} refers to the coefficients on \eqn{x} for the White group. The remaining
-race-specific parameters are all presented as differences relative to the White group.
-Clearly, this output is inequitable: it elevates one group (White) above others,
-and presents this group as "normal" while others are "deviations from normal".
-The output is also unclear: that the \code{(Intercept)} and \code{x} effects
-refer \emph{only} to the reference (White) group is nowhere mentioned in any default
-output.
+where \code{x} is a continuous covariate. This model allows for \code{race}-specific
+coefficients on \code{x} (or slopes). However, RGE requires a reference group;
+for \code{race}, this is typically non-Hispanic White (NHW). This creates several problems:
+\enumerate{
+\item All output is presented relative to the reference (NHW) group:
+the results for \code{(Intercept)} and \code{x} refer to the intercept and slope, respectively,
+\emph{for the reference (NHW) group}. This can lead to misleading conclusions
+about the overall \code{x} effect, since the dependence on the reference
+group is not made clear. All other \code{race} and \code{x:race} effects
+are presented relative to the reference (NHW) group, which
+elevates this group above all others.
+\item Compared to the main-only model \code{y ~ x + race}, adding the
+\code{x:race} interaction alters the estimates and standard errors of
+the \code{x} effect. This typically results in a loss of statistical power:
+the \code{x} effect now refers to a subset of the data (the reference group).
+\item Since all categorical covariates and interactions are
+anchored at a reference group, it becomes increasingly
+difficult to interpret the model parameters in the
+presence of multiple categorical variables (\code{race}, \code{sex}, etc.)
+and interactions.
+}
 
 \code{lmabc} addresses these issues. ABCs parametrize the regression model so that the main effect terms, here
 \code{(Intercept)} and \code{x}, are \emph{averages} of the race-specific terms.
-For instance, the coefficients on \eqn{x} represent the race-averaged effect
-of \eqn{x}, and the race-specific coefficients on \eqn{x} represent deviations
-from the average, rather than from the reference (White) group. The
-notion of "average" derives from the argument \code{cprob}: these can be
+The notion of "average" derives from the argument \code{cprob}: these can be
 input by the user (e.g., population proportions), otherwise
-they will be set to the sample proportions for each group.
+they will be set to the sample proportions for each group. ABCs provide
+several key advantages:
+\enumerate{
+\item \strong{Equitability}: the main \code{x} effect is
+parameterized as "group-averaged" effect. It does not
+elevate any single group (e.g., NHW). All other group-specific effects
+are relative to this global term, rather than any
+single group.
+\item \strong{Efficiency}: comparing the main-only model \code{y ~ x + race}
+with the race-modified model \code{y ~ x + race + x:race}, ABCs
+(with the default \code{cprobs}) ensure that the main \code{x} effect estimates
+are (nearly) unchanged and the standard errors are (nearly) unchanged
+or smaller. Remarkably, there are no negative (statistical) consequences for
+including the interaction \code{x:race}, even if it is irrelevant.
+\item \strong{Interpretability}: The \code{x} and \code{x:race} coefficients are
+"group-averaged" \code{x}-effects and "group-specific deviations", respectively.
+Coupled with the ABCs estimation/inference invariance, this
+yields simple interpretations of main and interaction effects.
+}
+}
+
+\section{Similarities to \code{lm}}{
+\code{lmabc} is a reparametrization of the linear model,
+but the fitted values, predictions, and residuals will be the same
+as \code{lm} (see \code{\link[=cv.penlmabc]{cv.penlmabc()}} for an example where this is no longer the case).
+Without categorical covariates, \code{lmabc} output will be
+identical to \code{lm}.
 }
 
 \section{Value}{

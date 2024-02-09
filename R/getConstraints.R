@@ -27,7 +27,6 @@
 #' proportions for every category level.
 #' }
 #'
-#'
 #' This method is called by [lmabc()].
 #'
 #' # Value
