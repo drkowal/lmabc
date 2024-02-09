@@ -103,35 +103,10 @@ for regression models with categorical covariates.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>A <code>glmabc</code> model is specified identically to the corresponding <code>glm</code> model.
 At this time, <code>glmabc</code> only supports a single response variable, and the data must be passed into the <code>data</code> parameter.</p>
-    </div>
-    <div class="section level2">
-    <h2 id="differences-from-glm">Differences from <code>glm</code><a class="anchor" aria-label="anchor" href="#differences-from-glm"></a></h2>
-    <p>The default approach for generalized linear regression with categorical covariates
-is reference group encoding (RGE): one category is selected as the "reference group"
-for each categorical variable, and all results are presented
-relative to this group. This output is inequitable and can be
-misleading, especially for categorical covariates like race/ethnicity,
-gender identity, religion, national origin, etc.</p>
-<p>For example, suppose an analyst fits a generalized linear model of the form <code>y ~ x + race + x:race</code>,
-where <code>x</code> is a continuous covariate. This model allows for race-specific
-coefficients on \(x\). However, RGE requires a reference group, typically
-White (or selected alphabetically), and the <code>glm</code> output is presented relative to this group:
-<code>(Intercept)</code> refers to the intercept for the White group and
-<code>x</code> refers to the coefficients on \(x\) for the White group. The remaining
-race-specific parameters are all presented as differences relative to the White group.
-Clearly, this output is inequitable: it elevates one group (White) above others,
-and presents this group as "normal" while others are "deviations from normal".
-The output is also unclear: that the <code>(Intercept)</code> and <code>x</code> effects
-refer <em>only</em> to the reference (White) group is nowhere mentioned in any default
-output.</p>
-<p><code>glmabc</code> addresses these issues. ABCs parametrize the regression model so that the main effect terms, here
-<code>(Intercept)</code> and <code>x</code>, are <em>averages</em> of the race-specific terms.
-For instance, the coefficients on \(x\) represent the race-averaged effect
-of \(x\), and the race-specific coefficients on \(x\) represent deviations
-from the average, rather than from the reference (White) group. The
-notion of "average" derives from the argument <code>cprob</code>: these can be
-input by the user (e.g., population proportions), otherwise
-they will be set to the sample proportions for each group.</p>
+<p>See <code><a href="lmabc.html">lmabc()</a></code> for details and motivation about ABCs for categorical
+covariates. Note that the ABCs estimation/inference invariance
+properties no longer apply for GLMs, but the arguments for equitability
+and interpretability remain valid.</p>
     </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
