@@ -4,14 +4,14 @@
 \alias{getConstraints}
 \title{Generating the Constraint Matrix for Abundance-Based Constraints (ABCs)}
 \usage{
-getConstraints(formula, data, cprobs = NULL)
+getConstraints(formula, data, props = NULL)
 }
 \arguments{
 \item{formula}{an object of class "\code{\link[=formula]{formula()}}" (or one that can be coerced to that class); a symbolic description of the model to be fitted.}
 
 \item{data}{a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
 
-\item{cprobs}{an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category. By default, \code{cprobs} will be calculated from the sample proportions in the data.}
+\item{props}{an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, \code{props} will be calculated from the empirical proportions in the data.}
 }
 \description{
 \code{getConstraints} is used to generate the constraint matrix for linear regression with ABCs.
@@ -21,7 +21,7 @@ For linear regression with categorical covariates (and interactions, etc.),
 constraints are needed for model identifiability. \code{getConstraints()} incorporates
 all the necessary constraints for a given \code{formula} statement within a single matrix.
 
-\code{cprobs} must include every level for all categorical covariates and all interactions that include at least one categorical covariate.
+\code{props} must include every level for all categorical covariates and all interactions that include at least one categorical covariate.
 It should be a named list of named vectors.
 It provides several useful options, including
 alternatives to ABCs:

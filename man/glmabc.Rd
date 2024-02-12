@@ -4,7 +4,7 @@
 \alias{glmabc}
 \title{Fitting Generalized Linear Models with Abundance-Based Constraints (ABCs)}
 \usage{
-glmabc(formula, family = stats::gaussian, data, ..., cprobs = NULL)
+glmabc(formula, family = stats::gaussian, data, ..., props = NULL)
 }
 \arguments{
 \item{formula}{an object of class \code{"\link[stats]{formula}"} (or one that
@@ -28,7 +28,7 @@ glmabc(formula, family = stats::gaussian, data, ..., cprobs = NULL)
     For \code{weights}: further arguments passed to or from other methods.
   }
 
-\item{cprobs}{a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.}
+\item{props}{an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, \code{props} will be calculated from the empirical proportions in the data.}
 }
 \description{
 \code{glmabc} is used to fit generalized linear models using abundance-based constraints (ABCs).

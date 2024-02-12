@@ -8,7 +8,7 @@
 #' @inheritParams stats::glm
 #'
 #' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
-#' @param cprobs a named list with an entry for each named categorical variable in the model, specifying the probabilities of each category.
+#' @param props an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, `props` will be calculated from the empirical proportions in the data.
 #'
 #' @details
 #'
@@ -39,7 +39,7 @@
 #' predict(fit, newdata = data.frame(mpg = 21, cyl = "6"), type = 'response')
 #'
 #' @export
-glmabc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
+glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
 
 	# Usual glm fit: this is a nice baseline
 	fit0 = stats::glm(formula = formula,
@@ -53,7 +53,7 @@ glmabc = function(formula, family = stats::gaussian, data, ..., cprobs = NULL){
 	}
 
 	# Compute the constraint matrix:
-	Con = getConstraints(formula, data, cprobs = cprobs)
+	Con = getConstraints(formula, data, props = props)
 
 	if(is.null(Con)){
 		# No categorical variables, so no constraints

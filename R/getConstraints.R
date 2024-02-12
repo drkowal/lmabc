@@ -4,7 +4,7 @@
 #'
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
 #' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
-#' @param cprobs an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category. By default, `cprobs` will be calculated from the sample proportions in the data.
+#' @param props an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, `props` will be calculated from the empirical proportions in the data.
 #'
 #' @details
 #'
@@ -14,7 +14,7 @@
 #' constraints are needed for model identifiability. `getConstraints()` incorporates
 #' all the necessary constraints for a given `formula` statement within a single matrix.
 #'
-#' `cprobs` must include every level for all categorical covariates and all interactions that include at least one categorical covariate.
+#' `props` must include every level for all categorical covariates and all interactions that include at least one categorical covariate.
 #' It should be a named list of named vectors.
 #' It provides several useful options, including
 #' alternatives to ABCs:
@@ -39,7 +39,7 @@
 #' getConstraints(Sepal.Length ~ Petal.Length + Species + Petal.Length*Species, data = iris)
 #'
 #' @export
-getConstraints = function(formula, data, cprobs = NULL){
+getConstraints = function(formula, data, props = NULL){
 
 	# Model frame has some useful information
 	mf = stats::model.frame(formula = formula,
@@ -72,19 +72,19 @@ getConstraints = function(formula, data, cprobs = NULL){
 		xnames = colnames(X) # variable names
 
 		# Compute the ABCs:
-		if(is.null(cprobs)){
+		if(is.null(props)){
 			# Categorical proportions:
 			pi_hat = lapply(cdat, function(k){
 				sapply(levels(k), function(g) mean(k==g))}
 			)
 		} else {
-			# Check that cprobs is proper:
-			if(any(is.na(match(cnames, names(cprobs))))){
-				stop('cprobs must be a named list with an entry for each named categorical variable in the model')
+			# Check that props is proper:
+			if(any(is.na(match(cnames, names(props))))){
+				stop('props must be a named list with an entry for each named categorical variable in the model')
 			}
 			# Match with the correct variable names:
 			pi_hat = lapply(cnames, function(cn)
-				cprobs[[match(cn, names(cprobs))]])
+				props[[match(cn, names(props))]])
 			names(pi_hat) = cnames
 		}
 

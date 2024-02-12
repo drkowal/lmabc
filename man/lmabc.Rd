@@ -4,7 +4,7 @@
 \alias{lmabc}
 \title{Fitting Linear Models with Abundance-Based Constraints (ABCs)}
 \usage{
-lmabc(formula, data, ..., cprobs = NULL)
+lmabc(formula, data, ..., props = NULL)
 }
 \arguments{
 \item{formula}{an object of class "\code{\link[=formula]{formula()}}" (or one that can be coerced to that class); a symbolic description of the model to be fitted.}
@@ -14,7 +14,7 @@ lmabc(formula, data, ..., cprobs = NULL)
 \item{...}{For \code{lm()}: additional arguments to be passed to the low level
     regression fitting functions (see below).}
 
-\item{cprobs}{an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, \code{cprobs} will be calculated from the proportions in the data.}
+\item{props}{an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, \code{props} will be calculated from the empirical proportions in the data.}
 }
 \description{
 \code{lmabc} is used to fit linear models using abundance-based constraints (ABCs).
@@ -73,7 +73,7 @@ are relative to this global term, rather than any
 single group.
 \item \strong{Efficiency}: comparing the main-only model \code{y ~ x + race}
 with the race-modified model \code{y ~ x + race + x:race}, ABCs
-(with the default \code{cprobs}) ensure that the main \code{x} effect estimates
+(with the default \code{props}) ensure that the main \code{x} effect estimates
 are (nearly) unchanged and the standard errors are (nearly) unchanged
 or smaller. Remarkably, there are no negative (statistical) consequences for
 including the interaction \code{x:race}, even if it is irrelevant.

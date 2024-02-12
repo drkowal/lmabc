@@ -9,7 +9,7 @@
 #' @inheritParams stats::lm
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
 #' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
-#' @param cprobs an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, `cprobs` will be calculated from the proportions in the data.
+#' @param props an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, `props` will be calculated from the empirical proportions in the data.
 #'
 #' @details
 #'
@@ -61,7 +61,7 @@
 #' single group.
 #' 2. **Efficiency**: comparing the main-only model `y ~ x + race`
 #' with the race-modified model `y ~ x + race + x:race`, ABCs
-#' (with the default `cprobs`) ensure that the main `x` effect estimates
+#' (with the default `props`) ensure that the main `x` effect estimates
 #' are (nearly) unchanged and the standard errors are (nearly) unchanged
 #' or smaller. Remarkably, there are no negative (statistical) consequences for
 #' including the interaction `x:race`, even if it is irrelevant.
@@ -90,7 +90,7 @@
 #' predict(fit, newdata = data.frame(Petal.Length = 1.5, Species = "setosa"))
 #'
 #' @export
-lmabc = function(formula, data, ..., cprobs = NULL){
+lmabc = function(formula, data, ..., props = NULL){
 
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,
@@ -103,7 +103,7 @@ lmabc = function(formula, data, ..., cprobs = NULL){
 	}
 
 	# Compute the constraint matrix:
-	Con = getConstraints(formula, data, cprobs = cprobs)
+	Con = getConstraints(formula, data, props = props)
 
 	if(is.null(Con)){
 		# No categorical variables, so no constraints

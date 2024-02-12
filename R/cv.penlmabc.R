@@ -12,7 +12,7 @@
 #' @param lambda_path optional vector of tuning parameters;
 #' defaults are inherited from `glmnet` (for ridge) or `genlasso` (for lasso)
 #' @param K number of folds for cross-validation; default is 10
-#' @param cprobs an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, `cprobs` will be calculated from the proportions in the data.
+#' @param props an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, `props` will be calculated from the empirical proportions in the data.
 #' @param plot logical; if TRUE, include a plot of the cross-validated
 #' MSE across `lambda_path` values
 #'
@@ -93,7 +93,7 @@ cv.penlmabc = function(formula,
 										type = 'lasso',
 										lambda_path = NULL,
 										K = 10,
-										cprobs = NULL,
+										props = NULL,
 										plot = FALSE) {
 
 	# Quick check: ridge or lasso
@@ -102,7 +102,7 @@ cv.penlmabc = function(formula,
 	}
 
 	# Get constraint matrix:
-	Con = getConstraints(formula, data, cprobs)
+	Con = getConstraints(formula, data, props)
 	m = nrow(Con)
 
 	# Full design matrix:

@@ -10,7 +10,7 @@ cv.penlmabc(
   type = "lasso",
   lambda_path = NULL,
   K = 10,
-  cprobs = NULL,
+  props = NULL,
   plot = FALSE
 )
 }
@@ -26,7 +26,7 @@ defaults are inherited from \code{glmnet} (for ridge) or \code{genlasso} (for la
 
 \item{K}{number of folds for cross-validation; default is 10}
 
-\item{cprobs}{an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, \code{cprobs} will be calculated from the proportions in the data.}
+\item{props}{an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, \code{props} will be calculated from the empirical proportions in the data.}
 
 \item{plot}{logical; if TRUE, include a plot of the cross-validated
 MSE across \code{lambda_path} values}
