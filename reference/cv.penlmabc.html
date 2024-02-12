@@ -73,7 +73,7 @@ more meaningful notions of sparsity, and improve interpretability.</p>
 <span>  type <span class="op">=</span> <span class="st">"lasso"</span>,</span>
 <span>  lambda_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  cprobs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  props <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  plot <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -101,8 +101,8 @@ defaults are inherited from <code>glmnet</code> (for ridge) or <code>genlasso</c
 <dd><p>number of folds for cross-validation; default is 10</p></dd>
 
 
-<dt>cprobs</dt>
-<dd><p>an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, <code>cprobs</code> will be calculated from the proportions in the data.</p></dd>
+<dt>props</dt>
+<dd><p>an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, <code>props</code> will be calculated from the empirical proportions in the data.</p></dd>
 
 
 <dt>plot</dt>

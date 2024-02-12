@@ -67,7 +67,7 @@ presence of interaction (or modifier) effects.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lmabc</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">...</span>, cprobs <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lmabc</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">...</span>, props <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -85,8 +85,8 @@ presence of interaction (or modifier) effects.</p>
     regression fitting functions (see below).</p></dd>
 
 
-<dt>cprobs</dt>
-<dd><p>an optional named list with an entry for each named categorical variable in the model, specifying the probabilities of each category, which must sum to 1. By default, <code>cprobs</code> will be calculated from the proportions in the data.</p></dd>
+<dt>props</dt>
+<dd><p>an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, <code>props</code> will be calculated from the empirical proportions in the data.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -133,7 +133,7 @@ are relative to this global term, rather than any
 single group.</p></li>
 <li><p><strong>Efficiency</strong>: comparing the main-only model <code>y ~ x + race</code>
 with the race-modified model <code>y ~ x + race + x:race</code>, ABCs
-(with the default <code>cprobs</code>) ensure that the main <code>x</code> effect estimates
+(with the default <code>props</code>) ensure that the main <code>x</code> effect estimates
 are (nearly) unchanged and the standard errors are (nearly) unchanged
 or smaller. Remarkably, there are no negative (statistical) consequences for
 including the interaction <code>x:race</code>, even if it is irrelevant.</p></li>
