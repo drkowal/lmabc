@@ -1,8 +1,8 @@
 ---
-title: "Interpretation of Linear Regression Models with Abundance-Based Constraints"
+title: "The 'ABCs' of `lmabc`: linear regression with categorical covariates"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Interpretation of Linear Regression Models with Abundance-Based Constraints}
+  %\VignetteIndexEntry{The 'ABCs' of `lmabc`: linear regression with categorical covariates}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,67 +10,296 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>"#,
+  #options(digits = 2)
 )
 ```
 
-```{r setup}
-library(lmabc)
-```
+
 
 ```{r generate_data, include=FALSE}
-n <- 200
+# Fix the seed:
+set.seed(12345)
 
-groups_1 <- c("Asian", "Hisp", "NHB", "NHW")
-pi_1 <- c(0.10, 0.15, 0.20, 0.55)
-K_1 <- length(groups_1)
-k_1 <- factor(sample(groups_1,
-                    size = n, replace = TRUE,
-                    prob = pi_1),
-             levels = c("NHW", "Asian", "Hisp", "NHB"))
+# Sample size:
+n = 500 
 
-x1 <- rnorm(n = n, mean = 5,  sd = 2)
+# Simulate the sex variable:
+sex = factor(sample(c("uu", "vv"),
+										size  = n, replace = TRUE,
+										prob  = c(0.5, 0.5)))
 
-Ey <- 1 + 2*x1 + 3*I(k_1==groups_1[1]) -.5*I(k_1==groups_1[2]) + .5*I(k_1==groups_1[2])*x1
-y <- Ey + rnorm(n=n)
+# Simulate the race variable:
+race = rep('A', n)
+race[sex == 'uu'] = sample(c("A", "B", "C", "D"),
+													 size  = sum(sex == 'uu'),
+													 replace=TRUE,
+													 prob  = c(0.55, 0.20, 0.10, 0.15))
+race[sex == 'vv'] = sample(c("A", "B", "C", "D"),
+													 size  = sum(sex == 'vv'), 
+													 replace = TRUE,
+													 prob  = c(0.15, 0.10, 0.20, 0.55))
 
-df <- data.frame(y, age = x1, race = k_1)
+# Simulate a continuous variable:
+x = rep(NA, n)
+x[race == 'A'] = 5 + rnorm(n = sum(race == 'A'))
+x[race == 'B'] = 0 + sqrt(12)*runif(n = sum(race == 'B'))
+x[race == 'C'] = -5 + sqrt((4-2)/4)*rt(n = sum(race == 'C'), df = 4)
+x[race == 'D'] = 0 + rgamma(n = sum(race == 'D'), shape = 1, rate = 1)
+
+# Simulate the response:
+eta = 0.5
+Ey = 1 + x + I(race=='A') - I(race == 'C') +
+	eta*x*I(race=='A') -
+	eta*x*I(race =="B") #+
+	#eta*I(race == 'A' &  sex == 'uu') -
+	#eta*I(race == 'B' & sex == 'uu')
+y = Ey + sqrt((4-2)/4)*rt(n = n, df = 4)
 ```
 
-## Motivation: inequitable interpretation
-The inequities in traditional baseline-encoded linear regression are easy to see with model output in R. Let's look at an example with some simulated data:
+## Overview 
+Regression analysis commonly features categorical (or nominal) covariates, such as race, sex, group/experimental assignments, and many other examples. These variables may appear alongside other covariates, as in the *main-only* (or ANCOVA) model 
+
+`y ~ x + race`
+
+or interacted with other variables, as in the *group-modified* model
+
+`y ~ x + race + x:race`
+
+(here we use `race` as our default categorical variable for clarity). 
+
+The group-modified model estimates group-specific effects of `x` on the response `y` (e.g., does exposure to a pollutant `x` more adversely impact the health `y` of certain subpopulations?). Specifically, the linear model expresses the expectation of the response variable `y` at specific `x` and `race` values:
+$$
+E(Y | X = x, race = r) =  \mu(x, r) = \alpha_0 + \alpha_1 x + \beta_r + \gamma_r x
+$$
+(here `x` is continuous).  As a result, we obtain *group-specific intercepts*,
+$$
+\mu(0, r) = \alpha_0 + \beta_r
+$$
+and *group-specific slopes*,
+$$
+\mu(x+1, r) - \mu(x,r) = \alpha_1 + \gamma_r
+$$
+The main-only model is recovered when $\gamma_r = 0$ for all `race` groups $r$. Then the slope is global and does not depend on `race`: $\mu(x+1, r) - \mu(x,r) = \alpha_1$. 
+
+However, both the main-only and the group-modified models have too many parameters. For instance, both models have group-specific intercepts, yet these are parametrized by group-specific coefficients $\beta_r$ *and* a global coefficient $\alpha_0$. Clearly, this uses one more parameter than necessary. A similar problem occurs for group-specific slopes. Without modification, these parameters are not estimable or interpretable. 
+
+The central question is then, how best to parametrize (or constrain) these group-specific intercepts and slopes? The choice has significant implications for **equitability**, **statistical efficiency**, and **interpretability**. 
+
+## Example Dataset
+We generate a simulated dataset with a continuous response variable `y`, a continuous covariate `x`, and two categorical variables, `race` and `sex`: 
 
 ```{r}
-summary(lm(y ~ age + race + age:race, df))
+# Simulated data stored as data frame: 
+dat = data.frame(y, x, race, sex)
 ```
 
-The output does not explicitly note that the continuous effect (`age`) is specific to the NHW race group and not a global effect for the population; similarly, the `age:Hisp` and `age:NHB` effects do not actually correspond to the race-specific slopes, but rather the _difference_ between the NHW-specific slope and the race-specific slopes for Hispanic and NH Black individuals, respectively.
+To mimic the challenges of real data analysis, the simulated covariates are *dependent*: `x` depends on `race`, both in mean and distribution, 
 
-Furthermore, regularization methods like variable selection would unfairly shrink coefficients toward the NHW-specific effect. The (racial) asymmetry is clear, and model-based inferences may differ depending on the choice of baseline.
+```{r, echo = FALSE, fig.align="center"}
+boxplot(x ~ race)
+# library(ggplot2)
+# ggplot(data = data.frame(x = x, race = race), aes(x = x)) +
+#     geom_boxplot(aes(color = race))
+```
 
-Together, we see that the default "baseline" method of linear regression creates inequities in interpretation and analysis. We believe it is important to deploy a more fair strategy, such as linear regression with abundance-based constraints.
+while `race` and `sex` are highly dependent categorical variables:
 
-## Our solution: abundance-based constraints
-In the corresponding paper to this R package, we explain in great depth the mathematical properties of our `lmABC` operation. This vignette will briefly explain model interpretation.
+```{r, echo = FALSE}
+knitr::kable(table(sex,race)/n, 
+  caption = 'Simulated data proportions: sex (rows) and race (columns)')
+```
 
-Consider a simple model using the data from the previous section. Now, let's use `lmABC`.
+We will consider estimation and inference with various combinations of the predictors `x`, `race`, and `sex` (and their interactions). The `race` and `sex` variables use arbitrary labeling to avoid any misleading race- or sex-specific effects in our example regression output.
 
+
+
+## Default strategies: the problem
+
+Suppose we call `lm` to fit the group-modified model:
 ```{r}
-fit_no_int <- lmabc(y ~ age + race, df)
-summary(fit_no_int)
+fit_lm = lm(y ~ x + race + x:race, data = dat)
 ```
 
-In this new model output, `age` corresponds to the global effect, and the other slopes modify the global effect. For instance, being in the NHW category shifts the intercept by `r round(coef(fit_no_int)[["raceNHW"]], 3)` units in $y$ compared to the population as a whole.
+The `summary()` output appears as follows:  
 
-We can add interaction terms.
+```{r, echo = FALSE}
+knitr::kable(coef(summary(fit_lm)), caption = 'Default output: lm(y ~ x + race + x:race)', digits = 2)
+```
 
+Immediately, we notice the absence of `raceA` and `x:raceA`. This occurs by design: `lm` uses *reference group encoding* (RGE), which parametrizes the model by deleting a reference group, here $\beta_A = 0$ and $\gamma_A = 0$. There are several limitations of this approach. 
+
+First, the `x` effect is *misleading*: because $\gamma_A = 0$, the "global" slope parameter is 
+$$
+\alpha_1 = \alpha_1 + \gamma_A = \mu(x+1, A) - \mu(x,A)
+$$
+i.e., the group-specific `x` effect *for the reference group* (`race = A`). However, this is not clear from the model output, which instead appears to present a "global" `x` effect. This presentation invites mistaken conclusions about the `x` effect for the broader population. 
+
+Second, this output is *inequitable*: it elevates one group above all others. The reference group is often selected to be White for `race`, Male for `sex`, etc., and thus induces a bias in the presentation of results. Similarly, the `x:race` effects are presented as deviations from the reference group `x` effect: for example `x:raceB` refers to the difference between the `x` effect for group `B` and the `x` effect for the reference group `A`. This implicitly treats one group as "normal" and the others as "deviations from normal". 
+
+Third, RGE is not well-designed to include interactions like `x:race`. In addition to the difficulties with interpretations and equitability, RGE is *statistically inefficient* for the main effects. To see this, consider the estimates and inference for the `x` effect under the main-only model `y ~ x + race`: 
+```{r, echo = FALSE}
+temp_coefs = coef(summary(lm(y ~ x + race, data = dat)))[1:2,]
+temp = matrix(temp_coefs[2,], nrow = 1);
+rownames(temp) = rownames(temp_coefs)[2]; colnames(temp) = colnames(temp_coefs)
+knitr::kable(temp, caption = 'Estimated x effect: lm(y ~ x + race)', digits = 2)
+```
+
+The estimates and standard errors of the `x` effect are considerably different. This occurs because here, the `x` effect refers to a global slope, $\alpha_1 = \mu(x+1, r) - \mu(x,r)$, rather than a (reference) group-specific slope---even though the output appears exactly the same. Usually, the standard errors will *increase* when `x:race` is included, since the slope is restricted to a subset of the data.  
+
+In aggregate, default `lm` output under RGE is at best difficult to interpret and at worst outright misleading. It suffers from alarming inequities and sacrifices statistical efficiency in the presence of (`x:race`) interactions. These issues also occur for the intercept parameters and compound for multiple categorical variables and interactions. 
+
+## Abundance-Based Constraints (ABCs): the solution
+Instead, suppose we call `lmabc` to fit the group-modified model:
 ```{r}
-fit_int <- lmabc(y ~ age + race + age:race, df)
-summary(fit_int)
+library(lmabc)
+fit_lmabc = lmabc(y ~ x + race + x:race, data = dat)
 ```
 
-Here, the interaction terms modify the coefficient of `age`, which is now the global effect of age on $y$.
+The `summary()` output appears as follows:  
 
-Crucially, the model itself is the same as the traditional baseline-encoded linear regression model. Thus, all properties of the model—residuals, R-squared, information for diagnostics—remain the same. `lmABC` just computes a different, fairer expression of the model than `lm` provides.
+```{r, echo = FALSE}
+knitr::kable(coef(summary(fit_lmabc)), caption = 'ABC output: lmabc(y ~ x + race + x:race)', digits = 2)
+```
 
-The `lmABC` package includes implementations for many common methods: `summary`, `print`, `plot`, `predict`, `logLik`, `vcov`, and more. And we don't just have the abundance-based constraints version of `lm`—check out `glmABC`, too!
+First, every `race` group is represented: the results do *not* elevate any single `race` group above the others. This eliminates the presentation bias and provides more **equitable** output. 
+
+Second, the `x` effect estimates and standard errors are *nearly identical* to those in the main-only model
+(${\hat\alpha}_1 =$ `r round(coef(lm(y ~ x + race, data = dat))[2],2)`, $SE({\hat\alpha}_1) =$ `r round(sqrt(vcov(lm(y ~ x + race, data = dat))[2,2]),2)`). This illustrates two remarkable **invariance properties of ABCs**:
+
+1. The estimated `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are nearly identical; and   
+2. The standard errors of the `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are 
+	a. Nearly identical when the `x:race` effect is small or 
+	b. Smaller for the group-modified model when the `x:race` effect is large. 
+
+In effect, ABCs allow the inclusion of (`x:race`) interactions "for free": they have (almost) no impact on estimation and inference for the main `x` effect. With ABCs, the analyst can estimate group-specific `x` effects without worrying that the addition of `x:race` will sacrifice power for the main `x` effect (which occurs for RGE). And, when the interaction effect `x:race` is substantial, the analyst gains *more power* for the main `x` effect.  
+
+We emphasize several features of these invariance properties:
+
+- They are unique to ABCs and do *not* occur for alternative approaches (default RGE, sum-to-zero constraints, etc.); 
+
+- They make no requirements about the true data-generating process; and 
+
+- They allow for dependencies between `x` and `race` (as in this simulated dataset). 
+
+
+The only condition is that, for continuous `x`, the scale of `x` must be approximately the same within each `race` group (no conditions are needed when `x` is categorical; see below). This is reasonable: if a "one-unit change in `x`" is not comparable for different `race` groups, then only the group-modified model that includes `race`-specific slopes is meaningful. In that case, there is no reason to consider the `x` effect under the main-only model. Regardless, the (near) invariance results are empirically robust to this condition. 
+
+Finally, these results improve **interpretability**: all group-specific coefficients $\gamma_r$ (e.g., `x:raceB`) now represent the difference between the group-specific slope, $\mu(x+1, r) - \mu(x,r)$, and the *properly global* `x` effect $\alpha_1$. Similar interpretations apply to the intercept parameters. 
+
+
+
+### ABCs: some details
+ABCs identify the group-specific parameters by constraining the *group averages* to be zero, 
+$$
+E_\pi(\gamma_R) = \sum_r \pi_r \gamma_r = 0
+$$
+where $R$ denotes a categorical random variable (e.g., `race`) with probabilities $Pr(R = r) = \pi_r$. A similar constraint is then used for the group-specific intercept parameters: $E_\pi(\beta_R) = \sum_r \pi_r \beta_r = 0$. These linear constraints are constructed using `getConstraints()` and enforced during estimation, for example using ordinary least squares `lmabc()`, maximum likelihood `glmabc()`, and penalized least squares `cv.penlmabc()`. Modifications are available for categorical-categorical interactions. 
+
+The constraints above are general and include many special cases: RGE uses $\pi_A = 1$ (reference) and $\pi_r = 0$ otherwise, while sum-to-zero constraints use equal weights $\pi_r = 1$ for all $r$. However, *the choice of $\{\pi_r\}$ is critical for equitability, statistical efficiency, and interpretability.* 
+
+ABCs use the empirically-observed proportions by group, $\pi_r=$ `mean(race == r)`. As such, the parameters have a genuine "group-average" interpretation. For instance, the global slope parameter in the group-modified model is
+$$
+\alpha_1 = E_{\pi}\{\mu(x+1, R) - \mu(x, R)\} = \sum_r \pi_r \{\mu(x+1, r) - \mu(x, r)\}
+$$
+i.e., the group average of the group-specific `x` effects. Similar interpretations are available for the global intercept:
+$$
+\alpha_0 = E_{\pi}\{\mu(0, R)\} = \sum_r \pi_r \mu(0, r)
+$$
+Because ABCs identify properly global (intercept and slope) parameters, the group-specific coefficients are interpretable as the difference between the group-specific `x` effect (or intercept) and the global/group-averaged `x` effect (or intercept). There is no need to elevate any single (reference) group. 
+
+
+ABCs may also use the population group proportions, if those are known. 
+
+
+### Interpeting the `lmabc` output 
+Revisiting the output from `lmabc(y ~ x + race + x:race)`, we summarize the main conclusions:
+
+- The global `x` effect is significant and positive (${\hat\alpha}_1 =$ `r round(coef(fit_lmabc)[2],2)`, $SE({\hat\alpha}_1) =$ `r round(sqrt(vcov(fit_lmabc)[2,2]),2)`). 
+
+- The `x:race` interaction effects show that the group-specific `x` effect is significantly larger than average for `race = A` (${\hat\gamma}_A =$ `r round(coef(fit_lmabc)[7],2)`, $SE({\hat\gamma}_A) =$ `r round(sqrt(vcov(fit_lmabc)[7,7]),2)`), significantly smaller than average for `race = B` (${\hat\gamma}_B =$ `r round(coef(fit_lmabc)[8],2)`, $SE({\hat\gamma}_B) =$ `r round(sqrt(vcov(fit_lmabc)[8,8]),2)`) and `race = D` (${\hat\gamma}_D =$ `r round(coef(fit_lmabc)[10],2)`, $SE({\hat\gamma}_D) =$ `r round(sqrt(vcov(fit_lmabc)[10,10]),2)`), and somewhat smaller than average for `race = C` (${\hat\gamma}_C =$ `r round(coef(fit_lmabc)[9],2)`, $SE({\hat\gamma}_C) =$ `r round(sqrt(vcov(fit_lmabc)[9,9]),2)`).
+
+- The group-specific slopes are computed by summing the relevant coefficients, for example $\mu(x+1, A) - \mu(x,A) = \alpha_1 + \gamma_A =$ `r round(sum(coef(fit_lmabc)[c(2,7)]),2)` is the group-specific `x` effect for `race = A`. 
+
+- Similar interpretations apply for the intercept coefficients. 
+
+## Categorical-categorical interactions
+The case of categorical-categorical interactions is arguably even more cumbersome for default (RGE) methods---and yet ABCs offer an even cleaner solution. Consider the `lm` output for two models that feature the categorical covariates `race` and `sex`: the main-only model `y ~ race + sex` and the group-modified model, `y ~ race + sex + race:sex`.
+```{r, echo = FALSE}
+knitr::kables(
+  list(
+    knitr::kable(
+    	    	coef(summary(lm(y ~ race + sex, data = dat))),
+    	    	digits = 2, caption = 'Default output: lm(y ~ race + sex)', 
+    	    	valign = 't'
+    ),
+    knitr::kable(
+    	      coef(summary(lm(y ~ race + sex + race:sex, data = dat))),
+    	digits = 2,     	    	    	caption = 'Default output: lm(y ~ race + sex + race:sex)', valign = 't'
+)
+  )
+)
+```
+In both cases, the reference groups for `race` (here, `A`) and `sex` (here, `uu`) are absent from all main and interaction effects. The output again is misleading: even for the simpler model `y ~ race + sex`, the main effects require consideration of *both* reference groups. For example, the intercept estimates $\alpha_0 = \mu(race = A, sex = uu)$, i.e., the expected response for `race = A` and `sex = uu`. Similarly, the main effects such as `sexvv` estimate $\mu(race = A, sex = vv) - \mu(race = A, sex = uu)$, i.e., the difference in the expected responses between `sex = vv` and `sex = uu` but *only for `race = A`*. When the reference groups are set at the usual values (White for `race` and Male for `sex`), these parametrizations are clearly inequitable. Finally, we see that the standard errors for the main effects increase when the `race:sex` interaction is added to to the model.
+
+
+ABCs completely circumvent these issues. Consider the same two models, but now subject to ABCs:
+```{r, echo = FALSE}
+knitr::kables(
+  list(
+    knitr::kable(
+    	    	coef(summary(lmabc(y ~ race + sex, data = dat))),
+    	    	digits = 2, caption = 'ABC output: lmabc(y ~ race + sex)', valign = 't'
+    ),
+    # the second kable() to set the digits option
+    knitr::kable(
+    	      coef(summary(lmabc(y ~ race + sex + race:sex, data = dat))),
+    	digits = 2,     	    	    	caption = 'ABC output: lmabc(y ~ race + sex + race:sex)', valign = 't'
+)
+  )
+)
+```
+First, each group is present in both the main effects and interactions. There is no need to consider reference groups, and thus no single (`race` or `sex`) group is elevated above the others. 
+
+Second, *all* main effect estimates---including the `(Intercept)`, all `race` effects, and both `sex` effects---are *identical* between the models that do and do not include the `race:sex` interaction. Unlike the previous setting with continuous-categorical interactions (`x:race`), this estimation invariance is *exact*. Importantly, this result makes no requirements on the true data-generating process or the categorical covariates, which here are highly dependent. 
+
+Similarly, the main effect standard errors---again for the `(Intercept)`, all `race` effects, and both `sex` effects---are (almost) identical between the two models. 
+
+We summarize these (provable) **invariance properties of ABCs** for categorical-categorical interactions:
+
+1. The estimated `(Intercept)`, `race`, and `sex` effects under `y ~ race + sex` and `y ~ race + sex + race:sex` are identical; and   
+2. The standard errors of `(Intercept)`, `race`, and `sex` under `y ~ race + sex` and `y ~ race + sex + race:sex` are
+	a. Nearly identical when the `race:sex` effect is small or 
+	b. Smaller for the group-modified model when the `race:sex` effect is large. 
+
+Again, the analyst may include (`race:sex`) interaction effects "for free": the main effect estimates are unchanged, and the statistical power for the main effects can only increase. 
+
+## Interpreting ABCs with care
+By design, ABCs leverage the (sample or population) categorical proportions to provide 1) more equitable output, 2) greater statistical efficiency, and 3) more interpretable parameters and estimates with properly global (i.e., group-averaged) main effects. However, the *group-specific* coefficients must be interpreted carefully in the context of the abundances $\{\pi_r\}$. 
+
+For instance, consider the simple model `y ~ sex`,
+```{r, echo = FALSE}
+knitr::kable(coef(summary(lmabc(y ~ sex, data = dat))), caption = 'ABC output: lmabc(y ~ sex)', digits = 2)
+```
+With two groups, ABCs imply that one effect must be positive and the other must be negative, as the two must average to zero. These effects are partly determined by the group abundances, `mean(sex=="uu")` = `r round(mean(sex=='uu'),2)` and `mean(sex=="vv")` = `r round(mean(sex=='vv'),2)`. Because `sex=="vv"` has a *lower* proportion, its estimated coefficient must be *higher* (in absolute value) to satisfy ABCs. Thus, we cannot merely interpret the `sex=="vv"` effect as "larger than" the `sex=="uu"` effect. 
+
+Fortunately, the standard errors inflate proportionally: hence, the `t value` statistics (`Estimate / Std. Error`) are equal and opposite. Similarly, the p-values will be identical for these (`sexuu` and `sexvv`) main effects.
+
+Even with these caveats, ABCs offer an appealing parametrization of this  ANOVA model. First, the estimated intercept *exactly* equals the sample mean, `mean(y)` = `r round(mean(y),2)`. Second, the `sex`-specific coefficients *exactly* equal the difference between the group-specific means and the overall mean, `mean(y[sex=="uu"]) - mean(y)` = `r round(mean(y[sex=="uu"]) - mean(y),2)`. This is certainly a natural way to parametrize the group-specific and global effects for this model. 
+
+
+## Additional details about `lmabc`
+
+The `lmabc` package includes implementations for many common methods: `summary`, `coef`, `print`, `plot`, `predict`, `logLik`, `vcov`, and more. 
+
+`lmabc` also includes methods for generalized linear models (GLMs) with categorical covariates (`glmabc`) and penalized (lasso and ridge) regression with cross-validation (`cv.penlmabc`). These methods, like `lmabc`, can handle multiple continuous and categorical covariates and their interactions. We note a few points:
+
+- The invariance properties of ABCs remain valid for multiple continuous and categorical covariates and their interactions. The conditions change slightly (see the reference below) but approximate invariance applies quite generally. 
+
+- For GLMs (`glmabc`), ABCs offer equitability and interpretability, but estimation invariance applies only for OLS. This work is currently under development.
+
+- For penalized (ridge or lasso) regression, ABCs are immensely valuable. Because these penalized estimators "shrink" the coefficients toward zero, default RGE estimates of group-specific effects are *statistically biased toward the reference group*. This is especially concerning for protected groups (race, sex, religion, etc.) but also implies that 1) estimates and predictions depend on the choice of reference group and 2) differences between group-specific `x` effects and reference group `x` effects are attenuated and obscured. ABCs resolve these critical limitations, again by providing efficient estimation and shrinkage toward *properly global* coefficients. The statistical properties of these estimators are currently under development. 
+
+
+## References
+Kowal, D. (2024). Regression with race-modifiers: towards equity and interpretability. <https://www.medrxiv.org/content/10.1101/2024.01.04.23300033v1>
