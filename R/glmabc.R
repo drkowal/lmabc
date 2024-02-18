@@ -52,6 +52,9 @@ glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
        consider a different formula statement')
 	}
 
+	# Fill in the data argument with stats::model.frame
+	data <- model_frame(formula = formula, data = data)
+
 	# Compute the constraint matrix:
 	Con = getConstraints(formula, data, props = props)
 

@@ -101,6 +101,9 @@ cv.penlmabc = function(formula,
 		stop('type must be "ridge" or "lasso"')
 	}
 
+	# Fill in the data argument with stats::model.frame
+	data <- model_frame(formula = formula, data = data)
+
 	# Get constraint matrix:
 	Con = getConstraints(formula, data, props)
 	m = nrow(Con)
