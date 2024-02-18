@@ -94,7 +94,7 @@ lmabc = function(formula, data, ..., props = NULL){
 
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,
-						data  = data, ...)
+						data = data, ...)
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
