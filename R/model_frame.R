@@ -20,7 +20,7 @@ model_frame <- function(formula, data) {
 	mf[[1L]] <- quote(stats::model.frame)
 
 	# call stats::model.frame
-	mf <- eval(mf, parent.frame())
+	mf <- eval(mf, parent.frame(n = 2L))
 
 	# remove "terms" attribute to avoid confusion
 	attr(mf, "terms") <- NULL
