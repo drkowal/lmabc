@@ -10,12 +10,20 @@
 #'
 #' @return a data.frame with the variables in `formula`
 model_frame <- function(formula, data) {
+	# set up call
 	mf <- match.call(call = sys.call(which = -1))
 	m <- match(c("formula", "data"), names(mf), 0L)
 	mf <- mf[c(1L, m)]
 	mf$drop.unused.levels <- TRUE
+
+	# change function to stats::model.frame
 	mf[[1L]] <- quote(stats::model.frame)
+
+	# call stats::model.frame
 	mf <- eval(mf, parent.frame())
+
+	# remove "terms" attribute to avoid confusion
 	attr(mf, "terms") <- NULL
+
 	mf
 }
