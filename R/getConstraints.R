@@ -1,5 +1,52 @@
 construct_empty_con <- function(formula, data) {
+	ter <- terms(formula)
 
+	mf = stats::model.frame(formula = formula,
+													data = data)
+
+	# Names of the variables involved:
+	vnames = attr(mf, 'names')
+
+	# Covariates:
+	covar = attr(ter, "term.labels")
+
+	# Subset to the variables included in the model:
+	data = data[,vnames]
+
+	# Handle character variables:
+	data = as.data.frame(lapply(data, function(k) if (is.character(k)) as.factor(k) else k))
+
+	# Handle the categorical variables:
+	f_inds = which(sapply(data, is.factor))
+
+	if (length(f_inds) == 0) {
+		return(NULL)
+	}
+
+	factors <- attr(ter, "factors")
+
+	# add a check: each non-interaction column sums to 1, each interaction column sums to 2, all column values are 1 (ensures main effects are present)
+
+	Con_rows <- unlist(
+		lapply(names(f_inds),
+					 function(i) {
+					 	n <- sum(factors[i,])
+					 	if (n == 1) {
+					 		i
+					 	} else {
+					 		paste0(i, seq(n))
+					 	}
+					 })
+	)
+
+	Con_cols_factors <- unlist(
+		lapply(names(f_inds),
+					 function(i) {
+
+					 })
+	)
+
+	Con_rows
 }
 
 
