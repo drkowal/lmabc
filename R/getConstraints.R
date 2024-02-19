@@ -40,12 +40,20 @@ construct_empty_con <- function(formula, data) {
 					 })
 	)
 
+	# find interactions with at least one cat variable
 	interaction_names <- attr(ter, "term.labels")[which(attr(ter, "order") == 2)]
 	interactions <- lapply(interaction_names,
 												 function(nam) {
 												 	rnames <- names(which(factors[, nam] == 1))
+
+												 	if (length(intersect(rnames, names(f_inds))) == 0) {
+												 		return(NULL)
+												 	}
+
+												 	rnames
 												 })
 	names(interactions) <- interaction_names
+	interactions <- Filter(Negate(is.null), interactions)
 
 	interactions
 }
