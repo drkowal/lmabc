@@ -11,6 +11,7 @@ construct_empty_con <- function(formula, data) {
 	covar = attr(ter, "term.labels")
 
 	# Subset to the variables included in the model:
+	# should be able to remove this once we merge optional-data-arg
 	data = data[,vnames]
 
 	# Handle character variables:
@@ -39,14 +40,14 @@ construct_empty_con <- function(formula, data) {
 					 })
 	)
 
-	Con_cols_factors <- unlist(
-		lapply(names(f_inds),
-					 function(i) {
+	interaction_names <- attr(ter, "term.labels")[which(attr(ter, "order") == 2)]
+	interactions <- lapply(interaction_names,
+												 function(nam) {
+												 	rnames <- names(which(factors[, nam] == 1))
+												 })
+	names(interactions) <- interaction_names
 
-					 })
-	)
-
-	Con_rows
+	interactions
 }
 
 
