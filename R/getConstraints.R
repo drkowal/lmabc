@@ -1,3 +1,9 @@
+construct_empty_con <- function(formula, data) {
+
+}
+
+
+
 #' Generating the Constraint Matrix for Abundance-Based Constraints (ABCs)
 #'
 #' `getConstraints` is used to generate the constraint matrix for linear regression with ABCs.
