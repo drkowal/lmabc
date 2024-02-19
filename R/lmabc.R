@@ -92,6 +92,9 @@
 #' @export
 lmabc = function(formula, data, ..., props = NULL){
 
+	# Fill in the data argument with stats::model.frame
+	data <- model_frame(formula = formula, data = data)
+
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,
 						data = data, ...)
@@ -101,9 +104,6 @@ lmabc = function(formula, data, ..., props = NULL){
 		stop('NAs found in the OLS estimators;
        consider a different formula statement')
 	}
-
-	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data)
 
 	# Compute the constraint matrix:
 	Con = getConstraints(formula, data, props = props)

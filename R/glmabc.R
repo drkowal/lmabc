@@ -41,6 +41,9 @@
 #' @export
 glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
 
+	# Fill in the data argument with stats::model.frame
+	data <- model_frame(formula = formula, data = data)
+
 	# Usual glm fit: this is a nice baseline
 	fit0 = stats::glm(formula = formula,
 										family = family,
@@ -51,9 +54,6 @@ glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
 		stop('NAs found in the OLS estimators;
        consider a different formula statement')
 	}
-
-	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data)
 
 	# Compute the constraint matrix:
 	Con = getConstraints(formula, data, props = props)
