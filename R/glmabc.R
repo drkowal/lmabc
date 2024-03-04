@@ -59,6 +59,8 @@ glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
 		# No categorical variables, so no constraints
 		return(fit0) # return the lm object
 	} else {
+		pi_hat <- attr(Con, "pi_hat")
+
 		# Incorporate the constraints
 
 		# Compute the full design matrix:

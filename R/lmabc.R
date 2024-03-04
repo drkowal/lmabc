@@ -117,7 +117,12 @@ lmabc = function(formula, data, ..., props = NULL){
 		beta_con <- coef(fit0_centered)
 		cov.unscaled_con <- vcov(fit0_centered)
 		sigma_hat <- sigma(fit0_centered)
+		pi_hat <- props
 	} else {
+		# save pi_hat
+
+		pi_hat <- attr(Con, "pi_hat")
+
 		# Incorporate the constraints
 
 		# Compute the full design matrix:
@@ -178,7 +183,7 @@ lmabc = function(formula, data, ..., props = NULL){
 	fit$lm = fit0 #  store the original object
 	fit$X = X # store the full design matrix
 	fit$Con = Con # store the constraint matrix
-	fit$pi_hat <- attr(Con, "pi_hat")  # story the proportions
+	fit$pi_hat <- pi_hat  # story the proportions
 	fit$coefficients = beta_con # coefficient estimates
 	fit$cov.unscaled = cov.unscaled_con # covariance matrix
 	fit$sigma = sigma_hat # estimated standard deviation

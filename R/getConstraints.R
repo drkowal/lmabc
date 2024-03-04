@@ -194,7 +194,6 @@ getConstraints = function(formula, data, props = NULL){
 
 	} else {
 		Con <- NULL  # no factor variables
-		attr(Con, "pi_hat") <- props
 	}
 
 	return(Con)
