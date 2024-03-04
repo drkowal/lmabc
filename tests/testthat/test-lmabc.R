@@ -52,3 +52,17 @@ test_that("lmabc works with f_contY_all", {
 	f <- f_contY_all
 	expect_equal(helper_fitted(f, df), lm(f, df)$fitted.values)
 })
+
+test_that("lmabc returns the correct pi_hat vector without specifying", {
+	f <- f_contY_contX.catX
+	expect_equal(lmabc(f, df)$pi_hat,
+							 list("cyl" = sapply(levels(df$cyl),
+							 										 function(g) mean(df$cyl == g))))
+})
+
+test_that("lmabc returns the correct pi_hat vector with custom props", {
+	f <- f_contY_contX.catX
+	props <- list("cyl" = c("4" = 0.9, "6" = 0.05, "8" = 0.05))
+	expect_equal(lmabc(f, df, props = props)$pi_hat,
+							 props)
+})
