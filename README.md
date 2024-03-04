@@ -1,23 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# lmabc
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-The goal of lmabc is to …
-
-## Installation
-
-You can install the development version of lmabc from
-[GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("prayaggordy/lmabc")
-```
-
 ### Overview
 
 Regression analysis commonly features categorical covariates, such as
@@ -147,11 +130,14 @@ available.
 
 ### Installation
 
-`lmabc` can be installed and loaded as follows:
+`lmabc` is not yet on CRAN. The latest version can be installed and
+loaded from GitHub:
 
-    remotes::install_github("prayaggordy/lmabc")
+``` r
+pak::pak("prayaggordy/lmabc")
 
-    library("lmabc")
+library("lmabc")
+```
 
 ### Future work
 

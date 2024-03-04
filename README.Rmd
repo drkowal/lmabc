@@ -13,22 +13,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# lmabc
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-The goal of lmabc is to ...
-
-## Installation
-
-You can install the development version of lmabc from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("prayaggordy/lmabc")
-```
-
 ### Overview
 Regression analysis commonly features categorical covariates, such as race, sex, group/experimental assignments, and many other examples. These variables are often interacted with (or *modify*) other variables, for example to infer group-specific effects of another variable `x` on the response `y` (e.g., does exposure to a pollutant `x` more adversely impact the health `y` of certain subpopulations?). However, default numerical encodings of categorical variables suffer from statistical inefficiencies, limited interpretability, and alarming biases, particularly for protected groups (race, sex, religion, national origin, etc.). 
 
@@ -57,13 +41,14 @@ While the benefits of equitability and interpretability are self-evident, we als
 These benefits apply to any categorical covariates. Generalizations for multiple continuous and categorical covariates and interactions are also available. 
 
 ### Installation
-`lmabc` can be installed and loaded as follows:
+`lmabc` is not yet on CRAN. The latest version can be installed and loaded from GitHub:
 
-```
-remotes::install_github("prayaggordy/lmabc")
+```{r, eval=FALSE}
+pak::pak("prayaggordy/lmabc")
 
 library("lmabc")
 ```
+
 
 ### Future work
 Users can develop their own ABCs-inspired methods using the `getConstraints()` and `getFullDesign()` methods in this package. Please email the package maintainer with any issues or questions.
