@@ -25,9 +25,6 @@ Suppose we have two categorical variables, `k1` and `k2`, with levels `a`, `b`, 
 
 This behavior is different from `lm`, which instead removes each unobserved level from the model and returns an `NA` for its coefficient. 
 
-## Data must be passed as a data.frame
-The standard implementation of `lm` can handle data passed as vectors, thus rendering the `data` argument optional. `lmabc` requires all variables in the formula statement to be passed to `lmabc` as a single data frame.
-
 ## Missing implementations of generic methods
 We implemented many of the common generic methods associated with linear regression models. However, our implementation is not exhaustive, especially for non-base packages. `lmabc` objects only have class "lmabc", so methods only implemented for class "lm" will fail unless the generic method has a default.
 
