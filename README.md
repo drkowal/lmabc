@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-### Overview
+# `lmabc`
+
+## Introduction
 
 Regression analysis commonly features categorical covariates, such as
 race, sex, group/experimental assignments, and many other examples.
@@ -21,7 +23,19 @@ penalized (lasso, ridge, etc.) and generalized (logistic, Poisson, etc.)
 regression. For ease of use, `lmabc` matches the functionality of `lm`
 and `glm`.
 
-### Default strategies: the problem
+## Installation
+
+`lmabc` is not yet on CRAN. The latest version can be installed and
+loaded from GitHub. The installation should take no more than a few
+seconds.
+
+``` r
+pak::pak("prayaggordy/lmabc")
+
+library("lmabc")
+```
+
+## Default strategies: the problem
 
 The predominant strategy for linear regression with categorical
 covariates is *reference group encoding* (RGE), which parametrizes and
@@ -77,7 +91,7 @@ address 3-4. Omitting constraints entirely is not feasible without some
 regularization, but regardless cannot solve 3-4 (and, for lasso
 estimation, tends to reproduce RGE, thus 1-2 resurface).
 
-### ABCs: the solution
+## ABCs: the solution
 
 `lmabc` resolves each of these problems for linear regression with
 categorical covariates. Using Abundance-Based Constraints (ABCs),
@@ -128,24 +142,31 @@ These benefits apply to any categorical covariates. Generalizations for
 multiple continuous and categorical covariates and interactions are also
 available.
 
-### Installation
-
-`lmabc` is not yet on CRAN. The latest version can be installed and
-loaded from GitHub:
-
-``` r
-pak::pak("prayaggordy/lmabc")
-
-library("lmabc")
-```
-
-### Future work
+## Future work
 
 Users can develop their own ABCs-inspired methods using the
 `getConstraints()` and `getFullDesign()` methods in this package. Please
 email the package maintainer with any issues or questions.
 
-### References
+The current implementation of `lmabc` is slower than `lm`. To benchmark,
+we constructed a 1 million row dataset and regressed a continuous
+outcome on two continuous predictors, three categorical predictors, a
+continuous-continuous interaction, a continuous-categorical interaction,
+and a categorical-categorical interaction. `lm` averaged 0.7 seconds,
+while `lmabc` averaged 3 seconds.
+
+## Dependencies
+
+`lmabc` requires the “base” R packages: `graphics`, `stats`, and
+`utils`. Ridge models with ABCs require `glmnet` with at least version
+4.0, while lasso models with ABCs require `genlasso` with at least
+version 1.6.1.
+
+`lmabc` should work with any recent version of R, though it has been
+tested exclusively with versions after 4.0.0. No additional hardware is
+required to run `lmabc`.
+
+## References
 
 Kowal, D. (2024). Regression with race-modifiers: towards equity and
 interpretability.
