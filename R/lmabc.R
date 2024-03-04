@@ -93,7 +93,7 @@
 lmabc = function(formula, data, ..., props = NULL){
 
 	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data)
+	data <- model_frame(formula = formula, data = data, props = props)
 
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,

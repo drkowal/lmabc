@@ -9,7 +9,7 @@
 #' @param data data.frame object
 #'
 #' @return a data.frame with the variables in `formula`
-model_frame <- function(formula, data) {
+model_frame <- function(formula, data, props) {
 	# set up call
 	mf <- match.call(call = sys.call(which = -1))
 	m <- match(c("formula", "data"), names(mf), 0L)
