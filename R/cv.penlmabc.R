@@ -96,7 +96,8 @@ cv.penlmabc = function(formula, data,
 											 plot = FALSE) {
 
 	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data, props = props)
+	data <- model_frame(formula = formula, data = data, props = props,
+											type = type, lambda_path = lambda_path, K = K, plot = plot)
 
 	# Quick check: ridge or lasso
 	if(!(type == 'ridge' | type == 'lasso')){
