@@ -1,41 +1,44 @@
 Package: lmabc
 Title: Linear Regression with Abundance-Based Constraints (ABCs)
 Version: 0.0.0.9000
-Authors@R: 
-    c(person(given = "Dan", family = "Kowal", email = "daniel.r.kowal@gmail.com", role = c("aut", "cre")),
-      person(given = "Prayag", family = "Gordy", role = c("aut")),
-      person(given = "Virginia", family = "Baskin", role = c("aut")),
-      person(given = "Jai", family = "Uparkar", role = c("aut")),
-      person(given = "Caleb", family = "Fikes", role = c("ctb"))
-    )
-Description: lmabc provides estimation and inference for 
-		linear regression with categorical covariates (race, sex, etc.). 
-		Common strategies, including the defaults in lm, select
-		a "reference" group (e.g,. White, Male, etc.) and present
-		all results relative to this group. However, this approach 
-		suffers from alarming biases, statistical inefficiencies, and 
-		limited interpretability. lmabc uses abundance-based constraints (ABCs) 
-		that (1) fully eliminate these biases, (2) provide appealing statistical
-		properties related to estimation invariance and improved statistical
-		power, and (3) produce more interpretable model output. lmabc reproduces 
-		the core functionality of lm and includes functions for generalized 
-		(logistic, Poisson, etc.) and penalized (lasso, ridge, etc.) linear models. 
-		Details are provided in Kowal (2024) <doi:10.1101/2024.01.04.23300033>.
+Authors@R: c(
+    person("Dan", "Kowal", , "daniel.r.kowal@gmail.com", role = c("aut", "cre")),
+    person("Prayag", "Gordy", role = "aut"),
+    person("Virginia", "Baskin", role = "aut"),
+    person("Jai", "Uparkar", role = "aut"),
+    person("Caleb", "Fikes", role = "ctb")
+  )
+Description: lmabc provides estimation and inference for linear regression
+    with categorical covariates (race, sex, etc.).  Common strategies,
+    including the defaults in lm, select a "reference" group (e.g,. White,
+    Male, etc.) and present all results relative to this group. However,
+    this approach suffers from alarming biases, statistical
+    inefficiencies, and limited interpretability. lmabc uses
+    abundance-based constraints (ABCs) that (1) fully eliminate these
+    biases, (2) provide appealing statistical properties related to
+    estimation invariance and improved statistical power, and (3) produce
+    more interpretable model output. lmabc reproduces the core
+    functionality of lm and includes functions for generalized (logistic,
+    Poisson, etc.) and penalized (lasso, ridge, etc.) linear models.
+    Details are provided in Kowal (2024)
+    <doi:10.1101/2024.01.04.23300033>.
 License: GPL (>= 3)
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+URL: https://prayaggordy.github.io/lmabc/,
+    https://github.com/prayaggordy/lmabc
 Imports: 
     graphics,
     stats,
     utils
 Suggests: 
     dplyr,
-    genlasso,
-    glmnet,
+    genlasso (>= 1.6.1),
+    glmnet (>= 4.0),
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
-URL: https://prayaggordy.github.io/lmabc/, https://github.com/prayaggordy/lmabc
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
