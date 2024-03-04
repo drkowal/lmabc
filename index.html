@@ -5,38 +5,40 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content='lmabc provides estimation and inference for 
-		linear regression with categorical covariates (race, sex, etc.). 
-		Common strategies, including the defaults in lm, select
-		a "reference" group (e.g,. White, Male, etc.) and present
-		all results relative to this group. However, this approach 
-		suffers from alarming biases, statistical inefficiencies, and 
-		limited interpretability. lmabc uses abundance-based constraints (ABCs) 
-		that (1) fully eliminate these biases, (2) provide appealing statistical
-		properties related to estimation invariance and improved statistical
-		power, and (3) produce more interpretable model output. lmabc reproduces 
-		the core functionality of lm and includes functions for generalized 
-		(logistic, Poisson, etc.) and penalized (lasso, ridge, etc.) linear models. 
-		Details are provided in Kowal (2024) &lt;doi:10.1101/2024.01.04.23300033&gt;.'>
+<meta name="description" content='lmabc provides estimation and inference for linear regression
+    with categorical covariates (race, sex, etc.).  Common strategies,
+    including the defaults in lm, select a "reference" group (e.g,. White,
+    Male, etc.) and present all results relative to this group. However,
+    this approach suffers from alarming biases, statistical
+    inefficiencies, and limited interpretability. lmabc uses
+    abundance-based constraints (ABCs) that (1) fully eliminate these
+    biases, (2) provide appealing statistical properties related to
+    estimation invariance and improved statistical power, and (3) produce
+    more interpretable model output. lmabc reproduces the core
+    functionality of lm and includes functions for generalized (logistic,
+    Poisson, etc.) and penalized (lasso, ridge, etc.) linear models.
+    Details are provided in Kowal (2024)
+    &lt;doi:10.1101/2024.01.04.23300033&gt;.'>
 <title>Linear Regression with Abundance-Based Constraints (ABCs) • lmabc</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Linear Regression with Abundance-Based Constraints (ABCs)">
-<meta property="og:description" content='lmabc provides estimation and inference for 
-		linear regression with categorical covariates (race, sex, etc.). 
-		Common strategies, including the defaults in lm, select
-		a "reference" group (e.g,. White, Male, etc.) and present
-		all results relative to this group. However, this approach 
-		suffers from alarming biases, statistical inefficiencies, and 
-		limited interpretability. lmabc uses abundance-based constraints (ABCs) 
-		that (1) fully eliminate these biases, (2) provide appealing statistical
-		properties related to estimation invariance and improved statistical
-		power, and (3) produce more interpretable model output. lmabc reproduces 
-		the core functionality of lm and includes functions for generalized 
-		(logistic, Poisson, etc.) and penalized (lasso, ridge, etc.) linear models. 
-		Details are provided in Kowal (2024) &lt;doi:10.1101/2024.01.04.23300033&gt;.'>
+<meta property="og:description" content='lmabc provides estimation and inference for linear regression
+    with categorical covariates (race, sex, etc.).  Common strategies,
+    including the defaults in lm, select a "reference" group (e.g,. White,
+    Male, etc.) and present all results relative to this group. However,
+    this approach suffers from alarming biases, statistical
+    inefficiencies, and limited interpretability. lmabc uses
+    abundance-based constraints (ABCs) that (1) fully eliminate these
+    biases, (2) provide appealing statistical properties related to
+    estimation invariance and improved statistical power, and (3) produce
+    more interpretable model output. lmabc reproduces the core
+    functionality of lm and includes functions for generalized (logistic,
+    Poisson, etc.) and penalized (lasso, ridge, etc.) linear models.
+    Details are provided in Kowal (2024)
+    &lt;doi:10.1101/2024.01.04.23300033&gt;.'>
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -88,15 +90,28 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level3">
-<h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
-</h3>
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="lmabc">
+<code>lmabc</code><a class="anchor" aria-label="anchor" href="#lmabc"></a>
+</h1></div>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>Regression analysis commonly features categorical covariates, such as race, sex, group/experimental assignments, and many other examples. These variables are often interacted with (or <em>modify</em>) other variables, for example to infer group-specific effects of another variable <code>x</code> on the response <code>y</code> (e.g., does exposure to a pollutant <code>x</code> more adversely impact the health <code>y</code> of certain subpopulations?). However, default numerical encodings of categorical variables suffer from statistical inefficiencies, limited interpretability, and alarming biases, particularly for protected groups (race, sex, religion, national origin, etc.).</p>
 <p><code>lmabc</code> addresses each of these problems, outlined below. <code>lmabc</code> provides estimation, inference, and prediction for linear regression with categorical covariates and interactions, including methods for penalized (lasso, ridge, etc.) and generalized (logistic, Poisson, etc.) regression. For ease of use, <code>lmabc</code> matches the functionality of <code>lm</code> and <code>glm</code>.</p>
 </div>
-<div class="section level3">
-<h3 id="default-strategies-the-problem">Default strategies: the problem<a class="anchor" aria-label="anchor" href="#default-strategies-the-problem"></a>
-</h3>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p><code>lmabc</code> is not yet on CRAN. The latest version can be installed and loaded from GitHub. The installation should take no more than a few seconds.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"prayaggordy/lmabc"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://prayaggordy.github.io/lmabc/">"lmabc"</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="default-strategies-the-problem">Default strategies: the problem<a class="anchor" aria-label="anchor" href="#default-strategies-the-problem"></a>
+</h2>
 <p>The predominant strategy for linear regression with categorical covariates is <em>reference group encoding</em> (RGE), which parametrizes and estimates the regression coefficients relative to a pre-selected reference category. For illustration, consider <code>race</code>, where the usual reference group is non-Hispanic White (NHW). This leads to several serious problems:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -110,9 +125,9 @@
 </ol>
 <p>These problems are not solved by changing the reference category. Other strategies, like sum-to-zero constraints, can address 1-2 but fail to address 3-4. Omitting constraints entirely is not feasible without some regularization, but regardless cannot solve 3-4 (and, for lasso estimation, tends to reproduce RGE, thus 1-2 resurface).</p>
 </div>
-<div class="section level3">
-<h3 id="abcs-the-solution">ABCs: the solution<a class="anchor" aria-label="anchor" href="#abcs-the-solution"></a>
-</h3>
+<div class="section level2">
+<h2 id="abcs-the-solution">ABCs: the solution<a class="anchor" aria-label="anchor" href="#abcs-the-solution"></a>
+</h2>
 <p><code>lmabc</code> resolves each of these problems for linear regression with categorical covariates. Using Abundance-Based Constraints (ABCs), <code>lmabc</code> includes estimation, inference, and prediction for penalized (lasso, ridge, etc.) and generalized (logistic, Poisson, etc.) regression with three key features, called “the EEI of ABCs”:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -125,25 +140,24 @@
 <p>While the benefits of equitability and interpretability are self-evident, we also emphasize the importance of statistical efficiency. For an analyst considering “main-only” models of the form <code>y ~ x + race</code>, ABCs allow the addition of interaction effects <code>x:race</code> “for free”: they have (almost) no impact on estimation and inference for the main <code>x</code> effect—unless the <code>x:race</code> interaction effect is strong, in which case the analyst gains <em>more power</em> for the main <code>x</code> effect. Yet by including the interaction, the analyst can now investigate group-specific <code>x</code> effects, again without negative consequences for the main effects. This is usually <em>not</em> the case for regression analysis, and does not occur for RGE (or other approaches).</p>
 <p>These benefits apply to any categorical covariates. Generalizations for multiple continuous and categorical covariates and interactions are also available.</p>
 </div>
-<div class="section level3">
-<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h3>
-<p><code>lmabc</code> can be installed and loaded as follows:</p>
-<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"prayaggordy/lmabc"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://prayaggordy.github.io/lmabc/">"lmabc"</a></span><span class="op">)</span></span></code></pre>
-</div>
-<div class="section level3">
-<h3 id="future-work">Future work<a class="anchor" aria-label="anchor" href="#future-work"></a>
-</h3>
+<div class="section level2">
+<h2 id="future-work">Future work<a class="anchor" aria-label="anchor" href="#future-work"></a>
+</h2>
 <p>Users can develop their own ABCs-inspired methods using the <code><a href="reference/getConstraints.html">getConstraints()</a></code> and <code><a href="reference/getFullDesign.html">getFullDesign()</a></code> methods in this package. Please email the package maintainer with any issues or questions.</p>
+<p>The current implementation of <code>lmabc</code> is slower than <code>lm</code>. To benchmark, we constructed a 1 million row dataset and regressed a continuous outcome on two continuous predictors, three categorical predictors, a continuous-continuous interaction, a continuous-categorical interaction, and a categorical-categorical interaction. <code>lm</code> averaged 0.7 seconds, while <code>lmabc</code> averaged 3 seconds.</p>
 </div>
-<div class="section level3">
-<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h3>
+<div class="section level2">
+<h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
+</h2>
+<p><code>lmabc</code> requires the “base” R packages: <code>graphics</code>, <code>stats</code>, and <code>utils</code>. Ridge models with ABCs require <code>glmnet</code> with at least version 4.0, while lasso models with ABCs require <code>genlasso</code> with at least version 1.6.1.</p>
+<p><code>lmabc</code> should work with any recent version of R, though it has been tested exclusively with versions after 4.0.0. No additional hardware is required to run <code>lmabc</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <p>Kowal, D. (2024). Regression with race-modifiers: towards equity and interpretability. <a href="https://www.medrxiv.org/content/10.1101/2024.01.04.23300033v1" class="external-link uri">https://www.medrxiv.org/content/10.1101/2024.01.04.23300033v1</a></p>
 </div>
-
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
