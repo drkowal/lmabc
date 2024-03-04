@@ -178,6 +178,7 @@ lmabc = function(formula, data, ..., props = NULL){
 	fit$lm = fit0 #  store the original object
 	fit$X = X # store the full design matrix
 	fit$Con = Con # store the constraint matrix
+	fit$pi_hat <- attr(Con, "pi_hat")  # story the proportions
 	fit$coefficients = beta_con # coefficient estimates
 	fit$cov.unscaled = cov.unscaled_con # covariance matrix
 	fit$sigma = sigma_hat # estimated standard deviation
