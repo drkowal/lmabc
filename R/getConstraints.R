@@ -55,8 +55,6 @@ construct_empty_con <- function(formula, data) {
 												 		return(NULL)
 												 	}
 
-												 	if (length)
-
 												 	rnames
 												 })
 	names(interactions) <- interaction_names
