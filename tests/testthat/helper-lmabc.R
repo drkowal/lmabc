@@ -1,4 +1,4 @@
-helper_fitted <- function(f, df) {
+helper_fitted <- function(f, df, props = NULL) {
 	all_terms <- attr(terms(f), "term.labels")[which(attr(terms(f), "order")==1)]
 	df_used <- df[,all_terms]
 	factor_terms <- which(sapply(df_used, is.factor))
@@ -15,7 +15,7 @@ helper_fitted <- function(f, df) {
 													 											   stats::contrasts,
 													 											   contrasts=FALSE))
 
-	coefs <- as.matrix(coef(lmabc(f, df)))
+	coefs <- as.matrix(coef(lmabc(f, df, props = props)))
 	X <- as.matrix(mm)
 	(X %*% coefs)[,1]
 }

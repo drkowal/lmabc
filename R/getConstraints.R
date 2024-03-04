@@ -106,6 +106,10 @@ getConstraints = function(formula, data, props = NULL){
 			covar)
 		inds_catcat = inds_catcat[!is.na(inds_catcat)]
 		if(length(inds_catcat) > 0){
+			if (!is.null(props)) {
+				stop("Custom proportions with categorical-categorical interactions is not currently supported. Leave `props` blank (or set to `NULL`) to use the empirical proportions.")
+			}
+
 			covar_all = covar; covar = covar[-inds_catcat]
 			terms_mx <- terms_mx[,-inds_catcat]
 		}
