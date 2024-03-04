@@ -18,6 +18,25 @@ test_that("lmabc does not have class 'lm' with some categoricals", {
 	expect_failure(expect_s3_class(lmabc(f, df), "lm"))
 })
 
+test_that("lmabc props argument works without cat-cat interactions", {
+	f <- f_contY_contX.catX
+	props <- list(
+		"cyl" = c("4" = 0.371, "6" = 0.244, "8" = 0.385),
+		"gear" = c("3" = 0.458, "4" = 0.397, "5" = 0.145),
+		"carb" = c("1" = 0.230, "2" = 0.307, "3" = 0.090, "4" = 0.322, "6" = 0.022, "8" = 0.029)
+	)
+	expect_equal(helper_fitted(f, df, props = props), lm(f, df)$fitted.values)
+})
+
+test_that("lmabc rejects supplied props with cat-cat interactions", {
+	f <- f_contY_catX.catX
+	props <- list(
+		"cyl" = c("4" = 0.371, "6" = 0.244, "8" = 0.385),
+		"gear" = c("3" = 0.458, "4" = 0.397, "5" = 0.145)
+	)
+	expect_error(helper_fitted(f, df, props = props))
+})
+
 test_that("lmabc works with f_contY_contX", {
 	f <- f_contY_contX
 	expect_equal(helper_fitted(f, df), lm(f, df)$fitted.values)
