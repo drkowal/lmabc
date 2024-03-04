@@ -38,4 +38,4 @@ library("lmabc")
 Users can develop their own ABCs-inspired methods using the `getConstraints()` and `getFullDesign()` methods in this package. Please email the package maintainer with any issues or questions.
 
 ### References
-Kowal, D. (2024). Regression with race-modifiers: towards equity and interpretability. <https://www.medrxiv.org/content/10.1101/2024.01.04.23300033v1>
+Kowal, D. (2024). Regression with race-modifiers: towards equity and interpretability. <https://doi.org/10.1101/2024.01.04.23300033>
