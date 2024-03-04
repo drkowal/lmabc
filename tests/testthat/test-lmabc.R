@@ -66,3 +66,15 @@ test_that("lmabc returns the correct pi_hat vector with custom props", {
 	expect_equal(lmabc(f, df, props = props)$pi_hat,
 							 props)
 })
+
+test_that("lmabc returns NULL pi_hat vector with no cat, default props", {
+	f <- f_contY_contX
+	expect_null(lmabc(f, df)$pi_hat)
+})
+
+test_that("lmabc returns given pi_hat vector with no cat, custom props", {
+	f <- f_contY_contX
+	props <- list("blah" = 1)
+	expect_equal(lmabc(f, df, props = props)$pi_hat,
+							 props)
+})
