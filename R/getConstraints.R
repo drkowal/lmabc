@@ -197,7 +197,11 @@ getConstraints = function(formula, data, props = NULL){
 			Con = rbind(Con, Con_cat)
 		}
 
-	} else Con = NULL # no factor variables
+		attr(Con, "pi_hat") <- pi_hat
+
+	} else {
+		Con <- NULL  # no factor variables
+	}
 
 	return(Con)
 }
