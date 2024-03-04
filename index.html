@@ -144,18 +144,18 @@
 <h2 id="future-work">Future work<a class="anchor" aria-label="anchor" href="#future-work"></a>
 </h2>
 <p>Users can develop their own ABCs-inspired methods using the <code><a href="reference/getConstraints.html">getConstraints()</a></code> and <code><a href="reference/getFullDesign.html">getFullDesign()</a></code> methods in this package. Please email the package maintainer with any issues or questions.</p>
-<p>The current implementation of <code>lmabc</code> is slower than <code>lm</code>. To benchmark, we constructed a 1 million row dataset and regressed a continuous outcome on two continuous predictors, three categorical predictors, a continuous-continuous interaction, a continuous-categorical interaction, and a categorical-categorical interaction. <code>lm</code> averaged 0.7 seconds, while <code>lmabc</code> averaged 3 seconds.</p>
+<p>The current implementation of <code>lmabc</code> is slightly slower than <code>lm</code>, but only for massive datasets. To benchmark, we constructed a 1 million row dataset and regressed a continuous outcome on two continuous predictors, three categorical predictors, a continuous-continuous interaction, a continuous-categorical interaction, and a categorical-categorical interaction. <code>lm</code> averaged 0.7 seconds, while <code>lmabc</code> averaged 3 seconds.</p>
 </div>
 <div class="section level2">
 <h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
 </h2>
-<p><code>lmabc</code> requires the “base” R packages: <code>graphics</code>, <code>stats</code>, and <code>utils</code>. Ridge models with ABCs require <code>glmnet</code> with at least version 4.0, while lasso models with ABCs require <code>genlasso</code> with at least version 1.6.1.</p>
+<p><code>lmabc</code> requires the “base” R packages: <code>graphics</code>, <code>stats</code>, and <code>utils</code>. Ridge regression with ABCs requires <code>glmnet</code> with at least version 4.0, while lasso regression with ABCs requires <code>genlasso</code> with at least version 1.6.1.</p>
 <p><code>lmabc</code> should work with any recent version of R, though it has been tested exclusively with versions after 4.0.0. No additional hardware is required to run <code>lmabc</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Kowal, D. (2024). Regression with race-modifiers: towards equity and interpretability. <a href="https://www.medrxiv.org/content/10.1101/2024.01.04.23300033v1" class="external-link uri">https://www.medrxiv.org/content/10.1101/2024.01.04.23300033v1</a></p>
+<p>Kowal, D. (2024). Regression with race-modifiers: towards equity and interpretability. <a href="https://doi.org/10.1101/2024.01.04.23300033" class="external-link uri">https://doi.org/10.1101/2024.01.04.23300033</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
