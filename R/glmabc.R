@@ -7,7 +7,7 @@
 #'
 #' @inheritParams stats::glm
 #'
-#' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
+#' @param data an optional data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
 #' @param props an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, `props` will be calculated from the empirical proportions in the data.
 #'
 #' @details
@@ -15,7 +15,7 @@
 #' # Details
 #'
 #' A `glmabc` model is specified identically to the corresponding `glm` model.
-#' At this time, `glmabc` only supports a single response variable, and the data must be passed into the `data` parameter.
+#' At this time, `glmabc` only supports a single response variable.
 #'
 #' See [lmabc()] for details and motivation about ABCs for categorical
 #' covariates. Note that the ABCs estimation/inference invariance

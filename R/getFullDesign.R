@@ -3,7 +3,7 @@
 #' `getFullDesign` is used to generate the design matrix for linear regression with ABCs.
 #'
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
-#' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
+#' @param data an optional data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
 #' @param center Boolean, whether to center continuous predictors. `TRUE` by default for `lmabc`.
 #'
 #' @details
@@ -31,6 +31,9 @@
 #'
 #' @export
 getFullDesign = function(formula, data, center = TRUE){
+
+	# Fill in the data argument with stats::model.frame
+	data <- model_frame(formula = formula, data = data)
 
 	# Model frame has some useful information
 	mf = stats::model.frame(formula = formula,

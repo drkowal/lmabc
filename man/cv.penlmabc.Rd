@@ -17,7 +17,7 @@ cv.penlmabc(
 \arguments{
 \item{formula}{an object of class "\code{\link[=formula]{formula()}}" (or one that can be coerced to that class); a symbolic description of the model to be fitted.}
 
-\item{data}{a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
+\item{data}{an optional data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
 
 \item{type}{either "lasso" or "ridge"}
 

@@ -9,7 +9,7 @@ lmabc(formula, data, ..., props = NULL)
 \arguments{
 \item{formula}{an object of class "\code{\link[=formula]{formula()}}" (or one that can be coerced to that class); a symbolic description of the model to be fitted.}
 
-\item{data}{a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
+\item{data}{an optional data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
 
 \item{...}{For \code{lm()}: additional arguments to be passed to the low level
     regression fitting functions (see below).}
@@ -25,7 +25,7 @@ presence of interaction (or modifier) effects.
 }
 \section{Details}{
 An \code{lmabc} model is specified identically to the corresponding \code{lm} model.
-At this time, \code{lmabc} only supports a single response variable, and the data must be passed into the \code{data} parameter.
+At this time, \code{lmabc} only supports a single response variable.
 }
 
 \section{Differences from \code{lm}}{

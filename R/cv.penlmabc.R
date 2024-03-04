@@ -7,7 +7,7 @@
 #'  more meaningful notions of sparsity, and improve interpretability.
 #'
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
-#' @param data a data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
+#' @param data an optional data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
 #' @param type either "lasso" or "ridge"
 #' @param lambda_path optional vector of tuning parameters;
 #' defaults are inherited from `glmnet` (for ridge) or `genlasso` (for lasso)

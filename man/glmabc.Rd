@@ -19,7 +19,7 @@ glmabc(formula, family = stats::gaussian, data, ..., props = NULL)
     third option is supported.  (See \code{\link[stats]{family}} for details of
     family functions.)}
 
-\item{data}{a data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
+\item{data}{an optional data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
 
 \item{...}{
     For \code{glm}: arguments to be used to form the default
@@ -38,7 +38,7 @@ for regression models with categorical covariates.
 }
 \section{Details}{
 A \code{glmabc} model is specified identically to the corresponding \code{glm} model.
-At this time, \code{glmabc} only supports a single response variable, and the data must be passed into the \code{data} parameter.
+At this time, \code{glmabc} only supports a single response variable.
 
 See \code{\link[=lmabc]{lmabc()}} for details and motivation about ABCs for categorical
 covariates. Note that the ABCs estimation/inference invariance
