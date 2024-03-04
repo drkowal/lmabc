@@ -73,11 +73,15 @@ getConstraints = function(formula, data, props = NULL){
 
 		# Compute the ABCs:
 		if(is.null(props)){
+			empirical_props <- TRUE
+
 			# Categorical proportions:
 			pi_hat = lapply(cdat, function(k){
 				sapply(levels(k), function(g) mean(k==g))}
 			)
 		} else {
+			empirical_props <- FALSE
+
 			# Check that props is proper:
 			if(any(is.na(match(cnames, names(props))))){
 				stop('props must be a named list with an entry for each named categorical variable in the model')
@@ -103,6 +107,10 @@ getConstraints = function(formula, data, props = NULL){
 			covar)
 		inds_catcat = inds_catcat[!is.na(inds_catcat)]
 		if(length(inds_catcat) > 0){
+			if (!empirical_props) {
+				stop("Custom proportions with categorical-categorical interactions is not currently supported. Leave `props` blank (or set to `NULL`) to use the empirical proportions.")
+			}
+
 			covar_all = covar; covar = covar[-inds_catcat]
 			terms_mx <- terms_mx[,-inds_catcat]
 		}
