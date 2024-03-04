@@ -31,8 +31,8 @@ Imports:
     utils
 Suggests: 
     dplyr,
-    genlasso,
-    glmnet,
+    genlasso (>= 1.6.1),
+    glmnet (>= 4.0),
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
