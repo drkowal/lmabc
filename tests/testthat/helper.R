@@ -10,3 +10,7 @@ f_contY_contX.contX <- formula(mpg ~ hp + disp + hp:disp)
 f_contY_contX.catX <- formula(mpg ~ disp + cyl + disp:cyl)
 f_contY_catX.catX <- formula(mpg ~ cyl + gear + cyl:gear)
 f_contY_all <- formula(mpg ~ hp + disp + cyl + gear + carb + hp:disp + disp:cyl + cyl:gear)
+
+model_frame_wrapper <- function(formula, data, props = NULL) {
+	model_frame(formula, data, props)
+}
