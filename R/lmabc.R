@@ -92,9 +92,12 @@
 #' @export
 lmabc = function(formula, data, ..., props = NULL){
 
+	# Fill in the data argument with stats::model.frame
+	data <- model_frame(formula = formula, data = data)
+
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,
-						data  = data, ...)
+						data = data, ...)
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
