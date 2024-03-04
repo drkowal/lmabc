@@ -78,7 +78,7 @@ $$
 $$
 and *group-specific slopes*,
 $$
-\mu(x+1, r) - \mu(x,r) = \alpha_1 + \gamma_r
+\mu(x+1, r) - \mu(x,r) = \alpha_1 + \gamma_r.
 $$
 The main-only model is recovered when $\gamma_r = 0$ for all `race` groups $r$. Then the slope is global and does not depend on `race`: $\mu(x+1, r) - \mu(x,r) = \alpha_1$. 
 
@@ -131,11 +131,11 @@ Immediately, we notice the absence of `raceA` and `x:raceA`. This occurs by desi
 
 First, the `x` effect is *misleading*: because $\gamma_A = 0$, the "global" slope parameter is 
 $$
-\alpha_1 = \alpha_1 + \gamma_A = \mu(x+1, A) - \mu(x,A)
+\alpha_1 = \alpha_1 + \gamma_A = \mu(x+1, A) - \mu(x,A),
 $$
 i.e., the group-specific `x` effect *for the reference group* (`race = A`). However, this is not clear from the model output, which instead appears to present a "global" `x` effect. This presentation invites mistaken conclusions about the `x` effect for the broader population. 
 
-Second, this output is *inequitable*: it elevates one group above all others. The reference group is often selected to be White for `race`, Male for `sex`, etc., and thus induces a bias in the presentation of results. Similarly, the `x:race` effects are presented as deviations from the reference group `x` effect: for example `x:raceB` refers to the difference between the `x` effect for group `B` and the `x` effect for the reference group `A`. This implicitly treats one group as "normal" and the others as "deviations from normal". 
+Second, this output is *inequitable*: it elevates one group above all others. The reference group is often selected to be White for `race`, Male for `sex`, etc., and thus induces a bias in the presentation of results. Similarly, the `x:race` effects are presented as deviations from the reference group `x` effect: for example `x:raceB` refers to the difference between the `x` effect for group `B` and the `x` effect for the reference group `A`. This implicitly treats one group as "normal" and the others as "deviations from normal."
 
 Third, RGE is not well-designed to include interactions like `x:race`. In addition to the difficulties with interpretations and equitability, RGE is *statistically inefficient* for the main effects. To see this, consider the estimates and inference for the `x` effect under the main-only model `y ~ x + race`: 
 ```{r, echo = FALSE}
@@ -168,18 +168,16 @@ Second, the `x` effect estimates and standard errors are *nearly identical* to t
 (${\hat\alpha}_1 =$ `r round(coef(lm(y ~ x + race, data = dat))[2],2)`, $SE({\hat\alpha}_1) =$ `r round(sqrt(vcov(lm(y ~ x + race, data = dat))[2,2]),2)`). This illustrates two remarkable **invariance properties of ABCs**:
 
 1. The estimated `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are nearly identical; and   
-2. The standard errors of the `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are 
+1. The standard errors of the `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are 
 	a. Nearly identical when the `x:race` effect is small or 
-	b. Smaller for the group-modified model when the `x:race` effect is large. 
+	a. Smaller for the group-modified model when the `x:race` effect is large. 
 
 In effect, ABCs allow the inclusion of (`x:race`) interactions "for free": they have (almost) no impact on estimation and inference for the main `x` effect. With ABCs, the analyst can estimate group-specific `x` effects without worrying that the addition of `x:race` will sacrifice power for the main `x` effect (which occurs for RGE). And, when the interaction effect `x:race` is substantial, the analyst gains *more power* for the main `x` effect.  
 
 We emphasize several features of these invariance properties:
 
 - They are unique to ABCs and do *not* occur for alternative approaches (default RGE, sum-to-zero constraints, etc.); 
-
 - They make no requirements about the true data-generating process; and 
-
 - They allow for dependencies between `x` and `race` (as in this simulated dataset). 
 
 
@@ -204,23 +202,20 @@ $$
 $$
 i.e., the group average of the group-specific `x` effects. Similar interpretations are available for the global intercept:
 $$
-\alpha_0 = E_{\pi}\{\mu(0, R)\} = \sum_r \pi_r \mu(0, r)
+\alpha_0 = E_{\pi}\{\mu(0, R)\} = \sum_r \pi_r \mu(0, r).
 $$
 Because ABCs identify properly global (intercept and slope) parameters, the group-specific coefficients are interpretable as the difference between the group-specific `x` effect (or intercept) and the global/group-averaged `x` effect (or intercept). There is no need to elevate any single (reference) group. 
 
 
-ABCs may also use the population group proportions, if those are known. 
+ABCs may also use the population group proportions, if those are known and passed to the function. 
 
 
 ### Interpeting the `lmabc` output 
 Revisiting the output from `lmabc(y ~ x + race + x:race)`, we summarize the main conclusions:
 
-- The global `x` effect is significant and positive (${\hat\alpha}_1 =$ `r round(coef(fit_lmabc)[2],2)`, $SE({\hat\alpha}_1) =$ `r round(sqrt(vcov(fit_lmabc)[2,2]),2)`). 
-
-- The `x:race` interaction effects show that the group-specific `x` effect is significantly larger than average for `race = A` (${\hat\gamma}_A =$ `r round(coef(fit_lmabc)[7],2)`, $SE({\hat\gamma}_A) =$ `r round(sqrt(vcov(fit_lmabc)[7,7]),2)`), significantly smaller than average for `race = B` (${\hat\gamma}_B =$ `r round(coef(fit_lmabc)[8],2)`, $SE({\hat\gamma}_B) =$ `r round(sqrt(vcov(fit_lmabc)[8,8]),2)`) and `race = D` (${\hat\gamma}_D =$ `r round(coef(fit_lmabc)[10],2)`, $SE({\hat\gamma}_D) =$ `r round(sqrt(vcov(fit_lmabc)[10,10]),2)`), and somewhat smaller than average for `race = C` (${\hat\gamma}_C =$ `r round(coef(fit_lmabc)[9],2)`, $SE({\hat\gamma}_C) =$ `r round(sqrt(vcov(fit_lmabc)[9,9]),2)`).
-
-- The group-specific slopes are computed by summing the relevant coefficients, for example $\mu(x+1, A) - \mu(x,A) = \alpha_1 + \gamma_A =$ `r round(sum(coef(fit_lmabc)[c(2,7)]),2)` is the group-specific `x` effect for `race = A`. 
-
+- The global `x` effect is significant and positive (${\hat\alpha}_1 = `r round(coef(fit_lmabc)[2],2)`$, $SE({\hat\alpha}_1) = `r round(sqrt(vcov(fit_lmabc)[2,2]),2)`$). 
+- The `x:race` interaction effects show that the group-specific `x` effect is significantly larger than average for `race = A` (${\hat\gamma}_A = `r round(coef(fit_lmabc)[7],2)`$, $SE({\hat\gamma}_A) = `r round(sqrt(vcov(fit_lmabc)[7,7]),2)`$), significantly smaller than average for `race = B` (${\hat\gamma}_B = `r round(coef(fit_lmabc)[8],2)`$, $SE({\hat\gamma}_B) = `r round(sqrt(vcov(fit_lmabc)[8,8]),2)`$) and `race = D` (${\hat\gamma}_D = `r round(coef(fit_lmabc)[10],2)`$, $SE({\hat\gamma}_D) = `r round(sqrt(vcov(fit_lmabc)[10,10]),2)`$), and somewhat smaller than average for `race = C` (${\hat\gamma}_C = `r round(coef(fit_lmabc)[9],2)`$, $SE({\hat\gamma}_C) = `r round(sqrt(vcov(fit_lmabc)[9,9]),2)`$).
+- The group-specific slopes are computed by summing the relevant coefficients, for example $\mu(x+1, A) - \mu(x,A) = \alpha_1 + \gamma_A = `r round(sum(coef(fit_lmabc)[c(2,7)]),2)`$ is the group-specific `x` effect for `race = A`. 
 - Similar interpretations apply for the intercept coefficients. 
 
 ## Categorical-categorical interactions
@@ -268,9 +263,9 @@ Similarly, the main effect standard errors---again for the `(Intercept)`, all `r
 We summarize these (provable) **invariance properties of ABCs** for categorical-categorical interactions:
 
 1. The estimated `(Intercept)`, `race`, and `sex` effects under `y ~ race + sex` and `y ~ race + sex + race:sex` are identical; and   
-2. The standard errors of `(Intercept)`, `race`, and `sex` under `y ~ race + sex` and `y ~ race + sex + race:sex` are
+1. The standard errors of `(Intercept)`, `race`, and `sex` under `y ~ race + sex` and `y ~ race + sex + race:sex` are
 	a. Nearly identical when the `race:sex` effect is small or 
-	b. Smaller for the group-modified model when the `race:sex` effect is large. 
+	a. Smaller for the group-modified model when the `race:sex` effect is large. 
 
 Again, the analyst may include (`race:sex`) interaction effects "for free": the main effect estimates are unchanged, and the statistical power for the main effects can only increase. 
 
@@ -295,9 +290,7 @@ The `lmabc` package includes implementations for many common methods: `summary`,
 `lmabc` also includes methods for generalized linear models (GLMs) with categorical covariates (`glmabc`) and penalized (lasso and ridge) regression with cross-validation (`cv.penlmabc`). These methods, like `lmabc`, can handle multiple continuous and categorical covariates and their interactions. We note a few points:
 
 - The invariance properties of ABCs remain valid for multiple continuous and categorical covariates and their interactions. The conditions change slightly (see the reference below) but approximate invariance applies quite generally. 
-
 - For GLMs (`glmabc`), ABCs offer equitability and interpretability, but estimation invariance applies only for OLS. This work is currently under development.
-
 - For penalized (ridge or lasso) regression, ABCs are immensely valuable. Because these penalized estimators "shrink" the coefficients toward zero, default RGE estimates of group-specific effects are *statistically biased toward the reference group*. This is especially concerning for protected groups (race, sex, religion, etc.) but also implies that 1) estimates and predictions depend on the choice of reference group and 2) differences between group-specific `x` effects and reference group `x` effects are attenuated and obscured. ABCs resolve these critical limitations, again by providing efficient estimation and shrinkage toward *properly global* coefficients. The statistical properties of these estimators are currently under development. 
 
 
