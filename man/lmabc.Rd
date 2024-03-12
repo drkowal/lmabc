@@ -4,15 +4,12 @@
 \alias{lmabc}
 \title{Fitting Linear Models with Abundance-Based Constraints (ABCs)}
 \usage{
-lmabc(formula, data, ..., props = NULL)
+lmabc(formula, data, props = NULL)
 }
 \arguments{
 \item{formula}{an object of class "\code{\link[=formula]{formula()}}" (or one that can be coerced to that class); a symbolic description of the model to be fitted.}
 
 \item{data}{an optional data frame (or object coercible by \code{as.data.frame} to a data frame) containing the variables in the model.}
-
-\item{...}{For \code{lm()}: additional arguments to be passed to the low level
-    regression fitting functions (see below).}
 
 \item{props}{an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, \code{props} will be calculated from the empirical proportions in the data.}
 }
