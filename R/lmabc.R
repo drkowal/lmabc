@@ -6,7 +6,6 @@
 #' and 3) more interpretable parameters, especially in the
 #' presence of interaction (or modifier) effects.
 #'
-#' @inheritParams stats::lm
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
 #' @param data an optional data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
 #' @param props an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, `props` will be calculated from the empirical proportions in the data.
