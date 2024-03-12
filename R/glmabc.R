@@ -60,9 +60,10 @@ glmabc = function(formula, family = stats::gaussian, data, props = NULL){
 
 	if(is.null(Con)){
 		# No categorical variables, so no constraints
-		X = getFullDesign(formula = formula,
-											data = data,
-											center = TRUE)
+		y <- data[[formula[[2]]]]
+		X <- getFullDesign(formula = formula,
+											 data = data,
+											 center = TRUE)[,-1, drop = FALSE]
 
 		fit0_centered <- glm(y ~ X, family = family)
 		beta_con <- coef(fit0_centered)
