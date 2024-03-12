@@ -117,20 +117,20 @@ glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
 		}
 		#sigma_hat = summary(fit_con)$sigma # error SD
 		#^this is not going to work for glm, summary.glm does not have a sigma component
-
-		# New class:
-		fit = fit0;  attr(fit, 'class') = c('glmabc', 'lmabc')
-		fit$call = match.call()  # store the function call
-		fit$glm = fit0 #  store the original object
-		fit$X = X # store the full design matrix
-		fit$Con = Con # store the constraint matrix
-		fit$pi_hat <- attr(Con, "pi_hat")  # story the proportions
-		fit$coefficients = beta_con # coefficient estimates
-		fit$cov.unscaled = cov.unscaled_con # covariance matrix
-		#fit$sigma = sigma_hat # estimated standard deviation
-		# fit$residuals # already there
-		#ADD: call
-
-		return(fit) # return the glmabc object
 	}
+
+	# New class:
+	fit = fit0;  attr(fit, 'class') = c('glmabc', 'lmabc')
+	fit$call = match.call()  # store the function call
+	fit$glm = fit0 #  store the original object
+	fit$X = X # store the full design matrix
+	fit$Con = Con # store the constraint matrix
+	fit$pi_hat <- attr(Con, "pi_hat")  # story the proportions
+	fit$coefficients = beta_con # coefficient estimates
+	fit$cov.unscaled = cov.unscaled_con # covariance matrix
+	#fit$sigma = sigma_hat # estimated standard deviation
+	# fit$residuals # already there
+	#ADD: call
+
+	return(fit) # return the glmabc object
 }
