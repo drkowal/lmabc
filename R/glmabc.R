@@ -39,15 +39,15 @@
 #' predict(fit, newdata = data.frame(mpg = 21, cyl = "6"), type = 'response')
 #'
 #' @export
-glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
+glmabc = function(formula, family = stats::gaussian, data, props = NULL){
 
 	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data)
+	data <- model_frame(formula = formula, data = data, family = family, props = props)
 
 	# Usual glm fit: this is a nice baseline
 	fit0 = stats::glm(formula = formula,
 										family = family,
-										data = data, ...)
+										data = data)
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
@@ -96,7 +96,7 @@ glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
 		# Fitted model in the *unconstrained* (lower-dim) space
 		fit_con = stats::glm(stats::update(formula, ~ Xuse - 1),
 												 family = family,
-												 data = data, ...)
+												 data = data)
 
 		#y = model.frame(fit0)[,1]
 		#fit_con = lm(y ~ Xuse - 1)

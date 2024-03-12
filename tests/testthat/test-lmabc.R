@@ -72,6 +72,12 @@ test_that("lmabc works with f_contY_all", {
 	expect_equal(helper_fitted(f, df), lm(f, df)$fitted.values)
 })
 
+test_that("lmabc works without data", {
+	f <- formula(y ~ x + race + x:race + sex + race:sex)
+	df_no_data <- data.frame(y = y, x = x, race = race, sex = sex)
+	expect_equal(coef(lmabc(f)), coef(lmabc(f, df_no_data)))
+})
+
 test_that("lmabc returns the correct pi_hat vector without specifying", {
 	f <- f_contY_contX.catX
 	expect_equal(lmabc(f, df)$pi_hat,

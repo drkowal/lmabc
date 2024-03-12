@@ -41,8 +41,7 @@
 #' @export
 getConstraints = function(formula, data, props = NULL){
 
-	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data)
+	data <- model_frame(formula = formula, data = data, props = props)
 
 	# Model frame has some useful information
 	mf = stats::model.frame(formula = formula,
