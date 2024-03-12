@@ -67,7 +67,7 @@ presence of interaction (or modifier) effects.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lmabc</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, <span class="va">...</span>, props <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lmabc</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, props <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,12 +77,7 @@ presence of interaction (or modifier) effects.</p>
 
 
 <dt>data</dt>
-<dd><p>a data frame (or object coercible by <code>as.data.frame</code> to a data frame) containing the variables in the model.</p></dd>
-
-
-<dt>...</dt>
-<dd><p>For <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>: additional arguments to be passed to the low level
-    regression fitting functions (see below).</p></dd>
+<dd><p>an optional data frame (or object coercible by <code>as.data.frame</code> to a data frame) containing the variables in the model.</p></dd>
 
 
 <dt>props</dt>
@@ -92,7 +87,7 @@ presence of interaction (or modifier) effects.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>An <code>lmabc</code> model is specified identically to the corresponding <code>lm</code> model.
-At this time, <code>lmabc</code> only supports a single response variable, and the data must be passed into the <code>data</code> parameter.</p>
+At this time, <code>lmabc</code> only supports a single response variable.</p>
     </div>
     <div class="section level2">
     <h2 id="differences-from-lm">Differences from <code>lm</code><a class="anchor" aria-label="anchor" href="#differences-from-lm"></a></h2>

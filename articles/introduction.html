@@ -103,7 +103,7 @@ E(Y | X = x, race = r) =  \mu(x, r) = \alpha_0 + \alpha_1 x + \beta_r +
 <em>group-specific intercepts</em>, <span class="math display">\[
 \mu(0, r) = \alpha_0 + \beta_r
 \]</span> and <em>group-specific slopes</em>, <span class="math display">\[
-\mu(x+1, r) - \mu(x,r) = \alpha_1 + \gamma_r
+\mu(x+1, r) - \mu(x,r) = \alpha_1 + \gamma_r.
 \]</span> The main-only model is recovered when <span class="math inline">\(\gamma_r = 0\)</span> for all <code>race</code>
 groups <span class="math inline">\(r\)</span>. Then the slope is global
 and does not depend on <code>race</code>: <span class="math inline">\(\mu(x+1, r) - \mu(x,r) = \alpha_1\)</span>.</p>
@@ -253,7 +253,7 @@ are several limitations of this approach.</p>
 <p>First, the <code>x</code> effect is <em>misleading</em>: because
 <span class="math inline">\(\gamma_A = 0\)</span>, the “global” slope
 parameter is <span class="math display">\[
-\alpha_1 = \alpha_1 + \gamma_A = \mu(x+1, A) - \mu(x,A)
+\alpha_1 = \alpha_1 + \gamma_A = \mu(x+1, A) - \mu(x,A),
 \]</span> i.e., the group-specific <code>x</code> effect <em>for the
 reference group</em> (<code>race = A</code>). However, this is not clear
 from the model output, which instead appears to present a “global”
@@ -268,7 +268,7 @@ effects are presented as deviations from the reference group
 difference between the <code>x</code> effect for group <code>B</code>
 and the <code>x</code> effect for the reference group <code>A</code>.
 This implicitly treats one group as “normal” and the others as
-“deviations from normal”.</p>
+“deviations from normal.”</p>
 <p>Third, RGE is not well-designed to include interactions like
 <code>x:race</code>. In addition to the difficulties with
 interpretations and equitability, RGE is <em>statistically
@@ -430,12 +430,12 @@ effect <code>x:race</code> is substantial, the analyst gains <em>more
 power</em> for the main <code>x</code> effect.</p>
 <p>We emphasize several features of these invariance properties:</p>
 <ul>
-<li><p>They are unique to ABCs and do <em>not</em> occur for alternative
-approaches (default RGE, sum-to-zero constraints, etc.);</p></li>
-<li><p>They make no requirements about the true data-generating process;
-and</p></li>
-<li><p>They allow for dependencies between <code>x</code> and
-<code>race</code> (as in this simulated dataset).</p></li>
+<li>They are unique to ABCs and do <em>not</em> occur for alternative
+approaches (default RGE, sum-to-zero constraints, etc.);</li>
+<li>They make no requirements about the true data-generating process;
+and</li>
+<li>They allow for dependencies between <code>x</code> and
+<code>race</code> (as in this simulated dataset).</li>
 </ul>
 <p>The only condition is that, for continuous <code>x</code>, the scale
 of <code>x</code> must be approximately the same within each
@@ -483,7 +483,7 @@ r) - \mu(x, r)\}
 \]</span> i.e., the group average of the group-specific <code>x</code>
 effects. Similar interpretations are available for the global intercept:
 <span class="math display">\[
-\alpha_0 = E_{\pi}\{\mu(0, R)\} = \sum_r \pi_r \mu(0, r)
+\alpha_0 = E_{\pi}\{\mu(0, R)\} = \sum_r \pi_r \mu(0, r).
 \]</span> Because ABCs identify properly global (intercept and slope)
 parameters, the group-specific coefficients are interpretable as the
 difference between the group-specific <code>x</code> effect (or
@@ -491,7 +491,7 @@ intercept) and the global/group-averaged <code>x</code> effect (or
 intercept). There is no need to elevate any single (reference)
 group.</p>
 <p>ABCs may also use the population group proportions, if those are
-known.</p>
+known and passed to the function.</p>
 </div>
 <div class="section level3">
 <h3 id="interpeting-the-lmabc-output">Interpeting the <code>lmabc</code> output<a class="anchor" aria-label="anchor" href="#interpeting-the-lmabc-output"></a>
@@ -499,24 +499,22 @@ known.</p>
 <p>Revisiting the output from <code>lmabc(y ~ x + race + x:race)</code>,
 we summarize the main conclusions:</p>
 <ul>
-<li><p>The global <code>x</code> effect is significant and positive
-(<span class="math inline">\({\hat\alpha}_1 =\)</span> 1.09, <span class="math inline">\(SE({\hat\alpha}_1) =\)</span> 0.04).</p></li>
-<li><p>The <code>x:race</code> interaction effects show that the
+<li>The global <code>x</code> effect is significant and positive (<span class="math inline">\({\hat\alpha}_1 = 1.09\)</span>, <span class="math inline">\(SE({\hat\alpha}_1) = 0.04\)</span>).</li>
+<li>The <code>x:race</code> interaction effects show that the
 group-specific <code>x</code> effect is significantly larger than
-average for <code>race = A</code> (<span class="math inline">\({\hat\gamma}_A =\)</span> 0.42, <span class="math inline">\(SE({\hat\gamma}_A) =\)</span> 0.05), significantly
-smaller than average for <code>race = B</code> (<span class="math inline">\({\hat\gamma}_B =\)</span> -0.44, <span class="math inline">\(SE({\hat\gamma}_B) =\)</span> 0.09) and
-<code>race = D</code> (<span class="math inline">\({\hat\gamma}_D
-=\)</span> -0.14, <span class="math inline">\(SE({\hat\gamma}_D)
-=\)</span> 0.05), and somewhat smaller than average for
-<code>race = C</code> (<span class="math inline">\({\hat\gamma}_C
-=\)</span> -0.18, <span class="math inline">\(SE({\hat\gamma}_C)
-=\)</span> 0.09).</p></li>
-<li><p>The group-specific slopes are computed by summing the relevant
+average for <code>race = A</code> (<span class="math inline">\({\hat\gamma}_A = 0.42\)</span>, <span class="math inline">\(SE({\hat\gamma}_A) = 0.05\)</span>), significantly
+smaller than average for <code>race = B</code> (<span class="math inline">\({\hat\gamma}_B = -0.44\)</span>, <span class="math inline">\(SE({\hat\gamma}_B) = 0.09\)</span>) and
+<code>race = D</code> (<span class="math inline">\({\hat\gamma}_D =
+-0.14\)</span>, <span class="math inline">\(SE({\hat\gamma}_D) =
+0.05\)</span>), and somewhat smaller than average for
+<code>race = C</code> (<span class="math inline">\({\hat\gamma}_C =
+-0.18\)</span>, <span class="math inline">\(SE({\hat\gamma}_C) =
+0.09\)</span>).</li>
+<li>The group-specific slopes are computed by summing the relevant
 coefficients, for example <span class="math inline">\(\mu(x+1, A) -
-\mu(x,A) = \alpha_1 + \gamma_A =\)</span> 1.51 is the group-specific
-<code>x</code> effect for <code>race = A</code>.</p></li>
-<li><p>Similar interpretations apply for the intercept
-coefficients.</p></li>
+\mu(x,A) = \alpha_1 + \gamma_A = 1.51\)</span> is the group-specific
+<code>x</code> effect for <code>race = A</code>.</li>
+<li>Similar interpretations apply for the intercept coefficients.</li>
 </ul>
 </div>
 </div>
@@ -970,14 +968,14 @@ penalized (lasso and ridge) regression with cross-validation
 handle multiple continuous and categorical covariates and their
 interactions. We note a few points:</p>
 <ul>
-<li><p>The invariance properties of ABCs remain valid for multiple
+<li>The invariance properties of ABCs remain valid for multiple
 continuous and categorical covariates and their interactions. The
 conditions change slightly (see the reference below) but approximate
-invariance applies quite generally.</p></li>
-<li><p>For GLMs (<code>glmabc</code>), ABCs offer equitability and
+invariance applies quite generally.</li>
+<li>For GLMs (<code>glmabc</code>), ABCs offer equitability and
 interpretability, but estimation invariance applies only for OLS. This
-work is currently under development.</p></li>
-<li><p>For penalized (ridge or lasso) regression, ABCs are immensely
+work is currently under development.</li>
+<li>For penalized (ridge or lasso) regression, ABCs are immensely
 valuable. Because these penalized estimators “shrink” the coefficients
 toward zero, default RGE estimates of group-specific effects are
 <em>statistically biased toward the reference group</em>. This is
@@ -988,7 +986,7 @@ of reference group and 2) differences between group-specific
 attenuated and obscured. ABCs resolve these critical limitations, again
 by providing efficient estimation and shrinkage toward <em>properly
 global</em> coefficients. The statistical properties of these estimators
-are currently under development.</p></li>
+are currently under development.</li>
 </ul>
 </div>
 <div class="section level2">

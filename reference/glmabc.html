@@ -64,7 +64,7 @@ for regression models with categorical covariates.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">glmabc</span><span class="op">(</span><span class="va">formula</span>, family <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/family.html" class="external-link">gaussian</a></span>, <span class="va">data</span>, <span class="va">...</span>, props <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">glmabc</span><span class="op">(</span><span class="va">formula</span>, family <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/family.html" class="external-link">gaussian</a></span>, <span class="va">data</span>, props <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -86,13 +86,7 @@ for regression models with categorical covariates.</p>
 
 
 <dt>data</dt>
-<dd><p>a data frame (or object coercible by <code>as.data.frame</code> to a data frame) containing the variables in the model.</p></dd>
-
-
-<dt>...</dt>
-<dd><p>For <code>glm</code>: arguments to be used to form the default
-    <code>control</code> argument if it is not supplied directly.</p>
-<p>For <code>weights</code>: further arguments passed to or from other methods.</p></dd>
+<dd><p>an optional data frame (or object coercible by <code>as.data.frame</code> to a data frame) containing the variables in the model.</p></dd>
 
 
 <dt>props</dt>
@@ -102,7 +96,7 @@ for regression models with categorical covariates.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>A <code>glmabc</code> model is specified identically to the corresponding <code>glm</code> model.
-At this time, <code>glmabc</code> only supports a single response variable, and the data must be passed into the <code>data</code> parameter.</p>
+At this time, <code>glmabc</code> only supports a single response variable.</p>
 <p>See <code><a href="lmabc.html">lmabc()</a></code> for details and motivation about ABCs for categorical
 covariates. Note that the ABCs estimation/inference invariance
 properties no longer apply for GLMs, but the arguments for equitability
@@ -124,12 +118,35 @@ See the DESCRIPTION file for all implemented S3 methods.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">glmabc</span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">mpg</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">mpg</span><span class="op">:</span><span class="va">cyl</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in match.call(definition, call, expand.dots, envir):</span> unused argument (family = "binomial")</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> glmabc(formula = am ~ mpg + cyl + mpg:cyl, family = "binomial", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     data = mtcars)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.13572    0.91699  -1.239    0.227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mpg          0.40528    0.24936   1.625    0.116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4        -0.18919    1.23255  -0.153    0.879</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6         1.03642    1.14001   0.909    0.372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl8        -0.36956    1.09408  -0.338    0.738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mpg:cyl4     0.07703    0.31668   0.243    0.810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mpg:cyl6     0.57172    0.62998   0.908    0.372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mpg:cyl8    -0.34638    0.27347  -1.267    0.217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 43.230  on 31  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 27.676  on 26  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 39.676</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>mpg <span class="op">=</span> <span class="fl">21</span>, cyl <span class="op">=</span> <span class="st">"6"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'response'</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'fit' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.6876515 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
