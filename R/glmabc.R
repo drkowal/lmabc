@@ -60,7 +60,14 @@ glmabc = function(formula, family = stats::gaussian, data, ..., props = NULL){
 
 	if(is.null(Con)){
 		# No categorical variables, so no constraints
-		return(fit0) # return the lm object
+		X = getFullDesign(formula = formula,
+											data = data,
+											center = TRUE)
+
+		fit0_centered <- glm(y ~ X, family = family)
+		beta_con <- coef(fit0_centered)
+		cov.unscaled_con <- vcov(fit0_centered)
+		pi_hat <- props
 	} else {
 		pi_hat <- attr(Con, "pi_hat")
 
