@@ -95,7 +95,7 @@ for clarity).</p>
 <code>x</code> on the response <code>y</code> (e.g., does exposure to a
 pollutant <code>x</code> more adversely impact the health <code>y</code>
 of certain subpopulations?). Specifically, the linear model expresses
-the expectation of the response variable <code>y</code> at specific
+the expectation of the response variable <code>y</code> at given
 <code>x</code> and <code>race</code> values: <span class="math display">\[
 E(Y | X = x, race = r) =  \mu(x, r) = \alpha_0 + \alpha_1 x + \beta_r +
 \gamma_r x
@@ -125,10 +125,7 @@ efficiency</strong>, and <strong>interpretability</strong>.</p>
 </h2>
 <p>We generate a simulated dataset with a continuous response variable
 <code>y</code>, a continuous covariate <code>x</code>, and two
-categorical variables, <code>race</code> and <code>sex</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Simulated data stored as data frame: </span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, <span class="va">race</span>, <span class="va">sex</span><span class="op">)</span></span></code></pre></div>
+categorical variables, <code>race</code> and <code>sex</code>.</p>
 <p>To mimic the challenges of real data analysis, the simulated
 covariates are <em>dependent</em>: <code>x</code> depends on
 <code>race</code>, both in mean and distribution,</p>
@@ -173,8 +170,8 @@ output.</p>
 <h2 id="default-strategies-the-problem">Default strategies: the problem<a class="anchor" aria-label="anchor" href="#default-strategies-the-problem"></a>
 </h2>
 <p>Suppose we call <code>lm</code> to fit the group-modified model:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit_lm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">race</span> <span class="op">+</span> <span class="va">x</span><span class="op">:</span><span class="va">race</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_lm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">race</span> <span class="op">+</span> <span class="va">x</span><span class="op">:</span><span class="va">race</span><span class="op">)</span></span></code></pre></div>
 <p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output appears as follows:</p>
 <table class="table">
 <caption>Default output: lm(y ~ x + race + x:race)</caption>
@@ -312,9 +309,9 @@ variables and interactions.</p>
 </h2>
 <p>Instead, suppose we call <code>lmabc</code> to fit the group-modified
 model:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://prayaggordy.github.io/lmabc/">lmabc</a></span><span class="op">)</span></span>
-<span><span class="va">fit_lmabc</span> <span class="op">=</span> <span class="fu"><a href="../reference/lmabc.html">lmabc</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">race</span> <span class="op">+</span> <span class="va">x</span><span class="op">:</span><span class="va">race</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">fit_lmabc</span> <span class="op">=</span> <span class="fu"><a href="../reference/lmabc.html">lmabc</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">race</span> <span class="op">+</span> <span class="va">x</span><span class="op">:</span><span class="va">race</span><span class="op">)</span></span></code></pre></div>
 <p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output appears as follows:</p>
 <table class="table">
 <caption>ABC output: lmabc(y ~ x + race + x:race)</caption>
@@ -936,11 +933,10 @@ the context of the abundances <span class="math inline">\(\{\pi_r\}\)</span>.</p
 other must be negative, as the two must average to zero. These effects
 are partly determined by the group abundances,
 <code>mean(sex=="uu")</code> = 0.55 and <code>mean(sex=="vv")</code> =
-0.45. Because <code>sex=="vv"</code> has a <em>lower</em> proportion,
-its estimated coefficient must be <em>higher</em> (in absolute value) to
-satisfy ABCs. Thus, we cannot merely interpret the
-<code>sex=="vv"</code> effect as “larger than” the
-<code>sex=="uu"</code> effect.</p>
+0.45. Because <code>vv</code> has a <em>lower</em> proportion, its
+estimated coefficient must be <em>higher</em> (in absolute value) to
+satisfy ABCs. Thus, we cannot merely interpret the <code>vv</code>
+effect as “larger than” the <code>uu</code> effect.</p>
 <p>Fortunately, the standard errors inflate proportionally: hence, the
 <code>t value</code> statistics (<code>Estimate / Std. Error</code>) are
 equal and opposite. Similarly, the p-values will be identical for these
