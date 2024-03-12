@@ -68,7 +68,7 @@ or interacted with other variables, as in the *group-modified* model
 
 (here we use `race` as our default categorical variable for clarity). 
 
-The group-modified model estimates group-specific effects of `x` on the response `y` (e.g., does exposure to a pollutant `x` more adversely impact the health `y` of certain subpopulations?). Specifically, the linear model expresses the expectation of the response variable `y` at specific `x` and `race` values:
+The group-modified model estimates group-specific effects of `x` on the response `y` (e.g., does exposure to a pollutant `x` more adversely impact the health `y` of certain subpopulations?). Specifically, the linear model expresses the expectation of the response variable `y` at given `x` and `race` values:
 $$
 E(Y | X = x, race = r) =  \mu(x, r) = \alpha_0 + \alpha_1 x + \beta_r + \gamma_r x
 $$
@@ -87,9 +87,9 @@ However, both the main-only and the group-modified models have too many paramete
 The central question is then, how best to parametrize (or constrain) these group-specific intercepts and slopes? The choice has significant implications for **equitability**, **statistical efficiency**, and **interpretability**. 
 
 ## Example Dataset
-We generate a simulated dataset with a continuous response variable `y`, a continuous covariate `x`, and two categorical variables, `race` and `sex`: 
+We generate a simulated dataset with a continuous response variable `y`, a continuous covariate `x`, and two categorical variables, `race` and `sex`. 
 
-```{r}
+```{r, include=FALSE}
 # Simulated data stored as data frame: 
 dat = data.frame(y, x, race, sex)
 ```
@@ -118,7 +118,7 @@ We will consider estimation and inference with various combinations of the predi
 
 Suppose we call `lm` to fit the group-modified model:
 ```{r}
-fit_lm = lm(y ~ x + race + x:race, data = dat)
+fit_lm = lm(y ~ x + race + x:race)
 ```
 
 The `summary()` output appears as follows:  
@@ -139,7 +139,7 @@ Second, this output is *inequitable*: it elevates one group above all others. Th
 
 Third, RGE is not well-designed to include interactions like `x:race`. In addition to the difficulties with interpretations and equitability, RGE is *statistically inefficient* for the main effects. To see this, consider the estimates and inference for the `x` effect under the main-only model `y ~ x + race`: 
 ```{r, echo = FALSE}
-temp_coefs = coef(summary(lm(y ~ x + race, data = dat)))[1:2,]
+temp_coefs = coef(summary(lm(y ~ x + race)))[1:2,]
 temp = matrix(temp_coefs[2,], nrow = 1);
 rownames(temp) = rownames(temp_coefs)[2]; colnames(temp) = colnames(temp_coefs)
 knitr::kable(temp, caption = 'Estimated x effect: lm(y ~ x + race)', digits = 2)
@@ -153,7 +153,7 @@ In aggregate, default `lm` output under RGE is at best difficult to interpret an
 Instead, suppose we call `lmabc` to fit the group-modified model:
 ```{r}
 library(lmabc)
-fit_lmabc = lmabc(y ~ x + race + x:race, data = dat)
+fit_lmabc = lmabc(y ~ x + race + x:race)
 ```
 
 The `summary()` output appears as follows:  
@@ -165,7 +165,7 @@ knitr::kable(coef(summary(fit_lmabc)), caption = 'ABC output: lmabc(y ~ x + race
 First, every `race` group is represented: the results do *not* elevate any single `race` group above the others. This eliminates the presentation bias and provides more **equitable** output. 
 
 Second, the `x` effect estimates and standard errors are *nearly identical* to those in the main-only model
-(${\hat\alpha}_1 =$ `r round(coef(lm(y ~ x + race, data = dat))[2],2)`, $SE({\hat\alpha}_1) =$ `r round(sqrt(vcov(lm(y ~ x + race, data = dat))[2,2]),2)`). This illustrates two remarkable **invariance properties of ABCs**:
+(${\hat\alpha}_1 =$ `r round(coef(lm(y ~ x + race))[2],2)`, $SE({\hat\alpha}_1) =$ `r round(sqrt(vcov(lm(y ~ x + race))[2,2]),2)`). This illustrates two remarkable **invariance properties of ABCs**:
 
 1. The estimated `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are nearly identical; and   
 1. The standard errors of the `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are 
@@ -224,12 +224,12 @@ The case of categorical-categorical interactions is arguably even more cumbersom
 knitr::kables(
   list(
     knitr::kable(
-    	    	coef(summary(lm(y ~ race + sex, data = dat))),
+    	    	coef(summary(lm(y ~ race + sex))),
     	    	digits = 2, caption = 'Default output: lm(y ~ race + sex)', 
     	    	valign = 't'
     ),
     knitr::kable(
-    	      coef(summary(lm(y ~ race + sex + race:sex, data = dat))),
+    	      coef(summary(lm(y ~ race + sex + race:sex))),
     	digits = 2,     	    	    	caption = 'Default output: lm(y ~ race + sex + race:sex)', valign = 't'
 )
   )
@@ -243,12 +243,12 @@ ABCs completely circumvent these issues. Consider the same two models, but now s
 knitr::kables(
   list(
     knitr::kable(
-    	    	coef(summary(lmabc(y ~ race + sex, data = dat))),
+    	    	coef(summary(lmabc(y ~ race + sex))),
     	    	digits = 2, caption = 'ABC output: lmabc(y ~ race + sex)', valign = 't'
     ),
     # the second kable() to set the digits option
     knitr::kable(
-    	      coef(summary(lmabc(y ~ race + sex + race:sex, data = dat))),
+    	      coef(summary(lmabc(y ~ race + sex + race:sex))),
     	digits = 2,     	    	    	caption = 'ABC output: lmabc(y ~ race + sex + race:sex)', valign = 't'
 )
   )
@@ -274,9 +274,9 @@ By design, ABCs leverage the (sample or population) categorical proportions to p
 
 For instance, consider the simple model `y ~ sex`,
 ```{r, echo = FALSE}
-knitr::kable(coef(summary(lmabc(y ~ sex, data = dat))), caption = 'ABC output: lmabc(y ~ sex)', digits = 2)
+knitr::kable(coef(summary(lmabc(y ~ sex))), caption = 'ABC output: lmabc(y ~ sex)', digits = 2)
 ```
-With two groups, ABCs imply that one effect must be positive and the other must be negative, as the two must average to zero. These effects are partly determined by the group abundances, `mean(sex=="uu")` = `r round(mean(sex=='uu'),2)` and `mean(sex=="vv")` = `r round(mean(sex=='vv'),2)`. Because `sex=="vv"` has a *lower* proportion, its estimated coefficient must be *higher* (in absolute value) to satisfy ABCs. Thus, we cannot merely interpret the `sex=="vv"` effect as "larger than" the `sex=="uu"` effect. 
+With two groups, ABCs imply that one effect must be positive and the other must be negative, as the two must average to zero. These effects are partly determined by the group abundances, `mean(sex=="uu")` = `r round(mean(sex=='uu'),2)` and `mean(sex=="vv")` = `r round(mean(sex=='vv'),2)`. Because `vv` has a *lower* proportion, its estimated coefficient must be *higher* (in absolute value) to satisfy ABCs. Thus, we cannot merely interpret the `vv` effect as "larger than" the `uu` effect. 
 
 Fortunately, the standard errors inflate proportionally: hence, the `t value` statistics (`Estimate / Std. Error`) are equal and opposite. Similarly, the p-values will be identical for these (`sexuu` and `sexvv`) main effects.
 
