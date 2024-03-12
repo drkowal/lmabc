@@ -42,6 +42,12 @@ test_that("lmabc works with f_contY_contX", {
 	expect_equal(helper_fitted(f, df), lm(f, df)$fitted.values)
 })
 
+test_that("lmabc gives same non-intercept coefficients as lm with f_contY_contX", {
+	f <- f_contY_contX
+	expect_equal(coef(lmabc(f, data = df))[-1],
+							 coef(lm(f, data = df))[-1])
+})
+
 test_that("lmabc works with f_contY_mixedX", {
 	f <- f_contY_mixedX
 	expect_equal(helper_fitted(f, df), lm(f, df)$fitted.values)
