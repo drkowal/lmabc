@@ -6,7 +6,6 @@
 #' and 3) more interpretable parameters, especially in the
 #' presence of interaction (or modifier) effects.
 #'
-#' @inheritParams stats::lm
 #' @param formula an object of class "[formula()]" (or one that can be coerced to that class); a symbolic description of the model to be fitted.
 #' @param data an optional data frame (or object coercible by `as.data.frame` to a data frame) containing the variables in the model.
 #' @param props an optional named list with an entry for each named categorical variable in the model, specifying the proportions of each category. By default, `props` will be calculated from the empirical proportions in the data.
@@ -90,14 +89,14 @@
 #' predict(fit, newdata = data.frame(Petal.Length = 1.5, Species = "setosa"))
 #'
 #' @export
-lmabc = function(formula, data, ..., props = NULL){
+lmabc = function(formula, data, props = NULL){
 
 	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data)
+	data <- model_frame(formula = formula, data = data, props = props)
 
 	# Usual fit: this is a nice baseline
 	fit0 = lm(formula = formula,
-						data = data, ...)
+						data = data)
 
 	# Check:
 	if(any(is.na(coef(fit0)))){
@@ -150,7 +149,7 @@ lmabc = function(formula, data, ..., props = NULL){
 
 		# Fitted model in the *unconstrained* (lower-dim) space
 		fit_con = lm(stats::update(formula, ~ Xuse - 1),
-								 data = data, ...)
+								 data = data)
 
 		#y = model.frame(fit0)[,1]
 		#fit_con = lm(y ~ Xuse - 1)

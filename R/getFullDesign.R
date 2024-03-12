@@ -32,8 +32,7 @@
 #' @export
 getFullDesign = function(formula, data, center = TRUE){
 
-	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data)
+	data <- model_frame(formula = formula, data = data, center = center)
 
 	# Model frame has some useful information
 	mf = stats::model.frame(formula = formula,

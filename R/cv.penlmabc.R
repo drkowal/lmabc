@@ -88,16 +88,16 @@
 # #' @importFrom glmnet glmnet
 # #' @importFrom genlasso genlasso
 #' @export
-cv.penlmabc = function(formula,
-										data,
-										type = 'lasso',
-										lambda_path = NULL,
-										K = 10,
-										props = NULL,
-										plot = FALSE) {
+cv.penlmabc = function(formula, data,
+											 type = 'lasso',
+											 lambda_path = NULL,
+											 K = 10,
+											 props = NULL,
+											 plot = FALSE) {
 
 	# Fill in the data argument with stats::model.frame
-	data <- model_frame(formula = formula, data = data)
+	data <- model_frame(formula = formula, data = data, props = props,
+											type = type, lambda_path = lambda_path, K = K, plot = plot)
 
 	# Quick check: ridge or lasso
 	if(!(type == 'ridge' | type == 'lasso')){

@@ -7,9 +7,10 @@
 #'
 #' @param formula formula object
 #' @param data data.frame object
+#' @param ... other parameters to fill in the call
 #'
 #' @return a data.frame with the variables in `formula`
-model_frame <- function(formula, data) {
+model_frame <- function(formula, data, ...) {
 	# set up call
 	mf <- match.call(call = sys.call(which = -1))
 	m <- match(c("formula", "data"), names(mf), 0L)

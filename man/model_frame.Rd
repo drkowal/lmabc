@@ -4,12 +4,14 @@
 \alias{model_frame}
 \title{Wrapper for model.frame}
 \usage{
-model_frame(formula, data)
+model_frame(formula, data, ...)
 }
 \arguments{
 \item{formula}{formula object}
 
 \item{data}{data.frame object}
+
+\item{...}{other parameters to fill in the call}
 }
 \value{
 a data.frame with the variables in \code{formula}
