@@ -67,6 +67,7 @@ glmabc = function(formula, family = stats::gaussian, data, props = NULL){
 
 		fit0_centered <- glm(y ~ X, family = family)
 		beta_con <- coef(fit0_centered)
+		names(beta_con) <- c("(Intercept)", colnames(X))
 		cov.unscaled_con <- vcov(fit0_centered)
 		pi_hat <- props
 	} else {
