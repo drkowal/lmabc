@@ -117,6 +117,7 @@ lmabc = function(formula, data, props = NULL){
 
 		fit0_centered <- lm(y ~ X)
 		beta_con <- coef(fit0_centered)
+		names(beta_con) <- c("(Intercept)", colnames(X))
 		cov.unscaled_con <- vcov(fit0_centered)
 		sigma_hat <- sigma(fit0_centered)
 		pi_hat <- props

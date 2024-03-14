@@ -60,7 +60,16 @@ glmabc = function(formula, family = stats::gaussian, data, props = NULL){
 
 	if(is.null(Con)){
 		# No categorical variables, so no constraints
-		return(fit0) # return the lm object
+		y <- data[[formula[[2]]]]
+		X <- getFullDesign(formula = formula,
+											 data = data,
+											 center = TRUE)[,-1, drop = FALSE]
+
+		fit0_centered <- glm(y ~ X, family = family)
+		beta_con <- coef(fit0_centered)
+		names(beta_con) <- c("(Intercept)", colnames(X))
+		cov.unscaled_con <- vcov(fit0_centered)
+		pi_hat <- props
 	} else {
 		pi_hat <- attr(Con, "pi_hat")
 
@@ -117,20 +126,20 @@ glmabc = function(formula, family = stats::gaussian, data, props = NULL){
 		}
 		#sigma_hat = summary(fit_con)$sigma # error SD
 		#^this is not going to work for glm, summary.glm does not have a sigma component
-
-		# New class:
-		fit = fit0;  attr(fit, 'class') = c('glmabc', 'lmabc')
-		fit$call = match.call()  # store the function call
-		fit$glm = fit0 #  store the original object
-		fit$X = X # store the full design matrix
-		fit$Con = Con # store the constraint matrix
-		fit$pi_hat <- attr(Con, "pi_hat")  # story the proportions
-		fit$coefficients = beta_con # coefficient estimates
-		fit$cov.unscaled = cov.unscaled_con # covariance matrix
-		#fit$sigma = sigma_hat # estimated standard deviation
-		# fit$residuals # already there
-		#ADD: call
-
-		return(fit) # return the glmabc object
 	}
+
+	# New class:
+	fit = fit0;  attr(fit, 'class') = c('glmabc', 'lmabc')
+	fit$call = match.call()  # store the function call
+	fit$glm = fit0 #  store the original object
+	fit$X = X # store the full design matrix
+	fit$Con = Con # store the constraint matrix
+	fit$pi_hat <- attr(Con, "pi_hat")  # story the proportions
+	fit$coefficients = beta_con # coefficient estimates
+	fit$cov.unscaled = cov.unscaled_con # covariance matrix
+	#fit$sigma = sigma_hat # estimated standard deviation
+	# fit$residuals # already there
+	#ADD: call
+
+	return(fit) # return the glmabc object
 }
