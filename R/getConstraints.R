@@ -67,6 +67,23 @@ getConstraints = function(formula, data, props = NULL){
 		cdat = data.frame(data[,f_inds]) # data frame
 		cnames = names(cdat) = names(data)[f_inds] # correct the names
 
+		# find any interactions with missing main effects
+		missing_main <- Filter(isTRUE,
+													 apply(terms_mx, 2,
+													 			function(column) {
+													 				if (any(column > 1)) {
+													 					length(intersect(cnames, names(which(column >= 1)))) >= 1
+													 				}
+													 			}))
+
+		print(missing_main)
+
+		if (length(missing_main > 0)) {
+			stop("You must include main effects for all interacted features. Interactions [",
+					 paste(names(which(unlist(missing_main))), collapse = ", "),
+					 "] is/are each missing at least one main effect.")
+		}
+
 		# Compute the full design matrix:
 		X = getFullDesign(formula = formula,
 											data = data,
@@ -116,21 +133,6 @@ getConstraints = function(formula, data, props = NULL){
 		# Indices of the categorical variables/interactions w/in 'covar' (excluding cat-cat)
 		c_inds = lapply(cnames, function(na) unname(which(terms_mx[na,] == 1)))
 		names(c_inds) = cnames
-
-		# find any interactions with missing main effects
-		missing_main <- Filter(function(x) x,
-													 apply(terms_mx, 2,
-													 			function(column) {
-													 				if (any(column > 1)) {
-													 					length(intersect(cnames, names(which(column >= 1)))) >= 1
-													 				}
-													 			}))
-
-		if (length(missing_main > 0)) {
-			stop("You must include main effects for all interacted features. Interactions [",
-					 paste(names(which(unlist(missing_main))), collapse = ", "),
-					 "] is/are each missing at least one main effect.")
-		}
 
 		# Some dimensions:
 		p = ncol(X) # number of covariates
