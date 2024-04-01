@@ -118,7 +118,7 @@ getConstraints = function(formula, data, props = NULL){
 		names(c_inds) = cnames
 
 		# find any interactions with missing main effects
-		missing_main <- Filter(Negate(is.null),
+		missing_main <- Filter(function(x) x,
 													 apply(terms_mx, 2,
 													 			function(column) {
 													 				if (any(column > 1)) {
