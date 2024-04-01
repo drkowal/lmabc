@@ -17,3 +17,31 @@ test_that("getConstraints works with cont:cat interactions and all main effects"
 test_that("getConstraints works with cat:cat interactions and all main effects", {
 	expect_equal(dim(getConstraints(f_contY_catX.catX, df)), c(7, 16))
 })
+
+test_that("getConstraints works with cont:cont missing main effect", {
+	expect_null(getConstraints(formula(mpg ~ hp:disp), df))
+})
+
+test_that("getConstraints works with cat and cont:cont missing main effect", {
+	expect_equal(dim(getConstraints(formula(mpg ~ gear + hp:disp), df)), c(1, 5))
+})
+
+test_that("getConstraints fails with cont:cat missing main cont effect", {
+	expect_error(getConstraints(formula(mpg ~ gear + hp:gear), df))
+})
+
+test_that("getConstraints fails with cont:cat missing main cat effect", {
+	expect_error(getConstraints(formula(mpg ~ hp + hp:gear), df))
+})
+
+test_that("getConstraints fails with cont:cat missing main cont and cat effects", {
+	expect_error(getConstraints(formula(mpg ~ hp:gear), df))
+})
+
+test_that("getConstraints fails with cat:cat missing main cat effect", {
+	expect_error(getConstraints(formula(mpg ~ cyl + cyl:gear), df))
+})
+
+test_that("getConstraints fails with cat:cat missing both main cat effects", {
+	expect_error(getConstraints(formula(mpg ~ cyl:gear), df))
+})
