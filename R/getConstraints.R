@@ -98,6 +98,11 @@ getConstraints = function(formula, data, props = NULL){
 		# matrix of formula terms (shows interactions)
 		terms_mx <- attr(terms(formula), "factors")
 
+		# find any missing main effects
+		missing_main <- Filter(Negate(is.null),
+													 apply(terms_mx, 2,
+													 			function(column) if (any(column > 1)) names(which(column >= 1))))
+
 		# Check for categorical-categorical pairs
 		# (these will be handled separately below)
 		inds_catcat = match(
