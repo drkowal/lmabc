@@ -118,9 +118,19 @@ getConstraints = function(formula, data, props = NULL){
 		names(c_inds) = cnames
 
 		# find any interactions with missing main effects
-		missing_main <- Filter(Negate(is.null),
+		missing_main <- Filter(Negate(is.null),  # to remove empty
 													 apply(terms_mx, 2,
-													 			function(column) if (any(column > 1)) names(which(column >= 1))))
+													 			function(column) {
+													 				if (any(column > 1)) {
+													 					length(intersect(cnames, names(which(column >= 1)))) >= 1
+													 				}
+													 			}))
+
+		if (length(missing_main > 0)) {
+			stop("You must include main effects for all interacted features. Interactions [",
+					 paste(names(which(unlist(missing_main))), collapse = ", "),
+					 "] is/are each missing at least one main effect.")
+		}
 
 		# Some dimensions:
 		p = ncol(X) # number of covariates
