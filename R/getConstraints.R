@@ -67,6 +67,9 @@ getConstraints = function(formula, data, props = NULL){
 		cdat = data.frame(data[,f_inds]) # data frame
 		cnames = names(cdat) = names(data)[f_inds] # correct the names
 
+		# matrix of formula terms (shows interactions)
+		terms_mx <- attr(terms(formula), "factors")
+
 		# find any interactions with missing main effects
 		missing_main <- Filter(isTRUE,
 													 apply(terms_mx, 2,
@@ -74,9 +77,8 @@ getConstraints = function(formula, data, props = NULL){
 													 				if (any(column > 1)) {
 													 					length(intersect(cnames, names(which(column >= 1)))) >= 1
 													 				}
-													 			}))
-
-		print(missing_main)
+													 			},
+													 			simplify = FALSE))
 
 		if (length(missing_main > 0)) {
 			stop("You must include main effects for all interacted features. Interactions [",
@@ -111,9 +113,6 @@ getConstraints = function(formula, data, props = NULL){
 		if(any(unlist(lapply(pi_hat, function(p) any(p < 0))))){
 			stop('Entries of cprob must be nonnegative')
 		}
-
-		# matrix of formula terms (shows interactions)
-		terms_mx <- attr(terms(formula), "factors")
 
 		# Check for categorical-categorical pairs
 		# (these will be handled separately below)
