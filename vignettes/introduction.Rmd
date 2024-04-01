@@ -267,7 +267,7 @@ We summarize these (provable) **invariance properties of ABCs** for categorical-
 	a. Nearly identical when the `race:sex` effect is small or 
 	a. Smaller for the group-modified model when the `race:sex` effect is large. 
 
-Again, the analyst may include (`race:sex`) interaction effects "for free": the main effect estimates are unchanged, and the statistical power for the main effects can only increase. 
+Again, the analyst may include (`race:sex`) interaction effects "for free": the main effect estimates are unchanged, and the statistical power for the main effects can only increase. Thus, we require that all corresponding main effects are included for interacted features.
 
 ## Interpreting ABCs with care
 By design, ABCs leverage the (sample or population) categorical proportions to provide 1) more equitable output, 2) greater statistical efficiency, and 3) more interpretable parameters and estimates with properly global (i.e., group-averaged) main effects. However, the *group-specific* coefficients must be interpreted carefully in the context of the abundances $\{\pi_r\}$. 
