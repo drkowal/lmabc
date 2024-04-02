@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   introduction: introduction.html
   limitations: limitations.html
-last_built: 2024-03-14T21:14Z
+last_built: 2024-04-02T18:30Z
 urls:
   reference: https://prayaggordy.github.io/lmabc/reference
   article: https://prayaggordy.github.io/lmabc/articles
