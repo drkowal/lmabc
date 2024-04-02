@@ -30,7 +30,7 @@ loaded from GitHub. The installation should take no more than a few
 seconds.
 
 ``` r
-pak::pak("prayaggordy/lmabc")
+pak::pak("drkowal/lmabc")
 
 library("lmabc")
 ```

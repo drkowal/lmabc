@@ -23,8 +23,8 @@ Description: lmabc provides estimation and inference for linear regression
     Details are provided in Kowal (2024)
     <doi:10.1101/2024.01.04.23300033>.
 License: GPL (>= 3)
-URL: https://prayaggordy.github.io/lmabc/,
-    https://github.com/prayaggordy/lmabc
+URL: https://drkowal.github.io/lmabc/,
+    https://github.com/drkowal/lmabc
 Imports: 
     graphics,
     stats,

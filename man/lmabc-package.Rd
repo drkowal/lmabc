@@ -12,7 +12,7 @@ lmabc provides estimation and inference for linear regression with categorical c
 Useful links:
 \itemize{
   \item \url{https://prayaggordy.github.io/lmabc/}
-  \item \url{https://github.com/prayaggordy/lmabc}
+  \item \url{https://github.com/drkowal/lmabc}
 }
 
 }
