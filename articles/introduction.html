@@ -117,8 +117,9 @@ group-specific slopes. Without modification, these parameters are not
 estimable or interpretable.</p>
 <p>The central question is then, how best to parametrize (or constrain)
 these group-specific intercepts and slopes? The choice has significant
-implications for <strong>equitability</strong>, <strong>statistical
-efficiency</strong>, and <strong>interpretability</strong>.</p>
+implications for <strong>statistical efficiency</strong>,
+<strong>equitability</strong>, and
+<strong>interpretability</strong>.</p>
 </div>
 <div class="section level2">
 <h2 id="example-dataset">Example Dataset<a class="anchor" aria-label="anchor" href="#example-dataset"></a>
@@ -442,8 +443,8 @@ categorical; see below). This is reasonable: if a “one-unit change in
 groups, then only the group-modified model that includes
 <code>race</code>-specific slopes is meaningful. In that case, there is
 no reason to consider the <code>x</code> effect under the main-only
-model. Regardless, the (near) invariance results are empirically robust
-to this condition.</p>
+model. Empirically, these (near) invariance results are quite robust to
+this condition.</p>
 <p>Finally, these results improve <strong>interpretability</strong>: all
 group-specific coefficients <span class="math inline">\(\gamma_r\)</span> (e.g., <code>x:raceB</code>) now
 represent the difference between the group-specific slope, <span class="math inline">\(\mu(x+1, r) - \mu(x,r)\)</span>, and the
@@ -885,8 +886,8 @@ effect is large.</li>
 <p>Again, the analyst may include (<code>race:sex</code>) interaction
 effects “for free”: the main effect estimates are unchanged, and the
 statistical power for the main effects can only increase. Thus, we
-require that all corresponding main effects are included for interacted
-features.</p>
+require that all main effects are included for any
+categorical-categorical or categorical-continuous interactions.</p>
 </div>
 <div class="section level2">
 <h2 id="interpreting-abcs-with-care">Interpreting ABCs with care<a class="anchor" aria-label="anchor" href="#interpreting-abcs-with-care"></a>
