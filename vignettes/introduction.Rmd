@@ -84,7 +84,7 @@ The main-only model is recovered when $\gamma_r = 0$ for all `race` groups $r$. 
 
 However, both the main-only and the group-modified models have too many parameters. For instance, both models have group-specific intercepts, yet these are parametrized by group-specific coefficients $\beta_r$ *and* a global coefficient $\alpha_0$. Clearly, this uses one more parameter than necessary. A similar problem occurs for group-specific slopes. Without modification, these parameters are not estimable or interpretable. 
 
-The central question is then, how best to parametrize (or constrain) these group-specific intercepts and slopes? The choice has significant implications for **equitability**, **statistical efficiency**, and **interpretability**. 
+The central question is then, how best to parametrize (or constrain) these group-specific intercepts and slopes? The choice has significant implications for **statistical efficiency**, **equitability**, and **interpretability**. 
 
 ## Example Dataset
 We generate a simulated dataset with a continuous response variable `y`, a continuous covariate `x`, and two categorical variables, `race` and `sex`. 
@@ -181,7 +181,7 @@ We emphasize several features of these invariance properties:
 - They allow for dependencies between `x` and `race` (as in this simulated dataset). 
 
 
-The only condition is that, for continuous `x`, the scale of `x` must be approximately the same within each `race` group (no conditions are needed when `x` is categorical; see below). This is reasonable: if a "one-unit change in `x`" is not comparable for different `race` groups, then only the group-modified model that includes `race`-specific slopes is meaningful. In that case, there is no reason to consider the `x` effect under the main-only model. Regardless, the (near) invariance results are empirically robust to this condition. 
+The only condition is that, for continuous `x`, the scale of `x` must be approximately the same within each `race` group (no conditions are needed when `x` is categorical; see below). This is reasonable: if a "one-unit change in `x`" is not comparable for different `race` groups, then only the group-modified model that includes `race`-specific slopes is meaningful. In that case, there is no reason to consider the `x` effect under the main-only model. Empirically, these (near) invariance results are quite robust to this condition. 
 
 Finally, these results improve **interpretability**: all group-specific coefficients $\gamma_r$ (e.g., `x:raceB`) now represent the difference between the group-specific slope, $\mu(x+1, r) - \mu(x,r)$, and the *properly global* `x` effect $\alpha_1$. Similar interpretations apply to the intercept parameters. 
 
@@ -267,7 +267,7 @@ We summarize these (provable) **invariance properties of ABCs** for categorical-
 	a. Nearly identical when the `race:sex` effect is small or 
 	a. Smaller for the group-modified model when the `race:sex` effect is large. 
 
-Again, the analyst may include (`race:sex`) interaction effects "for free": the main effect estimates are unchanged, and the statistical power for the main effects can only increase. Thus, we require that all corresponding main effects are included for interacted features.
+Again, the analyst may include (`race:sex`) interaction effects "for free": the main effect estimates are unchanged, and the statistical power for the main effects can only increase. Thus, we require that all main effects are included for any categorical-categorical or categorical-continuous interactions.
 
 ## Interpreting ABCs with care
 By design, ABCs leverage the (sample or population) categorical proportions to provide 1) more equitable output, 2) greater statistical efficiency, and 3) more interpretable parameters and estimates with properly global (i.e., group-averaged) main effects. However, the *group-specific* coefficients must be interpreted carefully in the context of the abundances $\{\pi_r\}$. 

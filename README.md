@@ -99,16 +99,7 @@ categorical covariates. Using Abundance-Based Constraints (ABCs),
 (lasso, ridge, etc.) and generalized (logistic, Poisson, etc.)
 regression with three key features, called “the EEI of ABCs”:
 
-1.  **Equitability**: Presentation biases and statistical biases are
-    both eliminated. For models like `y ~ x + race + x:race`, the main
-    `x` effect is parametrized and estimated as a “group-averaged” `x`
-    effect. No single (race) group is elevated. Instead, all
-    group-specific `x` effects are presented relative to the global
-    (i.e., “group-averaged”) `x` effect. This also resolves the (racial)
-    biases in regularized estimation: shrinkage is toward an
-    appropriately global `x` effect, not the reference (NHW) `x` effect,
-    with meaningful and equitable notions of sparsity.
-2.  **Efficiency**: ABCs ensure that the estimated main `x` effects for
+1.  **Efficiency**: ABCs ensure that the estimated main `x` effects for
     `y ~ x + race` and `y ~ x + race + x:race` are *identical* (if `x`
     is also categorical; they are *nearly identical* if `x` is
     continuous, under some conditions). If the interaction effect
@@ -119,6 +110,15 @@ regression with three key features, called “the EEI of ABCs”:
     including the interaction has no negative consequences: the main
     effect estimates are (nearly) unchanged and the standard errors are
     either (nearly) unchanged or smaller.
+2.  **Equitability**: Presentation biases and statistical biases are
+    both eliminated. For models like `y ~ x + race + x:race`, the main
+    `x` effect is parametrized and estimated as a “group-averaged” `x`
+    effect. No single (race) group is elevated. Instead, all
+    group-specific `x` effects are presented relative to the global
+    (i.e., “group-averaged”) `x` effect. This also resolves the (racial)
+    biases in regularized estimation: shrinkage is toward an
+    appropriately global `x` effect, not the reference (NHW) `x` effect,
+    with meaningful and equitable notions of sparsity.
 3.  **Interpretability**: The `x` and `x:race` coefficients are
     parametrized as “group-averaged” `x`-effects and “group-specific
     deviations”, respectively. This, coupled with the aforementioned

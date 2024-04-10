@@ -81,7 +81,7 @@ getConstraints = function(formula, data, props = NULL){
 													 			simplify = FALSE))
 
 		if (length(missing_main > 0)) {
-			stop("You must include main effects for all interacted features. Interactions [",
+			stop("You must include main effects for all categorical-categorical or categorical-continuous interactions. Interactions [",
 					 paste(names(which(unlist(missing_main))), collapse = ", "),
 					 "] is/are each missing at least one main effect.")
 		}
