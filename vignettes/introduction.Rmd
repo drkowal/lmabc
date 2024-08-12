@@ -82,7 +82,7 @@ $$
 $$
 The main-only model is recovered when $\gamma_r = 0$ for all `race` groups $r$. Then the slope is global and does not depend on `race`: $\mu(x+1, r) - \mu(x,r) = \alpha_1$. 
 
-However, both the main-only and the group-modified models have too many parameters. For instance, both models have group-specific intercepts, yet these are parametrized by group-specific coefficients $\beta_r$ *and* a global coefficient $\alpha_0$. Clearly, this uses one more parameter than necessary. A similar problem occurs for group-specific slopes. Without modification, these parameters are not estimable or interpretable. 
+However, both the main-only and the group-modified models have too many parameters. This is known as the "dummy variable trap": to numerically encode $L$ levels of a categorical variable, only $L-1$ dummy variables are needed. Here, both models have group-specific intercepts, yet these are parametrized by group-specific coefficients $\beta_r$ *and* a global coefficient $\alpha_0$. Clearly, this uses one more parameter than necessary. A similar problem occurs for group-specific slopes. Without modification, these parameters are not estimable or interpretable. 
 
 The central question is then, how best to parametrize (or constrain) these group-specific intercepts and slopes? The choice has significant implications for **statistical efficiency**, **equitability**, and **interpretability**. 
 
@@ -295,4 +295,6 @@ The `lmabc` package includes implementations for many common methods: `summary`,
 
 
 ## References
+Kowal, D. (2024). Facilitating heterogeneous effect estimation via statistically efficient categorical modifiers. <https://arxiv.org/abs/2408.00618>
+
 Kowal, D. (2024). Regression with race-modifiers: towards equity and interpretability. <https://doi.org/10.1101/2024.01.04.23300033>

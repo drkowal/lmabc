@@ -40,9 +40,10 @@ library("lmabc")
 The predominant strategy for linear regression with categorical
 covariates is *reference group encoding* (RGE), which parametrizes and
 estimates the regression coefficients relative to a pre-selected
-reference category. For illustration, consider `race`, where the usual
-reference group is non-Hispanic White (NHW). This leads to several
-serious problems:
+reference category (this is equivalent to using $L-1$ dummy variables to
+encode a categorical variable with $L$ categories). For illustration,
+consider `race`, where the usual reference group is non-Hispanic White
+(NHW). This leads to several serious problems:
 
 1.  **Presentation bias**: RGE elevates a single group (e.g., NHW) above
     others. All other group-specific effects are presented relative to
@@ -168,6 +169,10 @@ tested exclusively with versions after 4.0.0. No additional hardware is
 required to run `lmabc`.
 
 ## References
+
+Kowal, D. (2024). Facilitating heterogeneous effect estimation via
+statistically efficient categorical modifiers.
+<https://arxiv.org/abs/2408.00618>
 
 Kowal, D. (2024). Regression with race-modifiers: towards equity and
 interpretability. <https://doi.org/10.1101/2024.01.04.23300033>

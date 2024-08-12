@@ -20,8 +20,8 @@ Description: lmabc provides estimation and inference for linear regression
     more interpretable model output. lmabc reproduces the core
     functionality of lm and includes functions for generalized (logistic,
     Poisson, etc.) and penalized (lasso, ridge, etc.) linear models.
-    Details are provided in Kowal (2024)
-    <doi:10.1101/2024.01.04.23300033>.
+    Details are provided in Kowal (2024) <doi:10.48550/arXiv.2408.00618> and 
+    Kowal (2024) <doi:10.1101/2024.01.04.23300033>.
 License: GPL (>= 3)
 URL: https://drkowal.github.io/lmabc/,
     https://github.com/drkowal/lmabc

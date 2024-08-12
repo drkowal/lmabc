@@ -33,7 +33,7 @@ library("lmabc")
 
 ## Default strategies: the problem
 
-The predominant strategy for linear regression with categorical covariates is *reference group encoding* (RGE), which parametrizes and estimates the regression coefficients relative to a pre-selected reference category. For illustration, consider `race`, where the usual reference group is non-Hispanic White (NHW). This leads to several serious problems:
+The predominant strategy for linear regression with categorical covariates is *reference group encoding* (RGE), which parametrizes and estimates the regression coefficients relative to a pre-selected reference category (this is equivalent to using $L-1$ dummy variables to encode a categorical variable with $L$ categories). For illustration, consider `race`, where the usual reference group is non-Hispanic White (NHW). This leads to several serious problems:
 
 1. **Presentation bias**: RGE elevates a single group (e.g., NHW) above others. All other group-specific effects are presented relative to this group, which implicitly frames one group as "normal" and the others as "deviations from normal". In all major statistical software (R, SAS, Python,  MATLAB, Stata, etc.), the regression output for models of the form `y ~ x + race + x:race`, which is used to estimate group-specific `x` effects, presents the `x` effect without explicitly acknowledging that it actually refers to the `x` effect *for the reference (NHW) group*. A similar problem occurs for the intercept and is compounded for multiple categorical covariates and interactions. Alarmingly, this output can lead to misleading conclusions about the `x` effect for the broader population. For protected groups (race, sex, religion, national origin, etc.), this output is inequitable. 
 1. **Statistical bias**: Modern statistical and machine learning methods commonly use regularization strategies, including penalized regression, variable selection, and Bayesian inference, to stabilize (i.e., reduce the variance of) estimators by "shrinking" coefficients toward zero. With RGE, the implication is that group-specific `x` effects are (racially) *biased* toward the reference (NHW) `x` effect. This bias also attenuates the estimated differences between each group-specific `x` effect and the reference (NHW) `x` effect, which undermines the ability to detect group-specific differences. Finally, it implies that model estimates and predictions are dependent on the choice of the reference group. 
@@ -68,5 +68,8 @@ The current implementation of `lmabc` is slightly slower than `lm`, but only for
 
 ## References
 
+Kowal, D. (2024). Facilitating heterogeneous effect estimation via statistically efficient categorical modifiers. <https://arxiv.org/abs/2408.00618>
+
 Kowal, D. (2024). Regression with race-modifiers: towards equity and interpretability. <https://doi.org/10.1101/2024.01.04.23300033>
+
 
