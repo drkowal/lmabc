@@ -8,8 +8,8 @@
 <title>The 'ABCs' of `lmabc`: linear regression with categorical covariates • lmabc</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="The 'ABCs' of `lmabc`: linear regression with categorical covariates">
 </head>
 <body>
@@ -73,12 +73,12 @@ covariates, such as race, sex, group/experimental assignments, and many
 other examples. These variables may appear alongside other covariates,
 as in the <em>main-only</em> (or ANCOVA) model</p>
 <p><code>y ~ x + race</code></p>
-<p>or interacted with other variables, as in the <em>group-modified</em>
+<p>or interacted with other variables, as in the <em>cat-modified</em>
 model</p>
 <p><code>y ~ x + race + x:race</code></p>
 <p>(here we use <code>race</code> as our default categorical variable
 for clarity).</p>
-<p>The group-modified model estimates group-specific effects of
+<p>The cat-modified model estimates group-specific effects of
 <code>x</code> on the response <code>y</code> (e.g., does exposure to a
 pollutant <code>x</code> more adversely impact the health <code>y</code>
 of certain subpopulations?). Specifically, the linear model expresses
@@ -99,9 +99,9 @@ for all <code>race</code> groups
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>.
 Then the slope is global and does not depend on <code>race</code>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>α</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\mu(x+1, r) - \mu(x,r) = \alpha_1</annotation></semantics></math>.</p>
-<p>However, both the main-only and the group-modified models have too
-many parameters. This is known as the “dummy variable trap”: to
-numerically encode
+<p>However, both the main-only and the cat-modified models have too many
+parameters. This is known as the “dummy variable trap”: to numerically
+encode
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
 levels of a categorical variable, only
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">L-1</annotation></semantics></math>
@@ -127,7 +127,7 @@ categorical variables, <code>race</code> and <code>sex</code>.</p>
 <p>To mimic the challenges of real data analysis, the simulated
 covariates are <em>dependent</em>: <code>x</code> depends on
 <code>race</code>, both in mean and distribution,</p>
-<p><img src="introduction_files/figure-html/unnamed-chunk-3-1.png" width="700" style="display: block; margin: auto;"></p>
+<p><img src="introduction_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700" style="display: block; margin: auto;"></p>
 <p>while <code>race</code> and <code>sex</code> are highly dependent
 categorical variables:</p>
 <table class="table">
@@ -167,7 +167,7 @@ output.</p>
 <div class="section level2">
 <h2 id="default-strategies-the-problem">Default strategies: the problem<a class="anchor" aria-label="anchor" href="#default-strategies-the-problem"></a>
 </h2>
-<p>Suppose we call <code>lm</code> to fit the group-modified model:</p>
+<p>Suppose we call <code>lm</code> to fit the cat-modified model:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_lm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">race</span> <span class="op">+</span> <span class="va">x</span><span class="op">:</span><span class="va">race</span><span class="op">)</span></span></code></pre></div>
 <p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> output appears as follows:</p>
@@ -309,7 +309,7 @@ variables and interactions.</p>
 <div class="section level2">
 <h2 id="abundance-based-constraints-abcs-the-solution">Abundance-Based Constraints (ABCs): the solution<a class="anchor" aria-label="anchor" href="#abundance-based-constraints-abcs-the-solution"></a>
 </h2>
-<p>Instead, suppose we call <code>lmabc</code> to fit the group-modified
+<p>Instead, suppose we call <code>lmabc</code> to fit the cat-modified
 model:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://drkowal.github.io/lmabc/">lmabc</a></span><span class="op">)</span></span>
@@ -417,7 +417,7 @@ and <code>y ~ x + race + x:race</code> are nearly identical; and<br>
 <ol style="list-style-type: lower-alpha">
 <li>Nearly identical when the <code>x:race</code> effect is small
 or</li>
-<li>Smaller for the group-modified model when the <code>x:race</code>
+<li>Smaller for the cat-modified model when the <code>x:race</code>
 effect is large.</li>
 </ol>
 </li>
@@ -444,7 +444,7 @@ of <code>x</code> must be approximately the same within each
 <code>race</code> group (no conditions are needed when <code>x</code> is
 categorical; see below). This is reasonable: if a “one-unit change in
 <code>x</code>” is not comparable for different <code>race</code>
-groups, then only the group-modified model that includes
+groups, then only the cat-modified model that includes
 <code>race</code>-specific slopes is meaningful. In that case, there is
 no reason to consider the <code>x</code> effect under the main-only
 model. Empirically, these (near) invariance results are quite robust to
@@ -495,7 +495,7 @@ interpretability.</em></p>
 <p>ABCs use the empirically-observed proportions by group,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>r</mi></msub><mo>=</mo></mrow><annotation encoding="application/x-tex">\pi_r=</annotation></semantics></math><code>mean(race == r)</code>. As such, the parameters have a genuine
 “group-average” interpretation. For instance, the global slope parameter
-in the group-modified model is
+in the cat-modified model is
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo>=</mo><msub><mi>E</mi><mi>π</mi></msub><mo stretchy="false" form="prefix">{</mo><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>R</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo><mo>=</mo><munder><mo>∑</mo><mi>r</mi></munder><msub><mi>π</mi><mi>r</mi></msub><mo stretchy="false" form="prefix">{</mo><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>μ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
 \alpha_1 = E_{\pi}\{\mu(x+1, R) - \mu(x, R)\} = \sum_r \pi_r \{\mu(x+1, r) - \mu(x, r)\}
 </annotation></semantics></math> i.e., the group average of the
@@ -552,7 +552,7 @@ more cumbersome for default (RGE) methods—and yet ABCs offer an even
 cleaner solution. Consider the <code>lm</code> output for two models
 that feature the categorical covariates <code>race</code> and
 <code>sex</code>: the main-only model <code>y ~ race + sex</code> and
-the group-modified model, <code>y ~ race + sex + race:sex</code>.</p>
+the cat-modified model, <code>y ~ race + sex + race:sex</code>.</p>
 <table class="table kable_wrapper"><tbody><tr>
 <td>
 <table class="table">
@@ -908,7 +908,7 @@ and <code>sex</code> under <code>y ~ race + sex</code> and
 <ol style="list-style-type: lower-alpha">
 <li>Nearly identical when the <code>race:sex</code> effect is small
 or</li>
-<li>Smaller for the group-modified model when the <code>race:sex</code>
+<li>Smaller for the cat-modified model when the <code>race:sex</code>
 effect is large.</li>
 </ol>
 </li>
@@ -1038,7 +1038,7 @@ interpretability. <a href="https://doi.org/10.1101/2024.01.04.23300033" class="e
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

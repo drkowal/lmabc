@@ -1,0 +1,35 @@
+# Limitations of lmabc
+
+``` r
+library(lmabc)
+```
+
+The statistical methods, theory, and algorithms for regression with
+Abundance-Based Constraints (ABCs) are under active development. As
+such, the current implementation of `lmabc` is not exhaustive. This
+vignette will serve as a running list of limitations of `lmabc`. Please
+email the package maintainer with questions or suggestions.
+
+## `lmabc` throws an error for missing factor levels
+
+Suppose we have two categorical variables, `k1` and `k2`, with levels
+`a`, `b`, and `c` and `uu`, `vv`, respectively. If either `k1` or `k2`
+has zero observations in at least one level, then a model of the form
+`y ~ k1 + k2 + ...` will throw an error. Similarly, if an interaction is
+included, `y ~ k1 + k2 + k1:k2 + ...`, but a joint category (e.g.,
+`k1 = a` and `k2 = uu`) has zero observations, then `lmabc` will throw
+an error.
+
+This behavior is different from `lm`, which instead removes each
+unobserved level from the model and returns an `NA` for its coefficient.
+
+## Missing implementations of generic methods
+
+We implemented many of the common generic methods associated with linear
+regression models. However, our implementation is not exhaustive,
+especially for non-base packages. `lmabc` objects only have class
+“lmabc”, so methods only implemented for class “lm” will fail unless the
+generic method has a default.
+
+We will implement additional generic methods throughout the development
+process.
