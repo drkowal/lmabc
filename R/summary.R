@@ -73,6 +73,7 @@ vcov.glmabc <- function(object, complete = TRUE, ...) {
 	vcov.summary.glmabc(summary.glmabc(object, ...), complete = complete)
 }
 
+#' @exportS3Method vcov summary.glmabc
 vcov.summary.glmabc <- function(object, complete = TRUE, ...) {
 	.vcov.aliased <- utils::getFromNamespace(".vcov.aliased", "stats")
 	.vcov.aliased(object$aliased, object$cov.scaled, complete = complete)

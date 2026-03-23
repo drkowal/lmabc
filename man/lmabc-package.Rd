@@ -3,15 +3,14 @@
 \docType{package}
 \name{lmabc-package}
 \alias{lmabc-package}
-\alias{_PACKAGE}
 \title{lmabc: Linear Regression with Abundance-Based Constraints (ABCs)}
 \description{
-lmabc provides estimation and inference for linear regression with categorical covariates (race, sex, etc.). Common strategies, including the defaults in lm, select a "reference" group (e.g,. White, Male, etc.) and present all results relative to this group. However, this approach suffers from alarming biases, statistical inefficiencies, and limited interpretability. lmabc uses abundance-based constraints (ABCs) that (1) fully eliminate these biases, (2) provide appealing statistical properties related to estimation invariance and improved statistical power, and (3) produce more interpretable model output. lmabc reproduces the core functionality of lm and includes functions for generalized (logistic, Poisson, etc.) and penalized (lasso, ridge, etc.) linear models. Details are provided in Kowal (2024) \doi{10.1101/2024.01.04.23300033}.
+lmabc provides estimation and inference for linear regression with categorical covariates (race, sex, etc.). Common strategies, including the defaults in lm, select a "reference" group (White, Male, etc.) and present all results relative to this group. However, this approach suffers from statistical inefficiencies, alarming biases, and limited interpretability. lmabc uses abundance-based constraints (ABCs) to resolve each of these problems. Because of the unique statistical properties of ABCs, there is "nothing to lose" by including categorical-categorical and categorical-continuous interactions; yet potential gains include greater statistical power for the main effects and discovery of heterogeneous effects. lmabc reproduces the core functionality of lm and includes functions for generalized (logistic, Poisson, etc.) and penalized (lasso, ridge, etc.) linear models. Details are provided in Kowal (2026) \doi{10.1080/01621459.2026.2635078} and Kowal (2024) \doi{10.1101/2024.01.04.23300033}.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://prayaggordy.github.io/lmabc/}
+  \item \url{https://drkowal.github.io/lmabc/}
   \item \url{https://github.com/drkowal/lmabc}
 }
 

@@ -170,9 +170,9 @@ required to run `lmabc`.
 
 ## References
 
-Kowal, D. (2024). Facilitating heterogeneous effect estimation via
-statistically efficient categorical modifiers.
-<https://arxiv.org/abs/2408.00618>
+Kowal, D. (2026). Facilitating heterogeneous effect estimation via
+statistically efficient categorical modifiers. *JASA*.
+<https://doi.org/10.1080/01621459.2026.2635078>
 
 Kowal, D. (2024). Regression with race-modifiers: towards equity and
 interpretability. <https://doi.org/10.1101/2024.01.04.23300033>

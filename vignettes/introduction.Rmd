@@ -62,13 +62,13 @@ Regression analysis commonly features categorical (or nominal) covariates, such 
 
 `y ~ x + race`
 
-or interacted with other variables, as in the *group-modified* model
+or interacted with other variables, as in the *cat-modified* model
 
 `y ~ x + race + x:race`
 
 (here we use `race` as our default categorical variable for clarity). 
 
-The group-modified model estimates group-specific effects of `x` on the response `y` (e.g., does exposure to a pollutant `x` more adversely impact the health `y` of certain subpopulations?). Specifically, the linear model expresses the expectation of the response variable `y` at given `x` and `race` values:
+The cat-modified model estimates group-specific effects of `x` on the response `y` (e.g., does exposure to a pollutant `x` more adversely impact the health `y` of certain subpopulations?). Specifically, the linear model expresses the expectation of the response variable `y` at given `x` and `race` values:
 $$
 E(Y | X = x, race = r) =  \mu(x, r) = \alpha_0 + \alpha_1 x + \beta_r + \gamma_r x
 $$
@@ -82,7 +82,7 @@ $$
 $$
 The main-only model is recovered when $\gamma_r = 0$ for all `race` groups $r$. Then the slope is global and does not depend on `race`: $\mu(x+1, r) - \mu(x,r) = \alpha_1$. 
 
-However, both the main-only and the group-modified models have too many parameters. This is known as the "dummy variable trap": to numerically encode $L$ levels of a categorical variable, only $L-1$ dummy variables are needed. Here, both models have group-specific intercepts, yet these are parametrized by group-specific coefficients $\beta_r$ *and* a global coefficient $\alpha_0$. Clearly, this uses one more parameter than necessary. A similar problem occurs for group-specific slopes. Without modification, these parameters are not estimable or interpretable. 
+However, both the main-only and the cat-modified models have too many parameters. This is known as the "dummy variable trap": to numerically encode $L$ levels of a categorical variable, only $L-1$ dummy variables are needed. Here, both models have group-specific intercepts, yet these are parametrized by group-specific coefficients $\beta_r$ *and* a global coefficient $\alpha_0$. Clearly, this uses one more parameter than necessary. A similar problem occurs for group-specific slopes. Without modification, these parameters are not estimable or interpretable. 
 
 The central question is then, how best to parametrize (or constrain) these group-specific intercepts and slopes? The choice has significant implications for **statistical efficiency**, **equitability**, and **interpretability**. 
 
@@ -116,7 +116,7 @@ We will consider estimation and inference with various combinations of the predi
 
 ## Default strategies: the problem
 
-Suppose we call `lm` to fit the group-modified model:
+Suppose we call `lm` to fit the cat-modified model:
 ```{r}
 fit_lm = lm(y ~ x + race + x:race)
 ```
@@ -150,7 +150,7 @@ The estimates and standard errors of the `x` effect are considerably different. 
 In aggregate, default `lm` output under RGE is at best difficult to interpret and at worst outright misleading. It suffers from alarming inequities and sacrifices statistical efficiency in the presence of (`x:race`) interactions. These issues also occur for the intercept parameters and compound for multiple categorical variables and interactions. 
 
 ## Abundance-Based Constraints (ABCs): the solution
-Instead, suppose we call `lmabc` to fit the group-modified model:
+Instead, suppose we call `lmabc` to fit the cat-modified model:
 ```{r}
 library(lmabc)
 fit_lmabc = lmabc(y ~ x + race + x:race)
@@ -170,7 +170,7 @@ Second, the `x` effect estimates and standard errors are *nearly identical* to t
 1. The estimated `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are nearly identical; and   
 1. The standard errors of the `x` effects under `y ~ x + race` and `y ~ x + race + x:race` are 
 	a. Nearly identical when the `x:race` effect is small or 
-	a. Smaller for the group-modified model when the `x:race` effect is large. 
+	a. Smaller for the cat-modified model when the `x:race` effect is large. 
 
 In effect, ABCs allow the inclusion of (`x:race`) interactions "for free": they have (almost) no impact on estimation and inference for the main `x` effect. With ABCs, the analyst can estimate group-specific `x` effects without worrying that the addition of `x:race` will sacrifice power for the main `x` effect (which occurs for RGE). And, when the interaction effect `x:race` is substantial, the analyst gains *more power* for the main `x` effect.  
 
@@ -181,7 +181,7 @@ We emphasize several features of these invariance properties:
 - They allow for dependencies between `x` and `race` (as in this simulated dataset). 
 
 
-The only condition is that, for continuous `x`, the scale of `x` must be approximately the same within each `race` group (no conditions are needed when `x` is categorical; see below). This is reasonable: if a "one-unit change in `x`" is not comparable for different `race` groups, then only the group-modified model that includes `race`-specific slopes is meaningful. In that case, there is no reason to consider the `x` effect under the main-only model. Empirically, these (near) invariance results are quite robust to this condition. 
+The only condition is that, for continuous `x`, the scale of `x` must be approximately the same within each `race` group (no conditions are needed when `x` is categorical; see below). This is reasonable: if a "one-unit change in `x`" is not comparable for different `race` groups, then only the cat-modified model that includes `race`-specific slopes is meaningful. In that case, there is no reason to consider the `x` effect under the main-only model. Empirically, these (near) invariance results are quite robust to this condition. 
 
 Finally, these results improve **interpretability**: all group-specific coefficients $\gamma_r$ (e.g., `x:raceB`) now represent the difference between the group-specific slope, $\mu(x+1, r) - \mu(x,r)$, and the *properly global* `x` effect $\alpha_1$. Similar interpretations apply to the intercept parameters. 
 
@@ -196,7 +196,7 @@ where $R$ denotes a categorical random variable (e.g., `race`) with probabilitie
 
 The constraints above are general and include many special cases: RGE uses $\pi_A = 1$ (reference) and $\pi_r = 0$ otherwise, while sum-to-zero constraints use equal weights $\pi_r = 1$ for all $r$. However, *the choice of $\{\pi_r\}$ is critical for equitability, statistical efficiency, and interpretability.* 
 
-ABCs use the empirically-observed proportions by group, $\pi_r=$ `mean(race == r)`. As such, the parameters have a genuine "group-average" interpretation. For instance, the global slope parameter in the group-modified model is
+ABCs use the empirically-observed proportions by group, $\pi_r=$ `mean(race == r)`. As such, the parameters have a genuine "group-average" interpretation. For instance, the global slope parameter in the cat-modified model is
 $$
 \alpha_1 = E_{\pi}\{\mu(x+1, R) - \mu(x, R)\} = \sum_r \pi_r \{\mu(x+1, r) - \mu(x, r)\}
 $$
@@ -219,7 +219,7 @@ Revisiting the output from `lmabc(y ~ x + race + x:race)`, we summarize the main
 - Similar interpretations apply for the intercept coefficients. 
 
 ## Categorical-categorical interactions
-The case of categorical-categorical interactions is arguably even more cumbersome for default (RGE) methods---and yet ABCs offer an even cleaner solution. Consider the `lm` output for two models that feature the categorical covariates `race` and `sex`: the main-only model `y ~ race + sex` and the group-modified model, `y ~ race + sex + race:sex`.
+The case of categorical-categorical interactions is arguably even more cumbersome for default (RGE) methods---and yet ABCs offer an even cleaner solution. Consider the `lm` output for two models that feature the categorical covariates `race` and `sex`: the main-only model `y ~ race + sex` and the cat-modified model, `y ~ race + sex + race:sex`.
 ```{r, echo = FALSE}
 knitr::kables(
   list(
@@ -265,7 +265,7 @@ We summarize these (provable) **invariance properties of ABCs** for categorical-
 1. The estimated `(Intercept)`, `race`, and `sex` effects under `y ~ race + sex` and `y ~ race + sex + race:sex` are identical; and   
 1. The standard errors of `(Intercept)`, `race`, and `sex` under `y ~ race + sex` and `y ~ race + sex + race:sex` are
 	a. Nearly identical when the `race:sex` effect is small or 
-	a. Smaller for the group-modified model when the `race:sex` effect is large. 
+	a. Smaller for the cat-modified model when the `race:sex` effect is large. 
 
 Again, the analyst may include (`race:sex`) interaction effects "for free": the main effect estimates are unchanged, and the statistical power for the main effects can only increase. Thus, we require that all main effects are included for any categorical-categorical or categorical-continuous interactions.
 

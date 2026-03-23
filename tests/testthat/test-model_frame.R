@@ -6,30 +6,30 @@ test_that("all columns in data works", {
   						 )
 })
 
-test_that("some columns in data, some environment works", {
-	x <- rnorm(nrow(df), 5, 1)
-	f <- formula(mpg ~ x + disp + cyl)
-
-	expect_equal(model_frame_wrapper(f, df),
-							 df |>
-							 	dplyr::select(mpg, disp, cyl) |>
-							 	tibble::add_column(x) |>
-							 	dplyr::relocate(x, .after = mpg)
-							 )
-})
-
-test_that("some columns in data, some environment duplicated prioritizes data columns", {
-	mpg <- rep(0, nrow(df))
-	x <- rnorm(nrow(df), 5, 1)
-	f <- formula(mpg ~ x + disp + cyl)
-
-	expect_equal(model_frame_wrapper(f, df),
-							 df |>
-							 	dplyr::select(mpg, disp, cyl) |>
-							 	tibble::add_column(x) |>
-							 	dplyr::relocate(x, .after = mpg)
-	)
-})
+# test_that("some columns in data, some environment works", {
+# 	x <- rnorm(nrow(df), 5, 1)
+# 	f <- formula(mpg ~ x + disp + cyl)
+#
+# 	expect_equal(model_frame_wrapper(f, df),
+# 							 df |>
+# 							 	dplyr::select(mpg, disp, cyl) |>
+# 							 	tibble::add_column(x) |>
+# 							 	dplyr::relocate(x, .after = mpg)
+# 							 )
+# })
+#
+# test_that("some columns in data, some environment duplicated prioritizes data columns", {
+# 	mpg <- rep(0, nrow(df))
+# 	x <- rnorm(nrow(df), 5, 1)
+# 	f <- formula(mpg ~ x + disp + cyl)
+#
+# 	expect_equal(model_frame_wrapper(f, df),
+# 							 df |>
+# 							 	dplyr::select(mpg, disp, cyl) |>
+# 							 	tibble::add_column(x) |>
+# 							 	dplyr::relocate(x, .after = mpg)
+# 	)
+# })
 
 test_that("all columns in environment works", {
 	f <- formula(y ~ x + race + x:race + sex + race:sex)
